@@ -1,0 +1,6400 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=1280" />
+  <title>城市补贴指南 · CityMatch</title>
+  <script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+  <style>
+/* ===== Base ===== */
+* { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --bg: #FAF7F2;
+  --bg-2: #F4EFE6;
+  --surface: #FFFFFF;
+  --ink: #1F1A14;
+  --ink-2: #4B4338;
+  --ink-3: #8A7F70;
+  --line: #ECE5D8;
+  --line-2: #E3DAC8;
+
+  --amber: #F59E42;
+  --amber-2: #E8842A;
+  --amber-bg: #FFF3E2;
+  --amber-bg-2: #FFE7C9;
+  --amber-ink: #8A4D10;
+
+  --teal: #2E8C81;
+  --teal-bg: #DCEFEB;
+  --teal-ink: #1F5F58;
+
+  --indigo: #4F5BD5;
+  --indigo-bg: #E6E8FB;
+  --indigo-ink: #2E369B;
+
+  --rose: #C8556A;
+  --rose-bg: #FBE3E7;
+  --rose-ink: #8B2E40;
+
+  --green: #4F8F3A;
+  --green-bg: #E5F1D9;
+  --green-ink: #2F5E22;
+
+  --radius: 16px;
+  --radius-lg: 22px;
+  --radius-sm: 10px;
+
+  --shadow-sm: 0 1px 2px rgba(60,45,20,.04), 0 1px 1px rgba(60,45,20,.03);
+  --shadow-md: 0 4px 14px rgba(60,45,20,.06), 0 2px 4px rgba(60,45,20,.04);
+  --shadow-lg: 0 20px 40px -16px rgba(60,45,20,.16), 0 6px 14px rgba(60,45,20,.06);
+
+  --gradient-warm: linear-gradient(135deg, #FFE7C9 0%, #FFD3A0 40%, #FFB670 100%);
+  --gradient-amber: linear-gradient(135deg, #F8A94E 0%, #E8842A 100%);
+  --gradient-soft: linear-gradient(180deg, #FFF7EA 0%, #FAF7F2 100%);
+
+  --font-zh: "PingFang SC","HarmonyOS Sans SC","Hiragino Sans GB","Noto Sans SC",system-ui,sans-serif;
+  --font-en: "SF Pro Display",-apple-system,BlinkMacSystemFont,"Helvetica Neue",system-ui,sans-serif;
+}
+html, body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font-en), var(--font-zh);
+  font-feature-settings: "ss01","cv11";
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+body {
+  min-height: 100vh;
+  background:
+    radial-gradient(900px 600px at 90% -10%, #FFE7C9 0%, transparent 60%),
+    radial-gradient(700px 500px at -10% 10%, #E5F1D9 0%, transparent 55%),
+    var(--bg);
+  background-attachment: fixed;
+}
+button { font-family: inherit; cursor: pointer; border: none; background: none; color: inherit; }
+input, select, textarea { font-family: inherit; color: inherit; }
+a { color: inherit; text-decoration: none; }
+
+/* ===== Layout ===== */
+.shell { max-width: 1280px; margin: 0 auto; padding: 28px 36px 80px; }
+
+/* ===== Top bar ===== */
+.topbar {
+  display: flex; align-items: center; gap: 24px;
+  padding: 14px 0 22px;
+}
+.brand {
+  display: flex; align-items: center; gap: 12px;
+  font-weight: 600; font-size: 17px; letter-spacing: -0.01em;
+}
+.brand-mark {
+  width: 36px; height: 36px; border-radius: 11px;
+  background: var(--gradient-amber);
+  display: grid; place-items: center;
+  color: #fff; font-weight: 700; font-size: 18px;
+  box-shadow: 0 6px 16px -4px rgba(232,132,42,.45), inset 0 -2px 0 rgba(0,0,0,.08);
+}
+.brand-sub { color: var(--ink-3); font-weight: 400; font-size: 13px; margin-left: 2px; }
+
+.tabs {
+  display: flex; gap: 4px;
+  background: rgba(255,255,255,.6);
+  border: 1px solid var(--line);
+  padding: 5px; border-radius: 14px;
+  margin: 0 auto;
+  backdrop-filter: blur(8px);
+  box-shadow: var(--shadow-sm);
+}
+.tab {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 9px 18px; font-size: 14px; font-weight: 500;
+  color: var(--ink-2); border-radius: 10px;
+  transition: all 160ms ease; position: relative;
+}
+.tab:hover { color: var(--ink); background: rgba(255,255,255,.5); }
+.tab.active {
+  background: var(--ink); color: #fff;
+  box-shadow: 0 4px 12px -2px rgba(31,26,20,.2);
+}
+.tab .badge {
+  background: var(--amber); color: #fff;
+  font-size: 11px; padding: 1px 6px;
+  border-radius: 999px; font-weight: 600;
+}
+.tab.active .badge { background: rgba(255,255,255,.22); }
+
+.top-user { display: flex; align-items: center; gap: 10px; margin-left: auto; }
+.avatar {
+  width: 36px; height: 36px; border-radius: 50%;
+  background: linear-gradient(135deg, #FFD3A0, #2E8C81);
+  display: grid; place-items: center;
+  color: #fff; font-weight: 600; font-size: 14px;
+  box-shadow: var(--shadow-sm);
+}
+
+/* ===== Hero ===== */
+.hero {
+  position: relative;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  padding: 32px 36px; margin-bottom: 22px;
+  overflow: hidden; box-shadow: var(--shadow-md);
+}
+.hero::before {
+  content: ""; position: absolute; inset: 0;
+  background:
+    radial-gradient(450px 280px at 92% 30%, rgba(245,158,66,.16), transparent 70%),
+    radial-gradient(400px 240px at 8% 110%, rgba(46,140,129,.12), transparent 70%);
+  pointer-events: none;
+}
+.hero-inner { position: relative; display: grid; grid-template-columns: 1fr auto; gap: 24px; align-items: end; }
+.hero-eyebrow {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-size: 12px; font-weight: 500;
+  padding: 5px 11px 5px 8px;
+  background: var(--amber-bg); color: var(--amber-ink);
+  border-radius: 999px; letter-spacing: 0.02em;
+}
+.hero-eyebrow .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--amber); box-shadow: 0 0 0 3px rgba(245,158,66,.18); }
+.hero h1 {
+  font-size: 36px; font-weight: 600;
+  letter-spacing: -0.02em; line-height: 1.15;
+  margin: 12px 0 8px; color: var(--ink);
+}
+.hero h1 .accent {
+  background: linear-gradient(120deg, #E8842A, #C8556A);
+  -webkit-background-clip: text; background-clip: text; color: transparent;
+}
+.hero p { color: var(--ink-2); font-size: 15px; line-height: 1.55; max-width: 540px; }
+
+.hero-stats { display: grid; grid-auto-flow: column; gap: 18px; align-self: stretch; align-items: end; }
+.hero-stat { text-align: right; padding-left: 22px; border-left: 1px solid var(--line); }
+.hero-stat .num { font-size: 26px; font-weight: 600; color: var(--ink); letter-spacing: -0.02em; }
+.hero-stat .lbl { font-size: 12px; color: var(--ink-3); margin-top: 2px; }
+
+/* ===== Search & filter bar ===== */
+.filter-bar {
+  display: grid; grid-template-columns: 1fr auto; gap: 14px;
+  background: var(--surface); border: 1px solid var(--line);
+  padding: 14px; border-radius: var(--radius);
+  margin-bottom: 16px; box-shadow: var(--shadow-sm);
+}
+.searchbox {
+  display: flex; align-items: center; gap: 10px;
+  background: var(--bg-2); border-radius: 12px;
+  padding: 0 14px; border: 1px solid transparent;
+  transition: all 160ms ease;
+}
+.searchbox:focus-within {
+  border-color: var(--amber); background: #fff;
+  box-shadow: 0 0 0 4px rgba(245,158,66,.12);
+}
+.searchbox svg { color: var(--ink-3); flex-shrink: 0; }
+.searchbox input {
+  background: none; border: none; outline: none;
+  padding: 12px 0; width: 100%; font-size: 14px;
+}
+.searchbox input::placeholder { color: var(--ink-3); }
+.search-kbd {
+  font-size: 11px; color: var(--ink-3);
+  border: 1px solid var(--line-2); background: #fff;
+  padding: 2px 7px; border-radius: 6px;
+  font-family: "SF Mono", ui-monospace, monospace;
+}
+
+.chip-row { display: flex; gap: 8px; flex-wrap: wrap; }
+.chip {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 8px 14px; background: var(--bg-2);
+  border: 1px solid var(--line-2); border-radius: 999px;
+  font-size: 13px; color: var(--ink-2); font-weight: 500;
+  transition: all 140ms ease; white-space: nowrap;
+}
+.chip:hover { background: #fff; border-color: var(--ink-3); color: var(--ink); }
+.chip.active { background: var(--ink); color: #fff; border-color: var(--ink); }
+.chip.active.warm { background: var(--gradient-amber); border-color: transparent; box-shadow: 0 6px 16px -6px rgba(232,132,42,.55); }
+.chip .ico { font-size: 14px; opacity: 0.9; }
+
+/* ===== Persona banner ===== */
+.persona-banner {
+  display: flex; align-items: center; gap: 10px;
+  padding: 10px 16px;
+  background: var(--amber-bg);
+  border: 1px solid rgba(245,158,66,.3);
+  border-radius: 12px; margin-bottom: 14px;
+  font-size: 13px; color: var(--amber-ink);
+  animation: fade-in 300ms ease both;
+}
+.persona-banner strong { font-weight: 600; }
+.persona-banner-close {
+  margin-left: auto; opacity: 0.5; font-size: 16px;
+  line-height: 1; padding: 2px 4px;
+}
+.persona-banner-close:hover { opacity: 1; }
+
+/* ===== City grid ===== */
+.city-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 18px;
+}
+.city-card {
+  position: relative;
+  background: var(--surface); border: 1px solid var(--line);
+  border-radius: var(--radius); padding: 0; overflow: hidden;
+  transition: transform 200ms ease, box-shadow 200ms ease, border-color 200ms ease;
+  box-shadow: var(--shadow-sm);
+  display: flex; flex-direction: column;
+}
+.city-card:hover {
+  transform: translateY(-3px); box-shadow: var(--shadow-lg);
+  border-color: var(--line-2);
+}
+.city-card .banner {
+  height: 64px; position: relative;
+  background: linear-gradient(135deg, var(--c1,#FFE7C9), var(--c2,#FFB670));
+  overflow: hidden;
+}
+.city-card .city-pin {
+  position: absolute; top: 12px; left: 14px;
+  font-size: 11px; font-weight: 600; color: var(--ink);
+  background: rgba(255,255,255,.85);
+  padding: 4px 10px; border-radius: 999px;
+  backdrop-filter: blur(4px); letter-spacing: 0.04em; z-index: 2;
+}
+.city-card .fav-btn {
+  position: absolute; top: 10px; right: 10px;
+  width: 34px; height: 34px; border-radius: 50%;
+  background: rgba(255,255,255,.92);
+  display: grid; place-items: center;
+  backdrop-filter: blur(4px);
+  transition: transform 140ms ease, background 140ms ease;
+  z-index: 2;
+}
+.city-card .fav-btn:hover { transform: scale(1.08); }
+.city-card .fav-btn.active { background: var(--rose); color: #fff; }
+.city-card .fav-btn svg { width: 16px; height: 16px; }
+
+.city-card .body { padding: 16px 18px 18px; display: flex; flex-direction: column; flex: 1; gap: 12px; }
+.city-card .head { display: flex; align-items: flex-start; justify-content: space-between; gap: 10px; }
+.city-card .name { font-size: 20px; font-weight: 600; letter-spacing: -0.01em; }
+.city-card .name-en { font-size: 12px; color: var(--ink-3); margin-top: 2px; font-family: var(--font-en); letter-spacing: 0.04em; text-transform: uppercase; }
+
+.city-card .desc { font-size: 13px; color: var(--ink-2); line-height: 1.55; text-wrap: pretty; }
+
+/* ===== Subsidy Pill v2 ===== */
+.subsidy-pill-v2 {
+  display: inline-flex; flex-direction: column; align-items: flex-start;
+  padding: 8px 12px; border-radius: 10px; margin: 8px 0 2px;
+  background: linear-gradient(135deg, #FFF3E2, #FFE0BA);
+  border: 1px solid #FFD3A0;
+}
+.subsidy-pill-v2 .sn { font-size: 18px; font-weight: 600; color: var(--amber-ink); letter-spacing: -0.01em; }
+.subsidy-pill-v2 .sl { font-size: 11px; color: var(--amber-ink); opacity: 0.7; margin-top: 2px; }
+.subsidy-pill-v2.muted { background: var(--bg-2); border-color: var(--line); }
+.subsidy-pill-v2.muted .sn { color: var(--ink-3); }
+.subsidy-pill-v2.muted .sl { color: var(--ink-3); opacity: 0.6; }
+
+/* ===== Conditions Block ===== */
+.conditions-block {
+  display: flex; flex-direction: column; gap: 3px;
+  padding: 8px 0; margin-top: 2px;
+  border-top: 1px dashed var(--line);
+}
+.cond-item {
+  display: flex; align-items: center; gap: 6px;
+  font-size: 11px; color: var(--ink-3); line-height: 1.5;
+}
+.cond-item svg { color: var(--amber); flex-shrink: 0; }
+
+/* ===== Identity Link ===== */
+.identity-link {
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+  padding: 10px 16px; font-size: 13px; font-weight: 500;
+  border-radius: 11px; margin-top: auto; width: 100%;
+  background: var(--ink); color: #fff; text-decoration: none;
+  transition: all 140ms ease;
+}
+.identity-link:hover { background: #2d251c; transform: translateY(-1px); }
+
+/* ===== Themed Tags ===== */
+.tag.themed {
+  font-size: 12px; padding: 4px 9px; border-radius: 7px;
+  font-weight: 500;
+}
+
+.tags { display: flex; flex-wrap: wrap; gap: 6px; }
+.tag {
+  display: inline-flex; align-items: center; gap: 4px;
+  font-size: 12px; padding: 4px 9px; border-radius: 7px;
+  background: var(--bg-2); color: var(--ink-2); font-weight: 500;
+}
+.dots { display: inline-flex; gap: 2px; }
+.dots .d { width: 6px; height: 6px; border-radius: 50%; background: var(--line-2); }
+.dots .d.on { background: var(--amber); }
+.dots.teal .d.on { background: var(--teal); }
+.dots.green .d.on { background: var(--green); }
+
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  padding: 10px 16px; font-size: 13px; font-weight: 500;
+  border-radius: 11px; transition: all 140ms ease;
+}
+.btn.primary { background: var(--ink); color: #fff; flex: 1; }
+.btn.primary:hover { background: #2d251c; transform: translateY(-1px); }
+.btn.ghost { background: var(--bg-2); color: var(--ink-2); border: 1px solid var(--line); }
+.btn.ghost:hover { background: #fff; color: var(--ink); }
+.btn.warm { background: var(--gradient-amber); color: #fff; box-shadow: 0 6px 18px -8px rgba(232,132,42,.5); }
+.btn.warm:hover { transform: translateY(-1px); box-shadow: 0 10px 22px -10px rgba(232,132,42,.6); }
+.btn.icon { padding: 10px; }
+
+/* ===== Identity Picker ===== */
+.identity-picker-wrap { position: relative; }
+
+.identity-btn {
+  display: flex; align-items: center; gap: 7px;
+  padding: 8px 14px; font-size: 13px;
+  background: var(--bg-2); color: var(--ink-2);
+  border: 1px solid var(--line); border-radius: 11px;
+  transition: all 140ms ease; white-space: nowrap;
+}
+.identity-btn:hover { background: #fff; color: var(--ink); }
+.identity-btn.has-selection {
+  background: var(--amber-bg);
+  border-color: rgba(245,158,66,.4);
+  color: var(--amber-ink);
+}
+.identity-btn .id-val {
+  max-width: 130px; overflow: hidden;
+  text-overflow: ellipsis; white-space: nowrap;
+  font-weight: 500;
+}
+.identity-btn .id-lbl { color: var(--ink-3); font-size: 12px; font-weight: 400; }
+.identity-btn.has-selection .id-lbl { color: var(--amber-ink); opacity: 0.7; }
+.identity-btn .id-arr { font-size: 9px; color: var(--ink-3); margin-left: 1px; }
+
+.identity-dropdown {
+  position: absolute; top: calc(100% + 8px); right: 0;
+  width: 258px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  box-shadow: 0 24px 56px -18px rgba(60,45,20,.22), 0 4px 18px rgba(60,45,20,.08);
+  z-index: 300; overflow: hidden;
+  animation: drop-in 180ms cubic-bezier(.2,.8,.2,1) both;
+}
+@keyframes drop-in {
+  from { opacity: 0; transform: translateY(-8px) scale(0.97); }
+  to   { opacity: 1; transform: translateY(0)  scale(1); }
+}
+
+.id-hd {
+  padding: 14px 16px 11px;
+  border-bottom: 1px solid var(--line);
+}
+.id-hd-title { font-size: 13px; font-weight: 600; color: var(--ink); }
+.id-hd-sub { font-size: 11px; color: var(--ink-3); margin-top: 2px; }
+
+.id-opts { padding: 8px; display: flex; flex-direction: column; gap: 3px; }
+
+.id-opt {
+  display: flex; align-items: center; gap: 10px;
+  padding: 9px 10px; border-radius: 11px;
+  background: transparent;
+  border: 1.5px solid transparent;
+  text-align: left; width: 100%;
+  cursor: pointer; transition: all 140ms ease;
+}
+.id-opt:hover { background: var(--bg-2); }
+.id-opt.sel {
+  background: var(--amber-bg);
+  border-color: rgba(245,158,66,.4);
+}
+.id-opt-icon {
+  width: 30px; height: 30px; border-radius: 8px;
+  background: var(--bg-2);
+  display: grid; place-items: center;
+  font-size: 16px; flex-shrink: 0;
+  transition: background 140ms ease;
+}
+.id-opt.sel .id-opt-icon { background: rgba(255,255,255,.8); }
+.id-opt-text { flex: 1; font-size: 13px; font-weight: 500; color: var(--ink); }
+.id-opt-ck {
+  width: 18px; height: 18px; border-radius: 5px;
+  border: 1.5px solid var(--line-2);
+  background: transparent; flex-shrink: 0;
+  position: relative;
+  transition: all 140ms ease;
+}
+.id-opt.sel .id-opt-ck {
+  background: var(--amber); border-color: var(--amber);
+}
+.id-opt.sel .id-opt-ck::after {
+  content: ""; position: absolute;
+  left: 4px; top: 1px;
+  width: 4px; height: 9px;
+  border: solid #fff; border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+}
+
+.id-count-badge {
+  font-size: 10px; font-weight: 700; padding: 1px 6px;
+  background: var(--amber); color: #fff;
+  border-radius: 999px; margin-left: 2px;
+}
+
+.id-foot {
+  padding: 8px; border-top: 1px solid var(--line);
+  display: flex; gap: 6px;
+}
+.id-foot-clear {
+  padding: 8px 14px; border-radius: 9px;
+  background: var(--bg-2); color: var(--ink-3);
+  font-size: 12px; font-weight: 500;
+  border: none; cursor: pointer;
+  transition: all 140ms ease;
+}
+.id-foot-clear:hover { background: var(--rose-bg); color: var(--rose-ink); }
+.id-foot-done {
+  flex: 1; padding: 8px;
+  border-radius: 9px;
+  background: var(--gradient-amber);
+  color: #fff; font-size: 12px; font-weight: 600;
+  border: none; cursor: pointer;
+  transition: all 140ms ease;
+}
+.id-foot-done:hover { transform: translateY(-1px); }
+
+/* ===== Q&A flow ===== */
+.match-wrap {
+  display: grid; grid-template-columns: 320px 1fr; gap: 20px; min-height: 540px;
+}
+.match-side {
+  background: var(--surface); border: 1px solid var(--line);
+  border-radius: var(--radius); padding: 22px;
+  box-shadow: var(--shadow-sm); position: relative; overflow: hidden; height: max-content;
+}
+.match-side::before {
+  content: ""; position: absolute; right: -30px; top: -30px;
+  width: 160px; height: 160px; border-radius: 50%;
+  background: radial-gradient(circle, rgba(245,158,66,.18), transparent 70%);
+}
+.match-side h3 { font-size: 17px; font-weight: 600; letter-spacing: -0.01em; margin-bottom: 4px; position: relative; }
+.match-side .lead { font-size: 13px; color: var(--ink-3); margin-bottom: 18px; line-height: 1.55; position: relative; }
+
+.step-list { display: flex; flex-direction: column; gap: 4px; position: relative; }
+.step-item {
+  display: flex; align-items: center; gap: 12px;
+  padding: 10px 12px; border-radius: 11px;
+  font-size: 13px; color: var(--ink-2); font-weight: 500;
+  transition: all 140ms ease;
+}
+.step-item .num {
+  width: 24px; height: 24px; border-radius: 7px;
+  background: var(--bg-2); color: var(--ink-3);
+  display: grid; place-items: center;
+  font-size: 11px; font-weight: 600; flex-shrink: 0;
+}
+.step-item.done .num { background: var(--green-bg); color: var(--green-ink); }
+.step-item.active { background: var(--amber-bg); color: var(--amber-ink); }
+.step-item.active .num { background: var(--amber); color: #fff; }
+
+.progress-block { margin-top: 18px; padding: 14px; background: var(--bg); border-radius: 12px; position: relative; }
+.progress-block .pl { font-size: 11px; color: var(--ink-3); text-transform: uppercase; letter-spacing: 0.05em; }
+.progress-block .pv { font-size: 22px; font-weight: 600; color: var(--ink); margin-top: 2px; letter-spacing: -0.02em; }
+.progress-bar { margin-top: 10px; height: 6px; background: var(--line); border-radius: 99px; overflow: hidden; }
+.progress-bar .fill { height: 100%; background: var(--gradient-amber); border-radius: 99px; transition: width 360ms cubic-bezier(.2,.8,.2,1); }
+
+.match-main {
+  background: var(--surface); border: 1px solid var(--line);
+  border-radius: var(--radius); padding: 36px 40px;
+  box-shadow: var(--shadow-md);
+  display: flex; flex-direction: column; min-height: 540px;
+}
+.q-step-label { font-size: 12px; color: var(--ink-3); letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 8px; }
+.q-title { font-size: 26px; font-weight: 600; letter-spacing: -0.02em; line-height: 1.25; margin-bottom: 8px; }
+.q-sub { font-size: 14px; color: var(--ink-3); margin-bottom: 28px; line-height: 1.55; }
+
+.choice-grid { display: grid; gap: 12px; }
+.choice-grid.cols-2 { grid-template-columns: 1fr 1fr; }
+.choice-grid.cols-3 { grid-template-columns: repeat(3,1fr); }
+.choice {
+  display: flex; align-items: flex-start; gap: 14px;
+  padding: 18px; border: 1.5px solid var(--line);
+  border-radius: 14px; text-align: left;
+  background: var(--surface); transition: all 160ms ease; position: relative;
+}
+.choice:hover { border-color: var(--ink-3); transform: translateY(-1px); }
+.choice.selected {
+  border-color: var(--amber);
+  background: linear-gradient(180deg, #FFF7EA 0%, #FFFFFF 60%);
+  box-shadow: 0 0 0 4px rgba(245,158,66,.12);
+}
+.choice .ci {
+  width: 42px; height: 42px; flex-shrink: 0;
+  border-radius: 11px; background: var(--bg-2);
+  display: grid; place-items: center; font-size: 20px;
+}
+.choice.selected .ci { background: var(--amber-bg); }
+.choice .ct { display: flex; flex-direction: column; gap: 3px; }
+.choice .ct-title { font-size: 14px; font-weight: 600; color: var(--ink); }
+.choice .ct-desc { font-size: 12px; color: var(--ink-3); line-height: 1.5; }
+.choice .ck {
+  position: absolute; top: 14px; right: 14px;
+  width: 18px; height: 18px; border-radius: 50%;
+  border: 1.5px solid var(--line-2); transition: all 140ms ease;
+}
+.choice.selected .ck { background: var(--amber); border-color: var(--amber); }
+.choice.selected .ck::after {
+  content: ""; position: absolute; left: 5px; top: 2px;
+  width: 4px; height: 9px;
+  border: solid #fff; border-width: 0 2px 2px 0; transform: rotate(45deg);
+}
+
+.slider-block { padding: 4px 4px 0; }
+.slider-readout { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 16px; }
+.slider-readout .v {
+  font-size: 36px; font-weight: 600; letter-spacing: -0.02em;
+  background: linear-gradient(120deg, #E8842A, #C8556A);
+  -webkit-background-clip: text; background-clip: text; color: transparent;
+}
+.slider-readout .r { font-size: 12px; color: var(--ink-3); }
+input[type=range].slider-range {
+  -webkit-appearance: none; appearance: none;
+  width: 100%; height: 8px;
+  background: linear-gradient(90deg, var(--amber) 0%, var(--amber) var(--p,50%), var(--line) var(--p,50%));
+  border-radius: 99px; outline: none;
+}
+input[type=range].slider-range::-webkit-slider-thumb {
+  -webkit-appearance: none; width: 22px; height: 22px;
+  background: #fff; border: 3px solid var(--amber);
+  border-radius: 50%; cursor: pointer;
+  box-shadow: 0 3px 8px rgba(232,132,42,.3);
+}
+.slider-ticks { display: flex; justify-content: space-between; margin-top: 10px; font-size: 11px; color: var(--ink-3); }
+
+.q-foot {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-top: auto; padding-top: 28px; border-top: 1px dashed var(--line);
+}
+.q-foot .meta { font-size: 12px; color: var(--ink-3); }
+
+/* ===== Result ===== */
+.result-hero {
+  position: relative; border-radius: var(--radius-lg);
+  padding: 36px 40px;
+  background: linear-gradient(135deg, #FFE7C9 0%, #FFD3A0 50%, #FFB670 100%);
+  overflow: hidden; margin-bottom: 20px;
+  box-shadow: 0 20px 50px -20px rgba(232,132,42,.45);
+}
+.result-hero::after {
+  content: ""; position: absolute; right: -60px; bottom: -60px;
+  width: 280px; height: 280px; border-radius: 50%; background: rgba(255,255,255,.25);
+}
+.result-hero::before {
+  content: ""; position: absolute; right: 80px; top: -40px;
+  width: 140px; height: 140px; border-radius: 50%; background: rgba(255,255,255,.18);
+}
+.result-hero .ribbon {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-size: 12px; font-weight: 600; color: var(--amber-ink);
+  background: rgba(255,255,255,.7); padding: 6px 12px; border-radius: 999px;
+  position: relative; letter-spacing: 0.04em; text-transform: uppercase;
+}
+.result-hero h2 { font-size: 52px; font-weight: 600; letter-spacing: -0.03em; margin: 14px 0 6px; color: var(--ink); position: relative; }
+.result-hero .en { font-size: 16px; color: var(--amber-ink); margin-bottom: 14px; position: relative; font-family: var(--font-en); letter-spacing: 0.06em; }
+.result-hero .match-bar { position: relative; display: flex; align-items: center; gap: 14px; max-width: 380px; margin-top: 18px; }
+.result-hero .match-bar .lbl { font-size: 12px; color: var(--amber-ink); font-weight: 600; }
+.result-hero .match-bar .bar { flex: 1; height: 8px; background: rgba(255,255,255,.5); border-radius: 99px; overflow: hidden; }
+.result-hero .match-bar .bar .fill { height: 100%; background: var(--ink); border-radius: 99px; }
+.result-hero .match-bar .pct { font-weight: 600; font-size: 16px; color: var(--ink); }
+
+.reason-grid { display: grid; grid-template-columns: repeat(2,1fr); gap: 14px; margin-bottom: 20px; }
+.reason {
+  display: flex; gap: 14px; align-items: flex-start;
+  padding: 18px; background: var(--surface);
+  border: 1px solid var(--line); border-radius: var(--radius); box-shadow: var(--shadow-sm);
+}
+.reason .ri {
+  width: 40px; height: 40px; flex-shrink: 0;
+  border-radius: 11px; display: grid; place-items: center; font-size: 18px;
+}
+.reason .ri.amber { background: var(--amber-bg); color: var(--amber-ink); }
+.reason .ri.teal { background: var(--teal-bg); color: var(--teal-ink); }
+.reason .ri.green { background: var(--green-bg); color: var(--green-ink); }
+.reason .ri.indigo { background: var(--indigo-bg); color: var(--indigo-ink); }
+.reason .ri.rose { background: var(--rose-bg); color: var(--rose-ink); }
+.reason .rt { display: flex; flex-direction: column; gap: 4px; }
+.reason .rt-title { font-size: 14px; font-weight: 600; }
+.reason .rt-desc { font-size: 13px; color: var(--ink-2); line-height: 1.55; }
+
+.alt-row {
+  display: flex; gap: 12px; align-items: stretch;
+  background: var(--surface); border: 1px solid var(--line);
+  border-radius: var(--radius); padding: 18px 20px; box-shadow: var(--shadow-sm);
+}
+.alt-row .alt-lbl { font-size: 12px; color: var(--ink-3); text-transform: uppercase; letter-spacing: 0.05em; align-self: center; padding-right: 18px; border-right: 1px solid var(--line); margin-right: 4px; }
+.alt-card {
+  flex: 1; display: grid; grid-template-columns: 1fr auto; gap: 6px; align-items: center;
+  padding: 10px 14px; background: var(--bg); border-radius: 12px; transition: all 140ms ease;
+}
+.alt-card:hover { background: #fff; box-shadow: var(--shadow-sm); }
+.alt-card .an { font-size: 14px; font-weight: 600; }
+.alt-card .as { font-size: 11px; color: var(--ink-3); }
+.alt-card .ap { font-size: 13px; font-weight: 600; color: var(--amber-ink); }
+
+/* ===== Favorites ===== */
+.stat-row { display: grid; grid-template-columns: 1.2fr 1.2fr 1fr; gap: 16px; margin-bottom: 22px; }
+.stat-card {
+  position: relative; background: var(--surface);
+  border: 1px solid var(--line); border-radius: var(--radius);
+  padding: 22px 24px; overflow: hidden; box-shadow: var(--shadow-sm);
+}
+.stat-card.feature { background: linear-gradient(135deg, #FFF3E2 0%, #FFE0BA 100%); border-color: #FFD3A0; }
+.stat-card.feature.green { background: linear-gradient(135deg, #E5F1D9 0%, #C9E2B4 100%); border-color: #B5D49A; }
+.stat-card .sc-head { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; }
+.stat-card .sc-ico {
+  width: 34px; height: 34px; border-radius: 10px;
+  background: rgba(255,255,255,.7); display: grid; place-items: center; font-size: 16px;
+}
+.stat-card .sc-lbl { font-size: 12px; color: var(--ink-3); font-weight: 500; text-transform: uppercase; letter-spacing: 0.05em; }
+.stat-card.feature .sc-lbl { color: var(--amber-ink); }
+.stat-card.feature.green .sc-lbl { color: var(--green-ink); }
+.stat-card .sc-val { font-size: 38px; font-weight: 600; letter-spacing: -0.025em; line-height: 1; }
+.stat-card .sc-val .currency { font-size: 22px; vertical-align: top; margin-right: 2px; color: var(--ink-2); }
+.stat-card.feature .sc-val .currency { color: var(--amber-ink); }
+.stat-card.feature.green .sc-val .currency { color: var(--green-ink); }
+.stat-card .sc-foot { display: flex; align-items: center; gap: 8px; margin-top: 10px; font-size: 12px; color: var(--ink-3); }
+.stat-card .sc-foot .from { font-weight: 600; color: var(--ink-2); }
+.stat-card.feature .sc-foot .from { color: var(--amber-ink); }
+.stat-card.feature.green .sc-foot .from { color: var(--green-ink); }
+.spark { position: absolute; right: 20px; bottom: 16px; opacity: 0.55; }
+
+.fav-list { display: grid; gap: 12px; }
+.fav-row {
+  display: grid; grid-template-columns: 56px 1fr auto auto auto auto;
+  align-items: center; gap: 18px; padding: 16px 20px;
+  background: var(--surface); border: 1px solid var(--line);
+  border-radius: var(--radius); box-shadow: var(--shadow-sm); transition: all 160ms ease;
+}
+.fav-row:hover { box-shadow: var(--shadow-md); transform: translateX(2px); }
+.fav-row .glyph {
+  width: 56px; height: 56px; border-radius: 13px;
+  background: linear-gradient(135deg, var(--c1,#FFE7C9), var(--c2,#FFB670));
+  display: grid; place-items: center; font-size: 22px; font-weight: 600; color: var(--ink); letter-spacing: -0.02em;
+}
+.fav-row .meta-block .name { font-size: 17px; font-weight: 600; letter-spacing: -0.01em; }
+.fav-row .meta-block .desc { font-size: 12px; color: var(--ink-3); margin-top: 2px; }
+.fav-row .ftags { display: flex; gap: 6px; }
+.fav-row .data { display: flex; flex-direction: column; align-items: flex-end; gap: 2px; }
+.fav-row .data .v { font-size: 17px; font-weight: 600; color: var(--amber-ink); letter-spacing: -0.01em; }
+.fav-row .data .l { font-size: 11px; color: var(--ink-3); }
+.fav-row .level { display: flex; align-items: center; gap: 8px; }
+.fav-row .rm-btn {
+  width: 36px; height: 36px; border-radius: 10px;
+  background: var(--bg-2); color: var(--ink-3);
+  display: grid; place-items: center; transition: all 140ms ease;
+}
+.fav-row .rm-btn:hover { background: var(--rose-bg); color: var(--rose-ink); }
+
+.empty-state {
+  text-align: center; padding: 60px 40px;
+  background: var(--surface); border: 1px dashed var(--line-2);
+  border-radius: var(--radius); color: var(--ink-3);
+}
+.empty-state .ei { font-size: 36px; margin-bottom: 12px; opacity: 0.6; }
+.empty-state .et { font-size: 16px; color: var(--ink-2); font-weight: 600; margin-bottom: 4px; }
+.empty-state .ed { font-size: 13px; }
+
+/* ===== Toast ===== */
+.toast {
+  position: fixed; bottom: 28px; left: 50%; transform: translateX(-50%) translateY(20px);
+  background: var(--ink); color: #fff; padding: 11px 18px; border-radius: 12px;
+  font-size: 13px; opacity: 0; pointer-events: none;
+  transition: all 240ms cubic-bezier(.2,.8,.2,1);
+  box-shadow: 0 18px 36px -10px rgba(0,0,0,.3); z-index: 1000;
+  display: flex; align-items: center; gap: 8px;
+}
+.toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+/* ===== Misc ===== */
+.section-head { display: flex; align-items: flex-end; justify-content: space-between; margin: 6px 4px 14px; }
+.section-head .st { font-size: 18px; font-weight: 600; letter-spacing: -0.01em; }
+.section-head .sn { font-size: 13px; color: var(--ink-3); }
+
+.fade-in { animation: fade-in 360ms cubic-bezier(.2,.8,.2,1) both; }
+@keyframes fade-in {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@media (max-width: 900px) {
+  .shell { padding: 18px; }
+  .hero { padding: 24px; }
+  .hero-inner { grid-template-columns: 1fr; }
+  .hero-stats { grid-auto-flow: column; justify-content: start; }
+  .hero-stat { text-align: left; padding-left: 0; border-left: none; padding-right: 22px; border-right: 1px solid var(--line); }
+  .hero-stat:last-child { border-right: none; }
+  .match-wrap { grid-template-columns: 1fr; }
+  .stat-row { grid-template-columns: 1fr; }
+  .fav-row { grid-template-columns: 56px 1fr; gap: 12px; }
+  .fav-row .ftags, .fav-row .data, .fav-row .level { grid-column: 2; }
+}
+
+/* ===== Tweaks Panel ===== */
+.twk-panel{position:fixed;right:16px;bottom:16px;z-index:2147483646;width:280px;max-height:calc(100vh - 32px);display:flex;flex-direction:column;background:rgba(250,249,247,.78);color:#29261b;-webkit-backdrop-filter:blur(24px) saturate(160%);backdrop-filter:blur(24px) saturate(160%);border:.5px solid rgba(255,255,255,.6);border-radius:14px;box-shadow:0 1px 0 rgba(255,255,255,.5) inset,0 12px 40px rgba(0,0,0,.18);font:11.5px/1.4 ui-sans-serif,system-ui,-apple-system,sans-serif;overflow:hidden}
+.twk-hd{display:flex;align-items:center;justify-content:space-between;padding:10px 8px 10px 14px;cursor:move;user-select:none}
+.twk-hd b{font-size:12px;font-weight:600;letter-spacing:.01em}
+.twk-x{appearance:none;border:0;background:transparent;color:rgba(41,38,27,.55);width:22px;height:22px;border-radius:6px;cursor:default;font-size:13px;line-height:1}
+.twk-x:hover{background:rgba(0,0,0,.06);color:#29261b}
+.twk-body{padding:2px 14px 14px;display:flex;flex-direction:column;gap:10px;overflow-y:auto;overflow-x:hidden;min-height:0;scrollbar-width:thin;scrollbar-color:rgba(0,0,0,.15) transparent}
+.twk-row{display:flex;flex-direction:column;gap:5px}
+.twk-row-h{flex-direction:row;align-items:center;justify-content:space-between;gap:10px}
+.twk-lbl{display:flex;justify-content:space-between;align-items:baseline;color:rgba(41,38,27,.72)}
+.twk-lbl>span:first-child{font-weight:500}
+.twk-val{color:rgba(41,38,27,.5);font-variant-numeric:tabular-nums}
+.twk-sect{font-size:10px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:rgba(41,38,27,.45);padding:10px 0 0}
+.twk-sect:first-child{padding-top:0}
+.twk-seg{position:relative;display:flex;padding:2px;border-radius:8px;background:rgba(0,0,0,.06);user-select:none}
+.twk-seg-thumb{position:absolute;top:2px;bottom:2px;border-radius:6px;background:rgba(255,255,255,.9);box-shadow:0 1px 2px rgba(0,0,0,.12);transition:left .15s cubic-bezier(.3,.7,.4,1),width .15s}
+.twk-seg.dragging .twk-seg-thumb{transition:none}
+.twk-seg button{appearance:none;position:relative;z-index:1;flex:1;border:0;background:transparent;color:inherit;font:inherit;font-weight:500;min-height:22px;border-radius:6px;cursor:default;padding:4px 6px;line-height:1.2;overflow-wrap:anywhere}
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+  <script type="text/babel">
+// ═══════════════════════════════════════════════════════════
+// CONSTANTS — Identity Options
+// ═══════════════════════════════════════════════════════════
+const IDENTITY_OPTIONS = [
+  { v: "entrepreneur", icon: "💡", t: "创业者" },
+  { v: "overseas",     icon: "✈️", t: "留学归国" },
+  { v: "graduate",     icon: "📜", t: "应届毕业生" },
+];
+
+// ═══════════════════════════════════════════════════════════
+// TWEAKS PANEL HELPERS
+// ═══════════════════════════════════════════════════════════
+function useTweaks(defaults) {
+  const [values, setValues] = React.useState(defaults);
+  const setTweak = React.useCallback((keyOrEdits, val) => {
+    const edits = typeof keyOrEdits === 'object' && keyOrEdits !== null
+      ? keyOrEdits : { [keyOrEdits]: val };
+    setValues(prev => ({ ...prev, ...edits }));
+    window.parent.postMessage({ type: '__edit_mode_set_keys', edits }, '*');
+    window.dispatchEvent(new CustomEvent('tweakchange', { detail: edits }));
+  }, []);
+  return [values, setTweak];
+}
+
+function TweaksPanel({ title = 'Tweaks', children }) {
+  const [open, setOpen] = React.useState(false);
+  const dragRef = React.useRef(null);
+  const offsetRef = React.useRef({ x: 16, y: 16 });
+  const PAD = 16;
+  const clampToViewport = React.useCallback(() => {
+    const panel = dragRef.current; if (!panel) return;
+    const w = panel.offsetWidth, h = panel.offsetHeight;
+    const maxRight = Math.max(PAD, window.innerWidth - w - PAD);
+    const maxBottom = Math.max(PAD, window.innerHeight - h - PAD);
+    offsetRef.current = {
+      x: Math.min(maxRight, Math.max(PAD, offsetRef.current.x)),
+      y: Math.min(maxBottom, Math.max(PAD, offsetRef.current.y)),
+    };
+    panel.style.right = offsetRef.current.x + 'px';
+    panel.style.bottom = offsetRef.current.y + 'px';
+  }, []);
+  React.useEffect(() => {
+    if (!open) return;
+    clampToViewport();
+    const ro = new ResizeObserver(clampToViewport);
+    ro.observe(document.documentElement);
+    return () => ro.disconnect();
+  }, [open, clampToViewport]);
+  React.useEffect(() => {
+    const onMsg = (e) => {
+      const t = e?.data?.type;
+      if (t === '__activate_edit_mode') setOpen(true);
+      else if (t === '__deactivate_edit_mode') setOpen(false);
+    };
+    window.addEventListener('message', onMsg);
+    window.parent.postMessage({ type: '__edit_mode_available' }, '*');
+    return () => window.removeEventListener('message', onMsg);
+  }, []);
+  const dismiss = () => { setOpen(false); window.parent.postMessage({ type: '__edit_mode_dismissed' }, '*'); };
+  const onDragStart = (e) => {
+    const panel = dragRef.current; if (!panel) return;
+    const r = panel.getBoundingClientRect();
+    const sx = e.clientX, sy = e.clientY;
+    const startRight = window.innerWidth - r.right;
+    const startBottom = window.innerHeight - r.bottom;
+    const move = (ev) => {
+      offsetRef.current = { x: startRight - (ev.clientX - sx), y: startBottom - (ev.clientY - sy) };
+      clampToViewport();
+    };
+    const up = () => { window.removeEventListener('mousemove', move); window.removeEventListener('mouseup', up); };
+    window.addEventListener('mousemove', move);
+    window.addEventListener('mouseup', up);
+  };
+  if (!open) return null;
+  return (
+    <div ref={dragRef} className="twk-panel" style={{ right: offsetRef.current.x, bottom: offsetRef.current.y }}>
+      <div className="twk-hd" onMouseDown={onDragStart}>
+        <b>{title}</b>
+        <button className="twk-x" aria-label="Close" onMouseDown={e => e.stopPropagation()} onClick={dismiss}>✕</button>
+      </div>
+      <div className="twk-body">{children}</div>
+    </div>
+  );
+}
+
+function TweakSection({ label, children }) {
+  return <><div className="twk-sect">{label}</div>{children}</>;
+}
+
+function TweakRadio({ label, value, options, onChange }) {
+  const trackRef = React.useRef(null);
+  const [dragging, setDragging] = React.useState(false);
+  const valueRef = React.useRef(value);
+  valueRef.current = value;
+  const opts = options.map(o => typeof o === 'object' ? o : { value: o, label: o });
+  const idx = Math.max(0, opts.findIndex(o => o.v === value || o.value === value));
+  const n = opts.length;
+  const segAt = (clientX) => {
+    const r = trackRef.current.getBoundingClientRect();
+    const inner = r.width - 4;
+    const i = Math.floor(((clientX - r.left - 2) / inner) * n);
+    return opts[Math.max(0, Math.min(n - 1, i))].value;
+  };
+  const onPointerDown = (e) => {
+    setDragging(true);
+    const v0 = segAt(e.clientX);
+    if (v0 !== valueRef.current) onChange(v0);
+    const move = (ev) => { if (trackRef.current) { const v = segAt(ev.clientX); if (v !== valueRef.current) onChange(v); } };
+    const up = () => { setDragging(false); window.removeEventListener('pointermove', move); window.removeEventListener('pointerup', up); };
+    window.addEventListener('pointermove', move);
+    window.addEventListener('pointerup', up);
+  };
+  return (
+    <div className="twk-row">
+      <div className="twk-lbl"><span>{label}</span></div>
+      <div ref={trackRef} role="radiogroup" onPointerDown={onPointerDown} className={dragging ? 'twk-seg dragging' : 'twk-seg'}>
+        <div className="twk-seg-thumb" style={{ left: `calc(2px + ${idx} * (100% - 4px) / ${n})`, width: `calc((100% - 4px) / ${n})` }} />
+        {opts.map(o => (
+          <button key={o.value} type="button" role="radio" aria-checked={o.value === value}>{o.label}</button>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+// ═══════════════════════════════════════════════════════════
+// CITY DATA
+// ═══════════════════════════════════════════════════════════
+const CITIES = [
+{
+    "id": "beijing",
+    "name": "北京",
+    "nameEn": "BEIJING",
+    "region": "北方",
+    "tier": "一线",
+    "glyph": "京",
+    "c1": "#FBE3E7",
+    "c2": "#D88A98",
+    "desc": "首都，落户门槛高但含金量最高。朝阳海淀等区推出安居保障+灯塔计划，人工智能/集成电路/生物医药重点引才。",
+    "subsidy": 50000,
+    "subsidyLabel": "各区5-50万",
+    "subsidyKind": "安居补贴+落户",
+    "cost": 5,
+    "jobs": 5,
+    "chill": 1,
+    "link": "https://www.beijing.gov.cn/zhengce/zhengcefagui/202510/t20251031_4249233.html",
+    "linkLabel": "北京·五部门支持青年就业创业通知(京人社毕发〔2025〕12号·含安居补贴+落户)",
+    "tags": [
+      {
+        "t": "落户含金量高",
+        "c": "amber"
+      },
+      {
+        "t": "一线龙头",
+        "c": "rose"
+      },
+      {
+        "t": "科创中心",
+        "c": "indigo"
+      }
+    ],
+    "audience": [
+      "博士",
+      "硕士以上",
+      "留学归国"
+    ]
+  ,
+  identityData: {
+      "entrepreneur": {
+            "subsidy": 100000,
+            "subsidyLabel": "最高 10 万",
+            "subsidyKind": "一次性创业补贴+贴息贷款",
+            "conditions": [
+                  "毕业5年内首次创业",
+                  "项目入驻认定园区",
+                  "带动2人以上就业"
+            ],
+            "link": "https://www.beijing.gov.cn/zhengce/zhengcefagui/202504/t20250401_4261623.html",
+            "linkLabel": "北京·支持留学回国人才创新创业13条(2025年3月)"
+      },
+      "overseas": {
+            "subsidy": 300000,
+            "subsidyLabel": "最高 30 万",
+            "subsidyKind": "留学生安家补贴+落户",
+            "conditions": [
+                  "海外硕士学历以上",
+                  "回国2年内申请",
+                  "连续缴纳社保3个月"
+            ],
+            "link": "https://www.bjhd.gov.cn/ztzx/2025/hdst/mtjj/202504/t20250429_4767773_m.shtml",
+            "linkLabel": "北京海淀·青年人才创新创业示范区十条(含安居+落户+资金)"
+      },
+      "graduate": {
+            "subsidy": 50000,
+            "subsidyLabel": "各区5-50万",
+            "subsidyKind": "安居补贴+落户支持",
+            "conditions": [
+                  "应届全日制本科以上",
+                  "首次在京就业",
+                  "重点产业领域优先"
+            ],
+            "link": "https://www.beijing.gov.cn/zhengce/zhengcefagui/202510/t20251031_4249233.html",
+            "linkLabel": "北京·五部门支持青年就业创业通知(京人社毕发〔2025〕12号·含安居补贴+落户+扩岗补助)"
+      }
+}
+},
+{
+    "id": "tianjin",
+    "name": "天津",
+    "nameEn": "TIANJIN",
+    "region": "北方",
+    "tier": "新一线",
+    "glyph": "津",
+    "c1": "#FFE7C9",
+    "c2": "#FFB670",
+    "desc": "海河英才计划，留学生与高层次人才补贴力度全国领先，落户便捷含金量高。",
+    "subsidy": 300000,
+    "subsidyLabel": "最高 30 万",
+    "subsidyKind": "一次性安家费",
+    "cost": 2,
+    "jobs": 4,
+    "chill": 3,
+    "link": "https://hrss.tj.gov.cn/zhengwugongkai/zhengcezhinan/zxwjnew/202502/t20250213_6856514.html",
+    "linkLabel": "海河英才若干措施",
+    "tags": [
+      {
+        "t": "高额补贴",
+        "c": "amber"
+      },
+      {
+        "t": "留学生专项",
+        "c": "teal"
+      },
+      {
+        "t": "落户便捷",
+        "c": "indigo"
+      }
+    ],
+    "audience": [
+      "留学归国",
+      "硕士以上",
+      "求职者"
+    ]
+  ,
+  identityData: {
+      "entrepreneur": {
+            "subsidy": 300000,
+            "subsidyLabel": "最高 30 万",
+            "subsidyKind": "创业担保贷款+贴息+房租补贴",
+            "conditions": [
+                  "毕业2年内首次创办",
+                  "经营满1年",
+                  "最长24月房租补贴"
+            ],
+            "link": "https://hrss.tj.gov.cn/zhengwugongkai/zhengcezhinan/zxwjnew/202502/t20250213_6856514.html",
+            "linkLabel": "天津·海河英才"
+      },
+      "overseas": {
+            "subsidy": 300000,
+            "subsidyLabel": "最高 30 万",
+            "subsidyKind": "海河英才一次性安家费",
+            "conditions": [
+                  "海外硕博士学历",
+                  "签订3年以上劳动合同",
+                  "落户后即可申请"
+            ],
+            "link": "https://hrss.tj.gov.cn/zhengwugongkai/zhengcezhinan/zxwjnew/202502/t20250213_6856514.html",
+            "linkLabel": "天津·海归专项"
+      },
+      "graduate": {
+            "subsidy": 50000,
+            "subsidyLabel": "博士5万",
+            "subsidyKind": "海河英才安家费+人才公寓",
+            "conditions": [
+                  "应届全日制本科以上",
+                  "签1年以上劳动合同",
+                  "人才公寓租金优惠"
+            ],
+            "link": "https://hrss.tj.gov.cn/zhengwugongkai/zhengcezhinan/zxwjnew/202502/t20250213_6856514.html",
+            "linkLabel": "天津·海河英才若干措施(津政办规〔2025〕2号)"
+      }
+}
+},
+{
+    "id": "shijiazhuang",
+    "name": "石家庄",
+    "nameEn": "SHIJIAZHUANG",
+    "region": "北方",
+    "tier": "二线",
+    "glyph": "石",
+    "c1": "#E5F1D9",
+    "c2": "#9CC57E",
+    "desc": "一次性安家费博士5万/硕士3万/学士1万，人才绿卡B卡博士购房补贴30万。",
+    "subsidy": 50000,
+    "subsidyLabel": "最高 30 万",
+    "subsidyKind": "安家费+购房补贴",
+    "cost": 1,
+    "jobs": 3,
+    "chill": 3,
+    "link": "https://rsj.sjz.gov.cn/columns/e0294d80-e09d-4e5c-b59f-759abec61726/202602/10/7791409b-bca9-4d53-94e6-64e7a841f02d.html",
+    "linkLabel": "石家庄人社·人才绿卡",
+    "tags": [
+      {
+        "t": "生活成本低",
+        "c": "green"
+      },
+      {
+        "t": "绿卡购房补贴",
+        "c": "amber"
+      },
+      {
+        "t": "应届生友好",
+        "c": "indigo"
+      }
+    ],
+    "audience": [
+      "应届生",
+      "学生",
+      "求职者"
+    ]
+  ,
+  identityData: {
+      "entrepreneur": {
+            "subsidy": 10000,
+            "subsidyLabel": "最高 1 万",
+            "subsidyKind": "一次性创业补贴",
+            "conditions": [
+                  "毕业5年内",
+                  "正常经营3个月以上"
+            ],
+            "link": "https://rsj.sjz.gov.cn",
+            "linkLabel": "⚠️待核实·石家庄·一次性创业补贴"
+      },
+      "overseas": {
+            "subsidy": 50000,
+            "subsidyLabel": "最高 5 万",
+            "subsidyKind": "安家补贴",
+            "conditions": [
+                  "海外学历认证",
+                  "签订劳动合同"
+            ],
+            "link": "https://rsj.sjz.gov.cn",
+            "linkLabel": "石家庄·一次性安家补贴公示(博5万/硕3万/本1万·2025Q4批次)"
+      },
+      "graduate": {
+            "subsidy": 20000,
+            "subsidyLabel": "最高 2 万",
+            "subsidyKind": "生活补贴+租房补贴",
+            "conditions": [
+                  "应届全日制本科以上",
+                  "签1年以上劳动合同"
+            ],
+            "link": "https://rsj.sjz.gov.cn",
+            "linkLabel": "⚠️待核实·石家庄·生活补贴+租房补贴"
+      }
+}
+},
+{
+    "id": "tangshan",
+    "name": "唐山",
+    "nameEn": "TANGSHAN",
+    "region": "北方",
+    "tier": "二线",
+    "glyph": "唐",
+    "c1": "#E6E8FB",
+    "c2": "#9DA5EF",
+    "desc": "河北经济重镇，钢铁产业转型中，人才引进以企业奖励为主，生活成本极低。",
+    "subsidy": 30000,
+    "subsidyLabel": "最高 3 万",
+    "subsidyKind": "企业奖励+住房",
+    "cost": 1,
+    "jobs": 3,
+    "chill": 3,
+    "link": "https://rsj.tangshan.gov.cn/ecdomain/framework/tsrsw/hjbhieddnclcbbnpjmejkoomgnldodab/hjclkihenclcbbnpjmejkoomgnldodab.do?isfloat=1&disp_template=nemapdlhfngbbbnpkkgkplglecahomnl&fileid=20250704150105988&moduleIDPage=hjclkihenclcbbnpjmejkoomgnldodab&siteIDPage=tsrsw&infoChecked=0",
+    "linkLabel": "唐山人社·人才服务",
+    "tags": [
+      {
+        "t": "生活成本低",
+        "c": "green"
+      },
+      {
+        "t": "产业转型",
+        "c": "indigo"
+      },
+      {
+        "t": "企业奖励",
+        "c": "teal"
+      }
+    ],
+    "audience": [
+      "应届生",
+      "求职者"
+    ]
+  ,
+  identityData: {
+      "entrepreneur": {
+            "subsidy": 10000,
+            "subsidyLabel": "最高 1 万",
+            "subsidyKind": "一次性创业补贴",
+            "conditions": [
+                  "毕业5年内",
+                  "正常经营3个月以上"
+            ],
+            "link": "https://rsj.tangshan.gov.cn",
+            "linkLabel": "⚠️待核实·唐山·一次性创业补贴"
+      },
+      "overseas": {
+            "subsidy": 50000,
+            "subsidyLabel": "最高 5 万",
+            "subsidyKind": "安家补贴",
+            "conditions": [
+                  "海外学历认证",
+                  "签订劳动合同"
+            ],
+            "link": "https://rsj.tangshan.gov.cn",
+            "linkLabel": "唐山·凤凰英才青年人才奖补细则(博30万/硕10万购房补+博3千/月生活补)"
+      },
+      "graduate": {
+            "subsidy": 20000,
+            "subsidyLabel": "最高 2 万",
+            "subsidyKind": "生活补贴+租房补贴",
+            "conditions": [
+                  "应届全日制本科以上",
+                  "签1年以上劳动合同"
+            ],
+            "link": "https://rsj.tangshan.gov.cn",
+            "linkLabel": "⚠️待核实·唐山·生活补贴+租房补贴"
+      }
+}
+},
+{
+    "id": "qinhuangdao",
+    "name": "秦皇岛",
+    "nameEn": "QINHUANGDAO",
+    "region": "北方",
+    "tier": "二线",
+    "glyph": "秦",
+    "c1": "#DCEFEB",
+    "c2": "#6BB1C6",
+    "desc": "海滨旅游城市，环境宜人生活慢，重点引文旅+康养产业人才。",
+    "subsidy": 20000,
+    "subsidyLabel": "最高 2 万",
+    "subsidyKind": "生活补贴",
+    "cost": 2,
+    "jobs": 2,
+    "chill": 5,
+    "link": "https://www.qhd.gov.cn",
+    "linkLabel": "秦皇岛市政府·人才政策",
+    "tags": [
+      {
+        "t": "宜居",
+        "c": "teal"
+      },
+      {
+        "t": "慢生活",
+        "c": "green"
+      },
+      {
+        "t": "文旅康养",
+        "c": "rose"
+      }
+    ],
+    "audience": [
+      "应届生",
+      "学生"
+    ]
+  ,
+  identityData: {
+      "entrepreneur": {
+            "subsidy": 10000,
+            "subsidyLabel": "最高 1 万",
+            "subsidyKind": "一次性创业补贴",
+            "conditions": [
+                  "毕业5年内",
+                  "正常经营3个月以上"
+            ],
+            "link": "https://rsj.qhd.gov.cn",
+            "linkLabel": "⚠️待核实·秦皇岛·一次性创业补贴"
+      },
+      "overseas": {
+            "subsidy": 50000,
+            "subsidyLabel": "最高 5 万",
+            "subsidyKind": "安家补贴",
+            "conditions": [
+                  "海外学历认证",
+                  "签订劳动合同"
+            ],
+            "link": "https://rsj.qhd.gov.cn",
+            "linkLabel": "⚠️待核实·秦皇岛·安家补贴"
+      },
+      "graduate": {
+            "subsidy": 20000,
+            "subsidyLabel": "最高 2 万",
+            "subsidyKind": "生活补贴+租房补贴",
+            "conditions": [
+                  "应届全日制本科以上",
+                  "签1年以上劳动合同"
+            ],
+            "link": "https://rsj.qhd.gov.cn",
+            "linkLabel": "⚠️暂无公开政策原文·⚠️待核实·秦皇岛·生活补贴+租房补贴"
+      }
+}
+},
+{
+    "id": "handan",
+    "name": "邯郸",
+    "nameEn": "HANDAN",
+    "region": "北方",
+    "tier": "二线",
+    "glyph": "邯",
+    "c1": "#FFF3E2",
+    "c2": "#E8C470",
+    "desc": "河北南部中心城市，历史文化名城，制造业基础扎实，生活成本极低。",
+    "subsidy": 20000,
+    "subsidyLabel": "最高 2 万",
+    "subsidyKind": "安家补贴",
+    "cost": 1,
+    "jobs": 2,
+    "chill": 4,
+    "link": "https://rsj.hd.gov.cn",
+    "linkLabel": "邯郸人社",
+    "tags": [
+      {
+        "t": "生活成本低",
+        "c": "green"
+      },
+      {
+        "t": "制造业",
+        "c": "amber"
+      },
+      {
+        "t": "历史名城",
+        "c": "indigo"
+      }
+    ],
+    "audience": [
+      "应届生",
+      "学生"
+    ]
+  ,
+  identityData: {
+      "entrepreneur": {
+            "subsidy": 10000,
+            "subsidyLabel": "最高 1 万",
+            "subsidyKind": "一次性创业补贴",
+            "conditions": [
+                  "毕业5年内",
+                  "正常经营3个月以上"
+            ],
+            "link": "https://rsj.hd.gov.cn",
+            "linkLabel": "⚠️待核实·邯郸·一次性创业补贴"
+      },
+      "overseas": {
+            "subsidy": 50000,
+            "subsidyLabel": "最高 5 万",
+            "subsidyKind": "安家补贴",
+            "conditions": [
+                  "海外学历认证",
+                  "签订劳动合同"
+            ],
+            "link": "https://rsj.hd.gov.cn",
+            "linkLabel": "⚠️待核实·邯郸·安家补贴"
+      },
+      "graduate": {
+            "subsidy": 20000,
+            "subsidyLabel": "最高 2 万",
+            "subsidyKind": "生活补贴+租房补贴",
+            "conditions": [
+                  "应届全日制本科以上",
+                  "签1年以上劳动合同"
+            ],
+            "link": "https://rsj.hd.gov.cn",
+            "linkLabel": "⚠️暂无公开政策原文·⚠️待核实·邯郸·生活补贴+租房补贴"
+      }
+}
+},
+{
+    "id": "taiyuan",
+    "name": "太原",
+    "nameEn": "TAIYUAN",
+    "region": "北方",
+    "tier": "二线",
+    "glyph": "晋",
+    "c1": "#FBE3E7",
+    "c2": "#D88A98",
+    "desc": "博士生活补助5000元/月+购房补贴20万，QS前200高校专项，有7-21天免费人才驿站。",
+    "subsidy": 200000,
+    "subsidyLabel": "最高 20 万",
+    "subsidyKind": "购房补贴+生活补助",
+    "cost": 1,
+    "jobs": 3,
+    "chill": 4,
+    "link": "https://rsj.taiyuan.gov.cn/tzgg/20250630/30229329.html",
+    "linkLabel": "太原人社·人才补贴",
+    "tags": [
+      {
+        "t": "博士友好",
+        "c": "amber"
+      },
+      {
+        "t": "生活成本低",
+        "c": "green"
+      },
+      {
+        "t": "购房补贴高",
+        "c": "rose"
+      }
+    ],
+    "audience": [
+      "博士",
+      "硕士以上",
+      "应届生"
+    ]
+  ,
+  identityData: {
+      "entrepreneur": {
+            "subsidy": 10000,
+            "subsidyLabel": "最高 1 万",
+            "subsidyKind": "一次性创业补贴",
+            "conditions": [
+                  "毕业5年内",
+                  "正常经营3个月以上"
+            ],
+            "link": "https://rsj.taiyuan.gov.cn/zcwj/20220606/1214819.html",
+            "linkLabel": "⚠️待核实·太原·一次性创业补贴"
+      },
+      "overseas": {
+            "subsidy": 50000,
+            "subsidyLabel": "最高 5 万",
+            "subsidyKind": "安家补贴",
+            "conditions": [
+                  "海外学历认证",
+                  "签订劳动合同"
+            ],
+            "link": "https://rsj.taiyuan.gov.cn",
+            "linkLabel": "⚠️待核实·太原·安家补贴"
+      },
+      "graduate": {
+            "subsidy": 20000,
+            "subsidyLabel": "最高 2 万",
+            "subsidyKind": "生活补贴+租房补贴",
+            "conditions": [
+                  "应届全日制本科以上",
+                  "签1年以上劳动合同"
+            ],
+            "link": "https://rsj.taiyuan.gov.cn",
+            "linkLabel": "太原·来并工作补助实施办法全文(博5千/硕3千/本1.5千/月生活补·博20万购房)"
+      }
+}
+},
+{
+    "id": "datong",
+    "name": "大同",
+    "nameEn": "DATONG",
+    "region": "北方",
+    "tier": "二线",
+    "glyph": "同",
+    "c1": "#E5F1D9",
+    "c2": "#9CC57E",
+    "desc": "山西第二大城市，能源转型+文旅发展，引才政策以企业住房配套为主。",
+    "subsidy": 10000,
+    "subsidyLabel": "最高 1 万",
+    "subsidyKind": "住房配套",
+    "cost": 1,
+    "jobs": 2,
+    "chill": 4,
+    "link": "https://www.dt.gov.cn",
+    "linkLabel": "大同市政府",
+    "tags": [
+      {
+        "t": "生活成本低",
+        "c": "green"
+      },
+      {
+        "t": "能源转型",
+        "c": "indigo"
+      },
+      {
+        "t": "文旅",
+        "c": "teal"
+      }
+    ],
+    "audience": [
+      "应届生"
+    ]
+  ,
+  identityData: {
+      "entrepreneur": {
+            "subsidy": 10000,
+            "subsidyLabel": "最高 1 万",
+            "subsidyKind": "一次性创业补贴",
+            "conditions": [
+                  "毕业5年内",
+                  "正常经营3个月以上"
+            ],
+            "link": "https://zc.51shebao.com/detail/838234",
+            "linkLabel": "⚠️待核实·大同·一次性创业补贴"
+      },
+      "overseas": {
+            "subsidy": 50000,
+            "subsidyLabel": "最高 5 万",
+            "subsidyKind": "安家补贴",
+            "conditions": [
+                  "海外学历认证",
+                  "签订劳动合同"
+            ],
+            "link": "https://rsj.dt.gov.cn",
+            "linkLabel": "⚠️待核实·大同·安家补贴"
+      },
+      "graduate": {
+            "subsidy": 20000,
+            "subsidyLabel": "最高 2 万",
+            "subsidyKind": "生活补贴+租房补贴",
+            "conditions": [
+                  "应届全日制本科以上",
+                  "签1年以上劳动合同"
+            ],
+            "link": "https://rsj.dt.gov.cn",
+            "linkLabel": "大同·双十六条人才补贴申报(博5千/月+20万购房·硕3千/月+10万购房)"
+      }
+}
+},
+{
+    "id": "huhehaote",
+    "name": "呼和浩特",
+    "nameEn": "HOHHOT",
+    "region": "北方",
+    "tier": "二线",
+    "glyph": "蒙",
+    "c1": "#DCEFEB",
+    "c2": "#7FC0B6",
+    "desc": "人才强市25条，博士购房补贴10万+租房1000元/月，六大产业集群额外奖励5万。",
+    "subsidy": 100000,
+    "subsidyLabel": "最高 15 万",
+    "subsidyKind": "购房补贴+产业奖励",
+    "cost": 1,
+    "jobs": 3,
+    "chill": 4,
+    "link": "http://rsj.huhhot.gov.cn",
+    "linkLabel": "呼和浩特人社·人才强市",
+    "tags": [
+      {
+        "t": "产业奖励叠加",
+        "c": "amber"
+      },
+      {
+        "t": "生活成本低",
+        "c": "green"
+      },
+      {
+        "t": "落户补贴",
+        "c": "indigo"
+      }
+    ],
+    "audience": [
+      "应届生",
+      "求职者",
+      "硕士以上"
+    ]
+  ,
+  identityData: {
+      "entrepreneur": {
+            "subsidy": 10000,
+            "subsidyLabel": "最高 1 万",
+            "subsidyKind": "一次性创业补贴",
+            "conditions": [
+                  "毕业5年内",
+                  "正常经营3个月以上"
+            ],
+            "link": "http://rsj.huhhot.gov.cn/slb/zwgk_slb/gsgg_slb/202603/t20260318_1984157.html",
+            "linkLabel": "⚠️待核实·呼和浩特·一次性创业补贴"
+      },
+      "overseas": {
+            "subsidy": 50000,
+            "subsidyLabel": "最高 5 万",
+            "subsidyKind": "安家补贴",
+            "conditions": [
+                  "海外学历认证",
+                  "签订劳动合同"
+            ],
+            "link": "https://rsj.huhhot.gov.cn",
+            "linkLabel": "呼和浩特·2026年高校毕业生租购房补贴公告(博10万购房·博1千/月租房)"
+      },
+      "graduate": {
+            "subsidy": 20000,
+            "subsidyLabel": "最高 2 万",
+            "subsidyKind": "生活补贴+租房补贴",
+            "conditions": [
+                  "应届全日制本科以上",
+                  "签1年以上劳动合同"
+            ],
+            "link": "https://rsj.huhhot.gov.cn",
+            "linkLabel": "⚠️待核实·呼和浩特·生活补贴+租房补贴"
+      }
+}
+},
+{
+    "id": "baotou",
+    "name": "包头",
+    "nameEn": "BAOTOU",
+    "region": "北方",
+    "tier": "二线",
+    "glyph": "包",
+    "c1": "#E6E8FB",
+    "c2": "#9DA5EF",
+    "desc": "草原钢城，稀土之都，工业基础雄厚，引才以重点企业奖励+住房配套为主。",
+    "subsidy": 50000,
+    "subsidyLabel": "最高 5 万",
+    "subsidyKind": "企业奖励+安家",
+    "cost": 1,
+    "jobs": 2,
+    "chill": 4,
+    "link": "http://rsj.baotou.gov.cn",
+    "linkLabel": "包头人社",
+    "tags": [
+      {
+        "t": "稀土产业",
+        "c": "amber"
+      },
+      {
+        "t": "工业基础",
+        "c": "indigo"
+      },
+      {
+        "t": "生活成本低",
+        "c": "green"
+      }
+    ],
+    "audience": [
+      "应届生",
+      "求职者"
+    ]
+  ,
+  identityData: {
+      "entrepreneur": {
+            "subsidy": 10000,
+            "subsidyLabel": "最高 1 万",
+            "subsidyKind": "一次性创业补贴",
+            "conditions": [
+                  "毕业5年内",
+                  "正常经营3个月以上"
+            ],
+            "link": "https://btrb.baotounews.com.cn/paper/pc/content/202509/07/content_193969.html",
+            "linkLabel": "⚠️待核实·包头·一次性创业补贴"
+      },
+      "overseas": {
+            "subsidy": 50000,
+            "subsidyLabel": "最高 5 万",
+            "subsidyKind": "安家补贴",
+            "conditions": [
+                  "海外学历认证",
+                  "签订劳动合同"
+            ],
+            "link": "https://rsj.baotou.gov.cn",
+            "linkLabel": "包头·近悦远来人才生态(博20万安家+硕10万·15天免费驿站)"
+      },
+      "graduate": {
+            "subsidy": 20000,
+            "subsidyLabel": "最高 2 万",
+            "subsidyKind": "生活补贴+租房补贴",
+            "conditions": [
+                  "应届全日制本科以上",
+                  "签1年以上劳动合同"
+            ],
+            "link": "https://rsj.baotou.gov.cn",
+            "linkLabel": "⚠️待核实·包头·生活补贴+租房补贴"
+      }
+}
+},
+{
+    "id": "eerduosi",
+    "name": "鄂尔多斯",
+    "nameEn": "ORDOS",
+    "region": "北方",
+    "tier": "二线",
+    "glyph": "鄂",
+    "c1": "#FFF3E2",
+    "c2": "#E8C470",
+    "desc": "资源富集型城市，财政宽裕，对能源化工及新能源产业人才需求旺盛。",
+    "subsidy": 30000,
+    "subsidyLabel": "最高 3 万",
+    "subsidyKind": "安家补贴",
+    "cost": 2,
+    "jobs": 2,
+    "chill": 3,
+    "link": "https://rsj.ordos.gov.cn",
+    "linkLabel": "鄂尔多斯人社",
+    "tags": [
+      {
+        "t": "财政宽裕",
+        "c": "amber"
+      },
+      {
+        "t": "能源产业",
+        "c": "indigo"
+      },
+      {
+        "t": "新能源",
+        "c": "green"
+      }
+    ],
+    "audience": [
+      "应届生",
+      "求职者"
+    ]
+  ,
+  identityData: {
+      "entrepreneur": {
+            "subsidy": 10000,
+            "subsidyLabel": "最高 1 万",
+            "subsidyKind": "一次性创业补贴",
+            "conditions": [
+                  "毕业5年内",
+                  "正常经营3个月以上"
+            ],
+            "link": "https://rsj.ordos.gov.cn",
+            "linkLabel": "⚠️待核实·鄂尔多斯·一次性创业补贴"
+      },
+      "overseas": {
+            "subsidy": 50000,
+            "subsidyLabel": "最高 5 万",
+            "subsidyKind": "安家补贴",
+            "conditions": [
+                  "海外学历认证",
+                  "签订劳动合同"
+            ],
+            "link": "https://rsj.ordos.gov.cn",
+            "linkLabel": "⚠️待核实·鄂尔多斯·安家补贴"
+      },
+      "graduate": {
+            "subsidy": 20000,
+            "subsidyLabel": "最高 2 万",
+            "subsidyKind": "生活补贴+租房补贴",
+            "conditions": [
+                  "应届全日制本科以上",
+                  "签1年以上劳动合同"
+            ],
+            "link": "https://rsj.ordos.gov.cn",
+            "linkLabel": "⚠️暂无公开政策原文·⚠️待核实·鄂尔多斯·生活补贴+租房补贴"
+      }
+}
+},
+{
+    "id": "shenyang",
+    "name": "沈阳",
+    "nameEn": "SHENYANG",
+    "region": "北方",
+    "tier": "二线",
+    "glyph": "沈",
+    "c1": "#E5F1D9",
+    "c2": "#9CC57E",
+    "desc": "东北最大中心城市，博士生活补贴1500元/月+购房补贴7万，装备制造业重镇。",
+    "subsidy": 70000,
+    "subsidyLabel": "最高 7 万",
+    "subsidyKind": "购房补贴+生活补贴",
+    "cost": 2,
+    "jobs": 3,
+    "chill": 3,
+    "link": "https://www.shenyang.gov.cn/zwgk/zwdt/bxgz/202503/t20250306_4817741.html",
+    "linkLabel": "沈阳人社·人才新政",
+    "tags": [
+      {
+        "t": "东北枢纽",
+        "c": "amber"
+      },
+      {
+        "t": "装备制造",
+        "c": "indigo"
+      },
+      {
+        "t": "购房补贴",
+        "c": "teal"
+      }
+    ],
+    "audience": [
+      "应届生",
+      "硕士以上",
+      "求职者"
+    ]
+  ,
+  identityData: {
+      "entrepreneur": {
+            "subsidy": 10000,
+            "subsidyLabel": "最高 1 万",
+            "subsidyKind": "一次性创业补贴",
+            "conditions": [
+                  "毕业5年内",
+                  "正常经营3个月以上"
+            ],
+            "link": "https://rsj.shenyang.gov.cn",
+            "linkLabel": "⚠️待核实·沈阳·一次性创业补贴"
+      },
+      "overseas": {
+            "subsidy": 50000,
+            "subsidyLabel": "最高 5 万",
+            "subsidyKind": "安家补贴",
+            "conditions": [
+                  "海外学历认证",
+                  "签订劳动合同"
+            ],
+            "link": "https://rsj.shenyang.gov.cn",
+            "linkLabel": "沈阳·高校毕业生就业创业生活补贴+首次购房补贴(本2万/硕4万/博7万)"
+      },
+      "graduate": {
+            "subsidy": 20000,
+            "subsidyLabel": "最高 2 万",
+            "subsidyKind": "生活补贴+租房补贴",
+            "conditions": [
+                  "应届全日制本科以上",
+                  "签1年以上劳动合同"
+            ],
+            "link": "https://rsj.shenyang.gov.cn",
+            "linkLabel": "⚠️待核实·沈阳·生活补贴+租房补贴"
+      }
+}
+},
+{
+    "id": "dalian",
+    "name": "大连",
+    "nameEn": "DALIAN",
+    "region": "北方",
+    "tier": "二线",
+    "glyph": "连",
+    "c1": "#DCEFEB",
+    "c2": "#6BB1C6",
+    "desc": "北方最美海滨城市，软件+航运双引擎，博士购房补贴10万+安家费。",
+    "subsidy": 100000,
+    "subsidyLabel": "最高 10 万",
+    "subsidyKind": "购房补贴+安家费",
+    "cost": 3,
+    "jobs": 4,
+    "chill": 4,
+    "link": "https://www.dlhitech.gov.cn/news/view_77630.html",
+    "linkLabel": "大连人社·兴连英才",
+    "tags": [
+      {
+        "t": "宜居",
+        "c": "teal"
+      },
+      {
+        "t": "软件产业",
+        "c": "indigo"
+      },
+      {
+        "t": "沿海开放",
+        "c": "amber"
+      }
+    ],
+    "audience": [
+      "应届生",
+      "求职者",
+      "硕士以上"
+    ]
+  ,
+  identityData: {
+      "entrepreneur": {
+            "subsidy": 10000,
+            "subsidyLabel": "最高 1 万",
+            "subsidyKind": "一次性创业补贴",
+            "conditions": [
+                  "毕业5年内",
+                  "正常经营3个月以上"
+            ],
+            "link": "https://rsj.dl.gov.cn",
+            "linkLabel": "⚠️待核实·大连·一次性创业补贴"
+      },
+      "overseas": {
+            "subsidy": 50000,
+            "subsidyLabel": "最高 5 万",
+            "subsidyKind": "安家补贴",
+            "conditions": [
+                  "海外学历认证",
+                  "签订劳动合同"
+            ],
+            "link": "https://rsj.dl.gov.cn",
+            "linkLabel": "⚠️待核实·大连·安家补贴"
+      },
+      "graduate": {
+            "subsidy": 20000,
+            "subsidyLabel": "最高 2 万",
+            "subsidyKind": "生活补贴+租房补贴",
+            "conditions": [
+                  "应届全日制本科以上",
+                  "签1年以上劳动合同"
+            ],
+            "link": "https://rsj.dl.gov.cn",
+            "linkLabel": "大连·兴连英才计划高校毕业生住房补贴(本1000/硕1500/博2500/月×36月)"
+      }
+}
+},
+{
+    "id": "anshan",
+    "name": "鞍山",
+    "nameEn": "ANSHAN",
+    "region": "北方",
+    "tier": "二线",
+    "glyph": "鞍",
+    "c1": "#FBE3E7",
+    "c2": "#E8A0B0",
+    "desc": "钢都，鞍钢所在地，工业底子扎实，毕业生以企业分配住房补贴为主。",
+    "subsidy": 20000,
+    "subsidyLabel": "最高 2 万",
+    "subsidyKind": "企业补贴",
+    "cost": 1,
+    "jobs": 2,
+    "chill": 3,
+    "link": "https://rsj.anshan.gov.cn",
+    "linkLabel": "鞍山人社",
+    "tags": [
+      {
+        "t": "钢铁产业",
+        "c": "amber"
+      },
+      {
+        "t": "生活成本低",
+        "c": "green"
+      }
+    ],
+    "audience": [
+      "应届生"
+    ]
+  ,
+  identityData: {
+      "entrepreneur": {
+            "subsidy": 10000,
+            "subsidyLabel": "最高 1 万",
+            "subsidyKind": "一次性创业补贴",
+            "conditions": [
+                  "毕业5年内",
+                  "正常经营3个月以上"
+            ],
+            "link": "https://rsj.anshan.gov.cn",
+            "linkLabel": "⚠️待核实·鞍山·一次性创业补贴"
+      },
+      "overseas": {
+            "subsidy": 50000,
+            "subsidyLabel": "最高 5 万",
+            "subsidyKind": "安家补贴",
+            "conditions": [
+                  "海外学历认证",
+                  "签订劳动合同"
+            ],
+            "link": "https://rsj.anshan.gov.cn",
+            "linkLabel": "⚠️待核实·鞍山·安家补贴"
+      },
+      "graduate": {
+            "subsidy": 20000,
+            "subsidyLabel": "最高 2 万",
+            "subsidyKind": "生活补贴+租房补贴",
+            "conditions": [
+                  "应届全日制本科以上",
+                  "签1年以上劳动合同"
+            ],
+            "link": "https://rsj.anshan.gov.cn",
+            "linkLabel": "⚠️暂无公开政策原文·⚠️待核实·鞍山·生活补贴+租房补贴"
+      }
+}
+},
+{
+    "id": "changchun",
+    "name": "长春",
+    "nameEn": "CHANGCHUN",
+    "region": "北方",
+    "tier": "二线",
+    "glyph": "春",
+    "c1": "#E6E8FB",
+    "c2": "#9DA5EF",
+    "desc": "汽车城+光学之都，博士购房补贴8万+生活补贴，一汽集团配套产业就业稳定。",
+    "subsidy": 80000,
+    "subsidyLabel": "最高 8 万",
+    "subsidyKind": "购房+生活补贴",
+    "cost": 1,
+    "jobs": 3,
+    "chill": 3,
+    "link": "http://ccrs.changchun.gov.cn/ywdt/tzgg/202507/t20250716_3452668.html",
+    "linkLabel": "长春人社·人才政策",
+    "tags": [
+      {
+        "t": "汽车产业",
+        "c": "amber"
+      },
+      {
+        "t": "生活成本低",
+        "c": "green"
+      },
+      {
+        "t": "就业稳定",
+        "c": "indigo"
+      }
+    ],
+    "audience": [
+      "应届生",
+      "硕士以上",
+      "求职者"
+    ]
+  ,
+  identityData: {
+      "entrepreneur": {
+            "subsidy": 10000,
+            "subsidyLabel": "最高 1 万",
+            "subsidyKind": "一次性创业补贴",
+            "conditions": [
+                  "毕业5年内",
+                  "正常经营3个月以上"
+            ],
+            "link": "https://rsj.changchun.gov.cn",
+            "linkLabel": "⚠️待核实·长春·一次性创业补贴"
+      },
+      "overseas": {
+            "subsidy": 50000,
+            "subsidyLabel": "最高 5 万",
+            "subsidyKind": "安家补贴",
+            "conditions": [
+                  "海外学历认证",
+                  "签订劳动合同"
+            ],
+            "link": "https://rsj.changchun.gov.cn",
+            "linkLabel": "⚠️待核实·长春·安家补贴"
+      },
+      "graduate": {
+            "subsidy": 20000,
+            "subsidyLabel": "最高 2 万",
+            "subsidyKind": "生活补贴+租房补贴",
+            "conditions": [
+                  "应届全日制本科以上",
+                  "签1年以上劳动合同"
+            ],
+            "link": "https://rsj.changchun.gov.cn",
+            "linkLabel": "长春·高校毕业生就业生活补贴+租房补贴实施细则(长人社办〔2025〕19号)"
+      }
+}
+},
+{
+    "id": "jilin",
+    "name": "吉林",
+    "nameEn": "JILIN CITY",
+    "region": "北方",
+    "tier": "二线",
+    "glyph": "吉",
+    "c1": "#DCEFEB",
+    "c2": "#7FC0B6",
+    "desc": "松花江畔雾凇之城，化工+碳纤维产业特色，生活节奏慢而舒适。",
+    "subsidy": 20000,
+    "subsidyLabel": "最高 2 万",
+    "subsidyKind": "生活补贴",
+    "cost": 1,
+    "jobs": 2,
+    "chill": 5,
+    "link": "https://rsj.jlcity.gov.cn",
+    "linkLabel": "吉林市人社",
+    "tags": [
+      {
+        "t": "慢生活",
+        "c": "teal"
+      },
+      {
+        "t": "生活成本低",
+        "c": "green"
+      },
+      {
+        "t": "化工产业",
+        "c": "indigo"
+      }
+    ],
+    "audience": [
+      "应届生",
+      "学生"
+    ]
+  ,
+  identityData: {
+      "entrepreneur": {
+            "subsidy": 10000,
+            "subsidyLabel": "最高 1 万",
+            "subsidyKind": "一次性创业补贴",
+            "conditions": [
+                  "毕业5年内",
+                  "正常经营3个月以上"
+            ],
+            "link": "https://rsj.jlcity.gov.cn",
+            "linkLabel": "⚠️待核实·吉林·一次性创业补贴"
+      },
+      "overseas": {
+            "subsidy": 50000,
+            "subsidyLabel": "最高 5 万",
+            "subsidyKind": "安家补贴",
+            "conditions": [
+                  "海外学历认证",
+                  "签订劳动合同"
+            ],
+            "link": "https://rsj.jlcity.gov.cn",
+            "linkLabel": "⚠️待核实·吉林·安家补贴"
+      },
+      "graduate": {
+            "subsidy": 20000,
+            "subsidyLabel": "最高 2 万",
+            "subsidyKind": "生活补贴+租房补贴",
+            "conditions": [
+                  "应届全日制本科以上",
+                  "签1年以上劳动合同"
+            ],
+            "link": "https://rsj.jlcity.gov.cn",
+            "linkLabel": "⚠️暂无公开政策原文·⚠️待核实·吉林·生活补贴+租房补贴"
+      }
+}
+},
+{
+    "id": "haerbin",
+    "name": "哈尔滨",
+    "nameEn": "HARBIN",
+    "region": "北方",
+    "tier": "二线",
+    "glyph": "哈",
+    "c1": "#FFF3E2",
+    "c2": "#FFB670",
+    "desc": "冰城夏都，东北亚枢纽，博士生活补贴3000元/月，高校密集学术氛围浓。",
+    "subsidy": 100000,
+    "subsidyLabel": "最高 10 万",
+    "subsidyKind": "生活补贴+安家费",
+    "cost": 2,
+    "jobs": 3,
+    "chill": 3,
+    "link": "https://www.shangzhi.gov.cn/szsrmzf/c110052/202309/c01_924504.shtml",
+    "linkLabel": "哈尔滨人社·人才新政",
+    "tags": [
+      {
+        "t": "高校密集",
+        "c": "indigo"
+      },
+      {
+        "t": "东北亚枢纽",
+        "c": "teal"
+      },
+      {
+        "t": "博士友好",
+        "c": "amber"
+      }
+    ],
+    "audience": [
+      "博士",
+      "硕士以上",
+      "应届生"
+    ]
+  ,
+  identityData: {
+      "entrepreneur": {
+            "subsidy": 10000,
+            "subsidyLabel": "最高 1 万",
+            "subsidyKind": "一次性创业补贴",
+            "conditions": [
+                  "毕业5年内",
+                  "正常经营3个月以上"
+            ],
+            "link": "https://rsj.harbin.gov.cn",
+            "linkLabel": "⚠️待核实·哈尔滨·一次性创业补贴"
+      },
+      "overseas": {
+            "subsidy": 50000,
+            "subsidyLabel": "最高 5 万",
+            "subsidyKind": "安家补贴",
+            "conditions": [
+                  "海外学历认证",
+                  "签订劳动合同"
+            ],
+            "link": "https://rsj.harbin.gov.cn",
+            "linkLabel": "⚠️待核实·哈尔滨·安家补贴"
+      },
+      "graduate": {
+            "subsidy": 20000,
+            "subsidyLabel": "最高 2 万",
+            "subsidyKind": "生活补贴+租房补贴",
+            "conditions": [
+                  "应届全日制本科以上",
+                  "签1年以上劳动合同"
+            ],
+            "link": "https://rsj.harbin.gov.cn",
+            "linkLabel": "哈尔滨·引进高校毕业生安家费生活补助实施细则(博3000/月+10万安家)"
+      }
+}
+},
+{
+    "id": "daqing",
+    "name": "大庆",
+    "nameEn": "DAQING",
+    "region": "北方",
+    "tier": "二线",
+    "glyph": "庆",
+    "c1": "#E5F1D9",
+    "c2": "#9CC57E",
+    "desc": "油城转型，石化+新能源双轮驱动，企业层面安家补贴较有竞争力。",
+    "subsidy": 30000,
+    "subsidyLabel": "最高 3 万",
+    "subsidyKind": "企业安家补贴",
+    "cost": 1,
+    "jobs": 2,
+    "chill": 4,
+    "link": "https://rsj.daqing.gov.cn",
+    "linkLabel": "大庆人社",
+    "tags": [
+      {
+        "t": "能源转型",
+        "c": "amber"
+      },
+      {
+        "t": "生活成本低",
+        "c": "green"
+      }
+    ],
+    "audience": [
+      "应届生"
+    ]
+  ,
+  identityData: {
+      "entrepreneur": {
+            "subsidy": 10000,
+            "subsidyLabel": "最高 1 万",
+            "subsidyKind": "一次性创业补贴",
+            "conditions": [
+                  "毕业5年内",
+                  "正常经营3个月以上"
+            ],
+            "link": "https://rsj.daqing.gov.cn",
+            "linkLabel": "⚠️待核实·大庆·一次性创业补贴"
+      },
+      "overseas": {
+            "subsidy": 50000,
+            "subsidyLabel": "最高 5 万",
+            "subsidyKind": "安家补贴",
+            "conditions": [
+                  "海外学历认证",
+                  "签订劳动合同"
+            ],
+            "link": "https://rsj.daqing.gov.cn",
+            "linkLabel": "⚠️待核实·大庆·安家补贴"
+      },
+      "graduate": {
+            "subsidy": 20000,
+            "subsidyLabel": "最高 2 万",
+            "subsidyKind": "生活补贴+租房补贴",
+            "conditions": [
+                  "应届全日制本科以上",
+                  "签1年以上劳动合同"
+            ],
+            "link": "https://rsj.daqing.gov.cn",
+            "linkLabel": "⚠️暂无公开政策原文·⚠️待核实·大庆·生活补贴+租房补贴"
+      }
+}
+},
+{
+    "id": "jinan",
+    "name": "济南",
+    "nameEn": "JINAN",
+    "region": "北方",
+    "tier": "二线",
+    "glyph": "济",
+    "c1": "#E6E8FB",
+    "c2": "#9DA5EF",
+    "desc": "泉城，双30条人才政策，博士购房补贴15-25万，3年免费公交地铁。",
+    "subsidy": 250000,
+    "subsidyLabel": "最高 25 万",
+    "subsidyKind": "购房补贴+生活补贴",
+    "cost": 3,
+    "jobs": 4,
+    "chill": 3,
+    "link": "http://jnhrss.jinan.gov.cn/art/2026/2/25/art_9127_4900778.html",
+    "linkLabel": "济南人才·双30条",
+    "tags": [
+      {
+        "t": "高额购房补贴",
+        "c": "amber"
+      },
+      {
+        "t": "免费公交地铁",
+        "c": "green"
+      },
+      {
+        "t": "省会资源",
+        "c": "indigo"
+      }
+    ],
+    "audience": [
+      "博士",
+      "硕士以上",
+      "应届生"
+    ]
+  ,
+  identityData: {
+      "entrepreneur": {
+            "subsidy": 500000,
+            "subsidyLabel": "最高 50 万",
+            "subsidyKind": "创业人才遴选一次性奖励",
+            "conditions": [
+                  "市级创业人才遴选",
+                  "每年遴选10名",
+                  "科创基地最高2000万"
+            ],
+            "link": "http://jnhrss.jinan.gov.cn/col65774/art/2025/art_65774_4814468.html",
+            "linkLabel": "济南·个人创业一件事(一次性创业补贴小微1.2万+担保贷30万全额贴息)"
+      },
+      "overseas": {
+            "subsidy": 250000,
+            "subsidyLabel": "博士25万",
+            "subsidyKind": "购房补贴+生活补贴",
+            "conditions": [
+                  "博士≤40/硕士≤35",
+                  "连续缴纳社保",
+                  "免费公交地铁3年"
+            ],
+            "link": "http://jnhrss.jinan.gov.cn/art/2026/2/25/art_9127_4900778.html",
+            "linkLabel": "济南·双30条人才"
+      },
+      "graduate": {
+            "subsidy": 250000,
+            "subsidyLabel": "博士最高25万",
+            "subsidyKind": "购房补贴+生活补贴+租赁补",
+            "conditions": [
+                  "博士1500/月·硕1000/月×3年",
+                  "本科租赁补700/月",
+                  "专精特新企业额外叠加"
+            ],
+            "link": "https://www.jinan.gov.cn/col/col1812/art/2026/art_7ba623a6ca0c4bfdb67527920ab212ea.html",
+            "linkLabel": "济南·人才政策双30条(2026版)(博25万/硕15万购房·专精特新·博1500/月生活)"
+      }
+}
+},
+{
+    "id": "qingdao",
+    "name": "青岛",
+    "nameEn": "QINGDAO",
+    "region": "北方",
+    "tier": "新一线",
+    "glyph": "岛",
+    "c1": "#DCEFEB",
+    "c2": "#6BB1C6",
+    "desc": "海滨宜居城，硕博购房补贴20-30万，重点企业+重点学科领域专项。",
+    "subsidy": 300000,
+    "subsidyLabel": "最高 30 万",
+    "subsidyKind": "硕博购房补贴",
+    "cost": 3,
+    "jobs": 3,
+    "chill": 5,
+    "link": "https://www.xihaian.gov.cn/zwgk/bmgk/qsbj/gkml/zdgz/jycy/ggjy/202511/t20251104_10354075.shtml",
+    "linkLabel": "青岛人才引进政策",
+    "tags": [
+      {
+        "t": "宜居",
+        "c": "teal"
+      },
+      {
+        "t": "购房补贴",
+        "c": "amber"
+      },
+      {
+        "t": "硕博专项",
+        "c": "indigo"
+      }
+    ],
+    "audience": [
+      "硕士以上",
+      "博士",
+      "留学归国"
+    ]
+  ,
+  identityData: {
+      "entrepreneur": {
+            "subsidy": 150000,
+            "subsidyLabel": "博士15万",
+            "subsidyKind": "一次性安家费+住房补贴",
+            "conditions": [
+                  "博士≤40/硕士≤35",
+                  "连续社保6个月以上",
+                  "重点企业+重点学科优先"
+            ],
+            "link": "https://hrss.qingdao.gov.cn/zwgk/tzgg/202511/t20251125_10852436.shtml",
+            "linkLabel": "青岛·创业政策清单(一次性创业补贴1.2万+担保贷30万全额贴息)"
+      },
+      "overseas": {
+            "subsidy": 300000,
+            "subsidyLabel": "博士最高30万",
+            "subsidyKind": "硕博购房补贴+安家费",
+            "conditions": [
+                  "海外硕博士学历",
+                  "签订3年以上劳动合同",
+                  "购房补贴即申即享"
+            ],
+            "link": "https://hrss.qingdao.gov.cn/zcfg_47/zcwj_47/202506/t20250625_9734429.shtml",
+            "linkLabel": "青岛·促进青年人才聚青28条(博15万安家/硕10万·博1.2千/硕800/本500/月住房补)"
+      },
+      "graduate": {
+            "subsidy": 300000,
+            "subsidyLabel": "博士最高30万",
+            "subsidyKind": "硕博购房补贴+住房补贴",
+            "conditions": [
+                  "博士≤40/硕士≤35",
+                  "首次在青就业参保",
+                  "重点学科A+/A类理工科"
+            ],
+            "link": "https://hrss.qingdao.gov.cn",
+            "linkLabel": "青岛·硕博购房补贴实施细则(博30万·硕20万 青人社字〔2025〕87号)"
+      }
+}
+},
+{
+    "id": "yantai",
+    "name": "烟台",
+    "nameEn": "YANTAI",
+    "region": "北方",
+    "tier": "二线",
+    "glyph": "烟",
+    "c1": "#DCEFEB",
+    "c2": "#7FC0B6",
+    "desc": "蓬莱仙境，苹果之都+制造业重镇，博士生活补贴+购房补贴叠加。",
+    "subsidy": 50000,
+    "subsidyLabel": "最高 5 万",
+    "subsidyKind": "生活+购房补贴",
+    "cost": 2,
+    "jobs": 3,
+    "chill": 4,
+    "link": "https://www.haiyang.gov.cn/art/2025/6/24/art_48955_2944028.html",
+    "linkLabel": "烟台人社·人才服务",
+    "tags": [
+      {
+        "t": "宜居",
+        "c": "teal"
+      },
+      {
+        "t": "制造业",
+        "c": "amber"
+      }
+    ],
+    "audience": [
+      "应届生",
+      "硕士以上"
+    ]
+  ,
+  identityData: {
+      "entrepreneur": {
+            "subsidy": 10000,
+            "subsidyLabel": "最高 1 万",
+            "subsidyKind": "一次性创业补贴",
+            "conditions": [
+                  "毕业5年内",
+                  "正常经营3个月以上"
+            ],
+            "link": "https://rsj.yantai.gov.cn",
+            "linkLabel": "⚠️待核实·烟台·一次性创业补贴"
+      },
+      "overseas": {
+            "subsidy": 50000,
+            "subsidyLabel": "最高 5 万",
+            "subsidyKind": "安家补贴",
+            "conditions": [
+                  "海外学历认证",
+                  "签订劳动合同"
+            ],
+            "link": "https://rsj.yantai.gov.cn",
+            "linkLabel": "⚠️待核实·烟台·安家补贴"
+      },
+      "graduate": {
+            "subsidy": 20000,
+            "subsidyLabel": "最高 2 万",
+            "subsidyKind": "生活补贴+租房补贴",
+            "conditions": [
+                  "应届全日制本科以上",
+                  "签1年以上劳动合同"
+            ],
+            "link": "https://rsj.yantai.gov.cn",
+            "linkLabel": "烟台·引进人才生活+购房补贴3.0版(博20万/硕10万/本5万购房·博3.6万/年生活)"
+      }
+}
+},
+{
+    "id": "weihai",
+    "name": "威海",
+    "nameEn": "WEIHAI",
+    "region": "北方",
+    "tier": "二线",
+    "glyph": "威",
+    "c1": "#DCEFEB",
+    "c2": "#6BB1C6",
+    "desc": "最宜居海滨小城，跨境电商+海洋经济特色，生活舒适度北方第一。",
+    "subsidy": 30000,
+    "subsidyLabel": "最高 3 万",
+    "subsidyKind": "安居补贴",
+    "cost": 2,
+    "jobs": 2,
+    "chill": 5,
+    "link": "http://www.huancui.gov.cn/art/2025/6/30/art_57710_5695588.html",
+    "linkLabel": "威海人社",
+    "tags": [
+      {
+        "t": "宜居",
+        "c": "teal"
+      },
+      {
+        "t": "海洋经济",
+        "c": "indigo"
+      },
+      {
+        "t": "慢生活",
+        "c": "green"
+      }
+    ],
+    "audience": [
+      "应届生",
+      "求职者"
+    ]
+  ,
+  identityData: {
+      "entrepreneur": {
+            "subsidy": 10000,
+            "subsidyLabel": "最高 1 万",
+            "subsidyKind": "一次性创业补贴",
+            "conditions": [
+                  "毕业5年内",
+                  "正常经营3个月以上"
+            ],
+            "link": "https://rsj.weihai.gov.cn",
+            "linkLabel": "⚠️待核实·威海·一次性创业补贴"
+      },
+      "overseas": {
+            "subsidy": 50000,
+            "subsidyLabel": "最高 5 万",
+            "subsidyKind": "安家补贴",
+            "conditions": [
+                  "海外学历认证",
+                  "签订劳动合同"
+            ],
+            "link": "https://rsj.weihai.gov.cn",
+            "linkLabel": "⚠️待核实·威海·安家补贴"
+      },
+      "graduate": {
+            "subsidy": 20000,
+            "subsidyLabel": "最高 2 万",
+            "subsidyKind": "生活补贴+租房补贴",
+            "conditions": [
+                  "应届全日制本科以上",
+                  "签1年以上劳动合同"
+            ],
+            "link": "https://rsj.weihai.gov.cn",
+            "linkLabel": "威海·高校毕业生聚集计划(博6千/月·硕3千/月·本1.5千/月生活津贴)"
+      }
+}
+},
+{
+    "id": "weifang",
+    "name": "潍坊",
+    "nameEn": "WEIFANG",
+    "region": "北方",
+    "tier": "二线",
+    "glyph": "潍",
+    "c1": "#E5F1D9",
+    "c2": "#9CC57E",
+    "desc": "风筝之都，农业+动力装备产业集聚，制造业强市生活压力小。",
+    "subsidy": 30000,
+    "subsidyLabel": "最高 3 万",
+    "subsidyKind": "生活补贴",
+    "cost": 1,
+    "jobs": 3,
+    "chill": 3,
+    "link": "http://www.weicheng.gov.cn/WCQZWGK/jycyzcqd/03sdwy20231xxjs4/223432.html",
+    "linkLabel": "潍坊人社",
+    "tags": [
+      {
+        "t": "制造业",
+        "c": "amber"
+      },
+      {
+        "t": "生活成本低",
+        "c": "green"
+      }
+    ],
+    "audience": [
+      "应届生",
+      "求职者"
+    ]
+  ,
+  identityData: {
+      "entrepreneur": {
+            "subsidy": 10000,
+            "subsidyLabel": "最高 1 万",
+            "subsidyKind": "一次性创业补贴",
+            "conditions": [
+                  "毕业5年内",
+                  "正常经营3个月以上"
+            ],
+            "link": "https://rsj.weifang.gov.cn",
+            "linkLabel": "⚠️待核实·潍坊·一次性创业补贴"
+      },
+      "overseas": {
+            "subsidy": 50000,
+            "subsidyLabel": "最高 5 万",
+            "subsidyKind": "安家补贴",
+            "conditions": [
+                  "海外学历认证",
+                  "签订劳动合同"
+            ],
+            "link": "https://rsj.weifang.gov.cn",
+            "linkLabel": "潍坊·高校毕业生就业创业政策清单(含生活补贴+购房补贴+创业扶持)"
+      },
+      "graduate": {
+            "subsidy": 20000,
+            "subsidyLabel": "最高 2 万",
+            "subsidyKind": "生活补贴+租房补贴",
+            "conditions": [
+                  "应届全日制本科以上",
+                  "签1年以上劳动合同"
+            ],
+            "link": "https://rsj.weifang.gov.cn",
+            "linkLabel": "⚠️待核实·潍坊·生活补贴+租房补贴"
+      }
+}
+},
+{
+    "id": "zibo",
+    "name": "淄博",
+    "nameEn": "ZIBO",
+    "region": "北方",
+    "tier": "二线",
+    "glyph": "淄",
+    "c1": "#FFF3E2",
+    "c2": "#E8C470",
+    "desc": "齐国故都，烧烤之城，化工+新材料产业基地，对青年人才友好度飙升。",
+    "subsidy": 30000,
+    "subsidyLabel": "最高 3 万",
+    "subsidyKind": "生活补贴+住房",
+    "cost": 1,
+    "jobs": 3,
+    "chill": 4,
+    "link": "https://rsj.zibo.gov.cn/art/2024/5/15/art_10444_2740111.html",
+    "linkLabel": "淄博人社·人才金政",
+    "tags": [
+      {
+        "t": "青年友好",
+        "c": "green"
+      },
+      {
+        "t": "生活成本低",
+        "c": "amber"
+      },
+      {
+        "t": "烧烤之城",
+        "c": "rose"
+      }
+    ],
+    "audience": [
+      "应届生",
+      "学生",
+      "求职者"
+    ]
+  ,
+  identityData: {
+      "entrepreneur": {
+            "subsidy": 10000,
+            "subsidyLabel": "最高 1 万",
+            "subsidyKind": "一次性创业补贴",
+            "conditions": [
+                  "毕业5年内",
+                  "正常经营3个月以上"
+            ],
+            "link": "https://hrss.zibo.gov.cn/gongkai/channel_c_5f9fa491ab327f36e4c1307a_5fb3bcd6dd0092b848bb988a/doc_6773a8367ed45b1710716ed6.html",
+            "linkLabel": "⚠️待核实·淄博·一次性创业补贴"
+      },
+      "overseas": {
+            "subsidy": 50000,
+            "subsidyLabel": "最高 5 万",
+            "subsidyKind": "安家补贴",
+            "conditions": [
+                  "海外学历认证",
+                  "签订劳动合同"
+            ],
+            "link": "https://rsj.zibo.gov.cn",
+            "linkLabel": "淄博·高校毕业生生活补贴+购房补贴政策(人才金政50条·博4千/月+30万购房)"
+      },
+      "graduate": {
+            "subsidy": 20000,
+            "subsidyLabel": "最高 2 万",
+            "subsidyKind": "生活补贴+租房补贴",
+            "conditions": [
+                  "应届全日制本科以上",
+                  "签1年以上劳动合同"
+            ],
+            "link": "https://rsj.zibo.gov.cn",
+            "linkLabel": "淄博·高校毕业生人才金政(生活补贴+购房补贴+亲情引才奖)"
+      }
+}
+},
+{
+    "id": "zhengzhou",
+    "name": "郑州",
+    "nameEn": "ZHENGZHOU",
+    "region": "北方",
+    "tier": "新一线",
+    "glyph": "郑",
+    "c1": "#FFF3E2",
+    "c2": "#FFB670",
+    "desc": "国家中心城市，博士购房补贴10万+生活补贴1500元/月，人才公寓规模全国第一。",
+    "subsidy": 100000,
+    "subsidyLabel": "最高 10 万",
+    "subsidyKind": "购房补贴+生活补贴",
+    "cost": 2,
+    "jobs": 4,
+    "chill": 3,
+    "link": "https://public.zhengzhou.gov.cn/D0105Y/9849094.jhtml",
+    "linkLabel": "郑州人社·郑聚英才",
+    "tags": [
+      {
+        "t": "人才公寓全国第一",
+        "c": "amber"
+      },
+      {
+        "t": "交通枢纽",
+        "c": "indigo"
+      },
+      {
+        "t": "生活成本适中",
+        "c": "green"
+      }
+    ],
+    "audience": [
+      "应届生",
+      "硕士以上",
+      "求职者"
+    ]
+  ,
+  identityData: {
+      "entrepreneur": {
+            "subsidy": 10000,
+            "subsidyLabel": "1万+最高50万",
+            "subsidyKind": "开业补贴+创业担保贷款",
+            "conditions": [
+                  "离校2年内",
+                  "经营满1年",
+                  "人才公寓≤市场价70%"
+            ],
+            "link": "https://public.zzgx.gov.cn/D3601X/10052359.jhtml",
+            "linkLabel": "郑州·高新区人才新政(博最高2000万资助+创业扶持+购房补10-300万)"
+      },
+      "overseas": {
+            "subsidy": 100000,
+            "subsidyLabel": "博士10万",
+            "subsidyKind": "购房补贴+生活补贴",
+            "conditions": [
+                  "35岁以下+落户+社保",
+                  "博士1500/月×36月",
+                  "人才公寓规模全国第一"
+            ],
+            "link": "https://rsj.zhengzhou.gov.cn",
+            "linkLabel": "郑州·海归安居"
+      },
+      "graduate": {
+            "subsidy": 100000,
+            "subsidyLabel": "博士10万",
+            "subsidyKind": "购房补贴+生活补贴",
+            "conditions": [
+                  "专科以上45岁以下+落户",
+                  "博士1500/月·硕1000/月·本500/月",
+                  "人才公寓≤市场价70%"
+            ],
+            "link": "https://rsj.zhengzhou.gov.cn",
+            "linkLabel": "郑州·高校毕业生等青年就业创业政策(博10万购房+1500/月生活补)"
+      }
+}
+},
+{
+    "id": "luoyang",
+    "name": "洛阳",
+    "nameEn": "LUOYANG",
+    "region": "北方",
+    "tier": "二线",
+    "glyph": "洛",
+    "c1": "#FBE3E7",
+    "c2": "#E8A0B0",
+    "desc": "十三朝古都，牡丹花城，装备制造+文旅双特色，引才政策含安家+创业扶持。",
+    "subsidy": 30000,
+    "subsidyLabel": "最高 3 万",
+    "subsidyKind": "安家+创业扶持",
+    "cost": 1,
+    "jobs": 3,
+    "chill": 4,
+    "link": "https://www.ly.gov.cn/2025/05-09/566081.html",
+    "linkLabel": "洛阳人社",
+    "tags": [
+      {
+        "t": "古都文旅",
+        "c": "rose"
+      },
+      {
+        "t": "装备制造",
+        "c": "amber"
+      },
+      {
+        "t": "生活成本低",
+        "c": "green"
+      }
+    ],
+    "audience": [
+      "应届生",
+      "学生"
+    ]
+  ,
+  identityData: {
+      "entrepreneur": {
+            "subsidy": 10000,
+            "subsidyLabel": "最高 1 万",
+            "subsidyKind": "一次性创业补贴",
+            "conditions": [
+                  "毕业5年内",
+                  "正常经营3个月以上"
+            ],
+            "link": "https://m.ly.gov.cn/2025/05-09/566081.html",
+            "linkLabel": "⚠️待核实·洛阳·一次性创业补贴"
+      },
+      "overseas": {
+            "subsidy": 50000,
+            "subsidyLabel": "最高 5 万",
+            "subsidyKind": "安家补贴",
+            "conditions": [
+                  "海外学历认证",
+                  "签订劳动合同"
+            ],
+            "link": "https://rsj.luoyang.gov.cn",
+            "linkLabel": "⚠️待核实·洛阳·安家补贴"
+      },
+      "graduate": {
+            "subsidy": 20000,
+            "subsidyLabel": "最高 2 万",
+            "subsidyKind": "生活补贴+租房补贴",
+            "conditions": [
+                  "应届全日制本科以上",
+                  "签1年以上劳动合同"
+            ],
+            "link": "https://rsj.luoyang.gov.cn",
+            "linkLabel": "洛阳·青年人才生活补贴实施细则(洛人社〔2025〕9号·博2千/硕1.5千/本1千/月)"
+      }
+}
+},
+{
+    "id": "xian",
+    "name": "西安",
+    "nameEn": "XI'AN",
+    "region": "北方",
+    "tier": "新一线",
+    "glyph": "西",
+    "c1": "#FBE3E7",
+    "c2": "#D88A98",
+    "desc": "硬科技之都+航空航天产业集聚，人才公寓+生活补贴凭学历即可申请。",
+    "subsidy": 50000,
+    "subsidyLabel": "最高 5 万",
+    "subsidyKind": "人才公寓+生活补贴",
+    "cost": 1,
+    "jobs": 4,
+    "chill": 4,
+    "link": "https://zjj.xa.gov.cn/zw/zfxxgkml/zwxx/zxtz/1960624617347379201.html",
+    "linkLabel": "西安人才安居政策",
+    "tags": [
+      {
+        "t": "生活成本低",
+        "c": "green"
+      },
+      {
+        "t": "硬科技",
+        "c": "amber"
+      },
+      {
+        "t": "高校密集",
+        "c": "indigo"
+      }
+    ],
+    "audience": [
+      "应届生",
+      "学生",
+      "求职者"
+    ]
+  ,
+  identityData: {
+      "entrepreneur": {
+            "subsidy": 10000,
+            "subsidyLabel": "1万+最高100万",
+            "subsidyKind": "一次性创业补贴+创业担保贷款",
+            "conditions": [
+                  "毕业学年或毕业后1年",
+                  "孵化器30%场地免费",
+                  "贷款财政贴息50%"
+            ],
+            "link": "https://zjj.xa.gov.cn/zw/zfxxgkml/zcjd/1960606670953918466.html",
+            "linkLabel": "西安·人才安居货币化补贴实施细则(含海外人才安家+购房补贴)"
+      },
+      "overseas": {
+            "subsidy": 50000,
+            "subsidyLabel": "博士5万+20万",
+            "subsidyKind": "人才就业奖+购房补贴+科研启动",
+            "conditions": [
+                  "硕博快速落户",
+                  "博士首套购房20万",
+                  "乐业补贴博1.2万/硕6千"
+            ],
+            "link": "https://zjj.xa.gov.cn",
+            "linkLabel": "西安·人才安居货币化补贴政策解读(博/硕租赁补1千/3百元月·领军人才购房40-100万)"
+      },
+      "graduate": {
+            "subsidy": 50000,
+            "subsidyLabel": "最高 5 万",
+            "subsidyKind": "人才公寓+生活补贴+乐业补贴",
+            "conditions": [
+                  "硕博快速落户",
+                  "公租房2.89元/㎡/月",
+                  "D类人才租赁补1千/月×3年"
+            ],
+            "link": "https://zjj.xa.gov.cn",
+            "linkLabel": "西安·应届生安居"
+      }
+}
+},
+{
+    "id": "lanzhou",
+    "name": "兰州",
+    "nameEn": "LANZHOU",
+    "region": "北方",
+    "tier": "二线",
+    "glyph": "兰",
+    "c1": "#FFF3E2",
+    "c2": "#E8C470",
+    "desc": "黄河之都，一带一路节点，引才以安家补贴+科研启动费为主。",
+    "subsidy": 30000,
+    "subsidyLabel": "最高 3 万",
+    "subsidyKind": "安家补贴",
+    "cost": 1,
+    "jobs": 2,
+    "chill": 4,
+    "link": "http://www.lzanning.gov.cn/art/2025/4/16/art_21600_1483633.html",
+    "linkLabel": "兰州人社",
+    "tags": [
+      {
+        "t": "一带一路",
+        "c": "amber"
+      },
+      {
+        "t": "生活成本低",
+        "c": "green"
+      }
+    ],
+    "audience": [
+      "应届生",
+      "硕士以上"
+    ]
+  ,
+  identityData: {
+      "entrepreneur": {
+            "subsidy": 10000,
+            "subsidyLabel": "最高 1 万",
+            "subsidyKind": "一次性创业补贴",
+            "conditions": [
+                  "毕业5年内",
+                  "正常经营3个月以上"
+            ],
+            "link": "https://rsj.lanzhou.gov.cn",
+            "linkLabel": "⚠️待核实·兰州·一次性创业补贴"
+      },
+      "overseas": {
+            "subsidy": 50000,
+            "subsidyLabel": "最高 5 万",
+            "subsidyKind": "安家补贴",
+            "conditions": [
+                  "海外学历认证",
+                  "签订劳动合同"
+            ],
+            "link": "https://rsj.lanzhou.gov.cn",
+            "linkLabel": "⚠️待核实·兰州·安家补贴"
+      },
+      "graduate": {
+            "subsidy": 20000,
+            "subsidyLabel": "最高 2 万",
+            "subsidyKind": "生活补贴+租房补贴",
+            "conditions": [
+                  "应届全日制本科以上",
+                  "签1年以上劳动合同"
+            ],
+            "link": "https://rsj.lanzhou.gov.cn",
+            "linkLabel": "兰州·留兰倍增计划政策解读(含生活补贴+就业见习+落户支持)"
+      }
+}
+},
+{
+    "id": "yinchuan",
+    "name": "银川",
+    "nameEn": "YINCHUAN",
+    "region": "北方",
+    "tier": "二线",
+    "glyph": "银",
+    "c1": "#E6E8FB",
+    "c2": "#9DA5EF",
+    "desc": "塞上江南，西北宜居城市，数字经济+现代农业方向引才。",
+    "subsidy": 20000,
+    "subsidyLabel": "最高 2 万",
+    "subsidyKind": "生活补贴",
+    "cost": 1,
+    "jobs": 2,
+    "chill": 4,
+    "link": "https://www.yinchuan.gov.cn/xxgk/bmxxgkml/srsj_2124/xxgkml_2127/zcjd_2136/202510/t20251023_5060855.html",
+    "linkLabel": "银川人社",
+    "tags": [
+      {
+        "t": "西北宜居",
+        "c": "teal"
+      },
+      {
+        "t": "数字经济",
+        "c": "indigo"
+      },
+      {
+        "t": "生活成本低",
+        "c": "green"
+      }
+    ],
+    "audience": [
+      "应届生",
+      "学生"
+    ]
+  ,
+  identityData: {
+      "entrepreneur": {
+            "subsidy": 10000,
+            "subsidyLabel": "最高 1 万",
+            "subsidyKind": "一次性创业补贴",
+            "conditions": [
+                  "毕业5年内",
+                  "正常经营3个月以上"
+            ],
+            "link": "https://rsj.yinchuan.gov.cn",
+            "linkLabel": "⚠️待核实·银川·一次性创业补贴"
+      },
+      "overseas": {
+            "subsidy": 50000,
+            "subsidyLabel": "最高 5 万",
+            "subsidyKind": "安家补贴",
+            "conditions": [
+                  "海外学历认证",
+                  "签订劳动合同"
+            ],
+            "link": "https://rsj.yinchuan.gov.cn",
+            "linkLabel": "银川·高校毕业生基层就业生活补贴政策(500元/月×12月)"
+      },
+      "graduate": {
+            "subsidy": 20000,
+            "subsidyLabel": "最高 2 万",
+            "subsidyKind": "生活补贴+租房补贴",
+            "conditions": [
+                  "应届全日制本科以上",
+                  "签1年以上劳动合同"
+            ],
+            "link": "https://rsj.yinchuan.gov.cn",
+            "linkLabel": "⚠️待核实·银川·生活补贴+租房补贴"
+      }
+}
+},
+{
+    "id": "wulumuqi",
+    "name": "乌鲁木齐",
+    "nameEn": "URUMQI",
+    "region": "北方",
+    "tier": "二线",
+    "glyph": "乌",
+    "c1": "#DCEFEB",
+    "c2": "#7FC0B6",
+    "desc": "亚心之都，一带一路核心区，能源+商贸物流双驱动，引才政策力度加大。",
+    "subsidy": 30000,
+    "subsidyLabel": "最高 3 万",
+    "subsidyKind": "安家+生活补贴",
+    "cost": 2,
+    "jobs": 2,
+    "chill": 3,
+    "link": "https://rsj.wlmq.gov.cn",
+    "linkLabel": "乌鲁木齐人社",
+    "tags": [
+      {
+        "t": "一带一路",
+        "c": "amber"
+      },
+      {
+        "t": "能源枢纽",
+        "c": "indigo"
+      }
+    ],
+    "audience": [
+      "应届生",
+      "求职者"
+    ]
+  ,
+  identityData: {
+      "entrepreneur": {
+            "subsidy": 10000,
+            "subsidyLabel": "最高 1 万",
+            "subsidyKind": "一次性创业补贴",
+            "conditions": [
+                  "毕业5年内",
+                  "正常经营3个月以上"
+            ],
+            "link": "https://rsj.wlmq.gov.cn",
+            "linkLabel": "⚠️待核实·乌鲁木齐·一次性创业补贴"
+      },
+      "overseas": {
+            "subsidy": 50000,
+            "subsidyLabel": "最高 5 万",
+            "subsidyKind": "安家补贴",
+            "conditions": [
+                  "海外学历认证",
+                  "签订劳动合同"
+            ],
+            "link": "https://rsj.wlmq.gov.cn",
+            "linkLabel": "⚠️待核实·乌鲁木齐·安家补贴"
+      },
+      "graduate": {
+            "subsidy": 20000,
+            "subsidyLabel": "最高 2 万",
+            "subsidyKind": "生活补贴+租房补贴",
+            "conditions": [
+                  "应届全日制本科以上",
+                  "签1年以上劳动合同"
+            ],
+            "link": "https://rsj.wlmq.gov.cn",
+            "linkLabel": "⚠️待核实·乌鲁木齐·生活补贴+租房补贴"
+      }
+}
+},
+{
+    "id": "shanghai",
+    "name": "上海",
+    "nameEn": "SHANGHAI",
+    "region": "南方",
+    "tier": "一线",
+    "glyph": "沪",
+    "c1": "#FBE3E7",
+    "c2": "#C8556A",
+    "desc": "国际经济中心，落户政策持续优化。应届生/留学生落户通道清晰，各区人才公寓+租房补贴配套完善。",
+    "subsidy": 100000,
+    "subsidyLabel": "各区差异",
+    "subsidyKind": "落户+人才公寓+房补",
+    "cost": 5,
+    "jobs": 5,
+    "chill": 1,
+    "link": "https://www.jiading.gov.cn/xinwen/jddt1/msxw/content_926798",
+    "linkLabel": "上海人社·人才服务",
+    "tags": [
+      {
+        "t": "落户含金量最高",
+        "c": "amber"
+      },
+      {
+        "t": "国际化",
+        "c": "indigo"
+      },
+      {
+        "t": "金融中心",
+        "c": "rose"
+      }
+    ],
+    "audience": [
+      "留学归国",
+      "博士",
+      "硕士以上"
+    ]
+  ,
+  identityData: {
+      "entrepreneur": {
+            "subsidy": 300000,
+            "subsidyLabel": "最高 30 万",
+            "subsidyKind": "浦江人才B类+创业贷款",
+            "conditions": [
+                  "45周岁以下",
+                  "2021年后入境创业",
+                  "科技型创业项目"
+            ],
+            "link": "http://service.shanghai.gov.cn/xingzhengwendangkujyh/XZGFDetails.aspx?docid=230627135406DIJOtg4YfgsukX17IR6",
+            "linkLabel": "上海·白玉兰人才计划浦江项目实施办法(沪人社规〔2023〕8号)"
+      },
+      "overseas": {
+            "subsidy": 200000,
+            "subsidyLabel": "最高 20 万",
+            "subsidyKind": "浦江计划+安家费",
+            "conditions": [
+                  "Top200高校毕业",
+                  "签订3年以上劳动合同",
+                  "博士安家最高20万"
+            ],
+            "link": "https://rsj.sh.gov.cn/tlx_17522/202511/t20251117_4115348.html",
+            "linkLabel": "上海·留学生落户政策(2025版·Top50直落/Top51-100+6月社保)"
+      },
+      "graduate": {
+            "subsidy": 50000,
+            "subsidyLabel": "各区差异",
+            "subsidyKind": "落户+人才公寓+房补",
+            "conditions": [
+                  "Top50高校直接落户",
+                  "Top51-100缴6月社保",
+                  "各区人才公寓配套"
+            ],
+            "link": "https://www.jiading.gov.cn/xinwen/jddt1/msxw/content_964958",
+            "linkLabel": "上海·2026年非上海生源应届生进沪就业通知(五个新城直落·沪教委学〔2026〕13号)"
+      }
+}
+},
+{
+    "id": "nanjing",
+    "name": "南京",
+    "nameEn": "NANJING",
+    "region": "南方",
+    "tier": "二线",
+    "glyph": "宁",
+    "c1": "#E6E8FB",
+    "c2": "#9DA5EF",
+    "desc": "六朝古都，科教第三城。博士租房补贴2000元/月+购房补贴，高校密集学术机会多。",
+    "subsidy": 100000,
+    "subsidyLabel": "最高 10 万",
+    "subsidyKind": "租房补贴+购房补贴",
+    "cost": 4,
+    "jobs": 4,
+    "chill": 3,
+    "link": "https://rsj.nanjing.gov.cn/njsrlzyhshbzj/202603/t20260304_5799905.html",
+    "linkLabel": "南京人社·紫金山英才",
+    "tags": [
+      {
+        "t": "科教第三城",
+        "c": "indigo"
+      },
+      {
+        "t": "购房补贴",
+        "c": "amber"
+      },
+      {
+        "t": "落户宽松",
+        "c": "green"
+      }
+    ],
+    "audience": [
+      "应届生",
+      "博士",
+      "硕士以上"
+    ]
+  ,
+  identityData: {
+      "entrepreneur": {
+            "subsidy": 2000,
+            "subsidyLabel": "2千+最高50万",
+            "subsidyKind": "开业补贴+优秀项目资助",
+            "conditions": [
+                  "首次创业",
+                  "取得营业执照",
+                  "江北新区最高300万"
+            ],
+            "link": "http://gaj.nanjing.gov.cn/njsgaj/202512/t20251212_5712262.html",
+            "linkLabel": "南京·创业扶持"
+      },
+      "overseas": {
+            "subsidy": 100000,
+            "subsidyLabel": "博士10万",
+            "subsidyKind": "一次性生活补贴+租房补贴",
+            "conditions": [
+                  "研究生/本科45岁以下",
+                  "落户+劳动合同+社保",
+                  "博士租房补2千/月×36月"
+            ],
+            "link": "https://rsj.nanjing.gov.cn",
+            "linkLabel": "南京·人才落户实施办法(2025修订·含海归本科以上落户+配偶子女随迁)"
+      },
+      "graduate": {
+            "subsidy": 100000,
+            "subsidyLabel": "博士10万",
+            "subsidyKind": "一次性补贴+租房补贴",
+            "conditions": [
+                  "应届全日制本科以上",
+                  "博士租房补2千/月×36月",
+                  "宁青驿站14天免费住"
+            ],
+            "link": "https://rsj.nanjing.gov.cn",
+            "linkLabel": "南京·宁聚计划"
+      }
+}
+},
+{
+    "id": "suzhou",
+    "name": "苏州",
+    "nameEn": "SUZHOU",
+    "region": "南方",
+    "tier": "新一线",
+    "glyph": "苏",
+    "c1": "#FFF3E2",
+    "c2": "#E8C470",
+    "desc": "最强地级市，园区工业+生物医药双高地。姑苏人才计划覆盖创业+紧缺岗位。",
+    "subsidy": 250000,
+    "subsidyLabel": "最高 25 万",
+    "subsidyKind": "姑苏人才计划",
+    "cost": 4,
+    "jobs": 5,
+    "chill": 4,
+    "link": "https://one.sipac.gov.cn/frzrk/ndaservplat/Apps/psp/index.php?s=/Home/PolicySearch/graphicPolicydetail/id/111386",
+    "linkLabel": "苏州人才政策专栏",
+    "tags": [
+      {
+        "t": "创业友好",
+        "c": "amber"
+      },
+      {
+        "t": "最强地级市",
+        "c": "rose"
+      },
+      {
+        "t": "生物医药",
+        "c": "teal"
+      }
+    ],
+    "audience": [
+      "创业者",
+      "博士",
+      "硕士以上"
+    ]
+  ,
+  identityData: {
+      "entrepreneur": {
+            "subsidy": 300000,
+            "subsidyLabel": "最高 30 万",
+            "subsidyKind": "优秀创业项目+人才基金",
+            "conditions": [
+                  "毕业2年内",
+                  "经营满1年+社保",
+                  "产业园区叠加扶持"
+            ],
+            "link": "https://www.suzhou.gov.cn/szsrmzf/szyw/202503/9515eb15f910427f9871e5cd7ac9803d.shtml",
+            "linkLabel": "苏州·姑苏创新创业领军人才计划实施办法(创业100-500万+购房200万)"
+      },
+      "overseas": {
+            "subsidy": 250000,
+            "subsidyLabel": "博士25万",
+            "subsidyKind": "姑苏人才计划+购房补贴",
+            "conditions": [
+                  "海外学历认证",
+                  "紧缺专业优先",
+                  "博士购房补贴25万"
+            ],
+            "link": "http://www.suzhou.gov.cn/2025ndzt/szxytj/202503/fce665eb9d06446b8f6961d2f8548e80.shtml",
+            "linkLabel": "苏州·加快集聚青年人才若干措施(博≥1500/月租房+30万购房·紧缺博10万一次性)"
+      },
+      "graduate": {
+            "subsidy": 100000,
+            "subsidyLabel": "博士10万",
+            "subsidyKind": "紧缺人才生活补贴+面试交通补",
+            "conditions": [
+                  "应届全日制本科以上",
+                  "14天免费住宿",
+                  "公积金贷款1.5倍最高225万"
+            ],
+            "link": "https://www.suzhou.gov.cn",
+            "linkLabel": "苏州·青年人才9条"
+      }
+}
+},
+{
+    "id": "wuxi",
+    "name": "无锡",
+    "nameEn": "WUXI",
+    "region": "南方",
+    "tier": "二线",
+    "glyph": "锡",
+    "c1": "#DCEFEB",
+    "c2": "#7FC0B6",
+    "desc": "太湖明珠，物联网之都。博士购房补贴最高20万，物联网+集成电路产业密集。",
+    "subsidy": 200000,
+    "subsidyLabel": "最高 20 万",
+    "subsidyKind": "购房补贴+生活补贴",
+    "cost": 3,
+    "jobs": 4,
+    "chill": 4,
+    "link": "https://wxjkq.wuxi.gov.cn/doc/2025/01/24/4486507.shtml",
+    "linkLabel": "无锡人社·太湖人才",
+    "tags": [
+      {
+        "t": "物联网之都",
+        "c": "indigo"
+      },
+      {
+        "t": "购房补贴",
+        "c": "amber"
+      },
+      {
+        "t": "宜居",
+        "c": "teal"
+      }
+    ],
+    "audience": [
+      "硕士以上",
+      "博士",
+      "应届生"
+    ]
+  ,
+  identityData: {
+      "entrepreneur": {
+            "subsidy": 10000,
+            "subsidyLabel": "最高 1 万",
+            "subsidyKind": "一次性创业补贴",
+            "conditions": [
+                  "毕业5年内",
+                  "正常经营3个月以上"
+            ],
+            "link": "https://wxjkq.wuxi.gov.cn/doc/2025/01/24/4486507.shtml",
+            "linkLabel": "⚠️待核实·无锡·一次性创业补贴"
+      },
+      "overseas": {
+            "subsidy": 50000,
+            "subsidyLabel": "最高 5 万",
+            "subsidyKind": "安家补贴",
+            "conditions": [
+                  "海外学历认证",
+                  "签订劳动合同"
+            ],
+            "link": "https://rsj.wuxi.gov.cn",
+            "linkLabel": "⚠️待核实·无锡·安家补贴"
+      },
+      "graduate": {
+            "subsidy": 20000,
+            "subsidyLabel": "最高 2 万",
+            "subsidyKind": "生活补贴+租房补贴",
+            "conditions": [
+                  "应届全日制本科以上",
+                  "签1年以上劳动合同"
+            ],
+            "link": "https://rsj.wuxi.gov.cn",
+            "linkLabel": "无锡·优秀青年人才十项措施全文(博30万/硕10万/本5万购房·博3万/年租房补)"
+      }
+}
+},
+{
+    "id": "changzhou",
+    "name": "常州",
+    "nameEn": "CHANGZHOU",
+    "region": "南方",
+    "tier": "二线",
+    "glyph": "常",
+    "c1": "#E5F1D9",
+    "c2": "#9CC57E",
+    "desc": "新能源之都，动力电池+光伏产业爆发。引才以购房补贴+生活补贴为主。",
+    "subsidy": 50000,
+    "subsidyLabel": "最高 5 万",
+    "subsidyKind": "购房补贴+生活补贴",
+    "cost": 3,
+    "jobs": 4,
+    "chill": 3,
+    "link": "https://www.changzhou.gov.cn/gi_news/278178099455170",
+    "linkLabel": "常州人社·龙城英才",
+    "tags": [
+      {
+        "t": "新能源之都",
+        "c": "amber"
+      },
+      {
+        "t": "产业爆发",
+        "c": "green"
+      },
+      {
+        "t": "沪宁线",
+        "c": "indigo"
+      }
+    ],
+    "audience": [
+      "应届生",
+      "硕士以上",
+      "求职者"
+    ]
+  ,
+  identityData: {
+      "entrepreneur": {
+            "subsidy": 10000,
+            "subsidyLabel": "最高 1 万",
+            "subsidyKind": "一次性创业补贴",
+            "conditions": [
+                  "毕业5年内",
+                  "正常经营3个月以上"
+            ],
+            "link": "https://rsj.changzhou.gov.cn",
+            "linkLabel": "⚠️待核实·常州·一次性创业补贴"
+      },
+      "overseas": {
+            "subsidy": 50000,
+            "subsidyLabel": "最高 5 万",
+            "subsidyKind": "安家补贴",
+            "conditions": [
+                  "海外学历认证",
+                  "签订劳动合同"
+            ],
+            "link": "https://rsj.changzhou.gov.cn",
+            "linkLabel": "⚠️待核实·常州·安家补贴"
+      },
+      "graduate": {
+            "subsidy": 20000,
+            "subsidyLabel": "最高 2 万",
+            "subsidyKind": "生活补贴+租房补贴",
+            "conditions": [
+                  "应届全日制本科以上",
+                  "签1年以上劳动合同"
+            ],
+            "link": "https://rsj.changzhou.gov.cn",
+            "linkLabel": "常州·青年人才生活居住双资助政策(博30万/硕8万/本5万购房+生活补)"
+      }
+}
+},
+{
+    "id": "nantong",
+    "name": "南通",
+    "nameEn": "NANTONG",
+    "region": "南方",
+    "tier": "二线",
+    "glyph": "通",
+    "c1": "#E6E8FB",
+    "c2": "#9DA5EF",
+    "desc": "上海北大门，跨江通道加速融入上海都市圈。船舶海工+电子信息产业集聚。",
+    "subsidy": 30000,
+    "subsidyLabel": "最高 3 万",
+    "subsidyKind": "生活补贴+安家",
+    "cost": 2,
+    "jobs": 3,
+    "chill": 3,
+    "link": "https://zj.nantong.gov.cn/ntsfgj/fdcscgl/content/e925d75b-aac0-4fa3-8ae9-77b359977b09.html",
+    "linkLabel": "南通人社·江海英才",
+    "tags": [
+      {
+        "t": "上海后花园",
+        "c": "indigo"
+      },
+      {
+        "t": "船舶海工",
+        "c": "teal"
+      },
+      {
+        "t": "跨江通道",
+        "c": "amber"
+      }
+    ],
+    "audience": [
+      "应届生",
+      "求职者"
+    ]
+  ,
+  identityData: {
+      "entrepreneur": {
+            "subsidy": 10000,
+            "subsidyLabel": "最高 1 万",
+            "subsidyKind": "一次性创业补贴",
+            "conditions": [
+                  "毕业5年内",
+                  "正常经营3个月以上"
+            ],
+            "link": "https://rsj.nantong.gov.cn",
+            "linkLabel": "⚠️待核实·南通·一次性创业补贴"
+      },
+      "overseas": {
+            "subsidy": 50000,
+            "subsidyLabel": "最高 5 万",
+            "subsidyKind": "安家补贴",
+            "conditions": [
+                  "海外学历认证",
+                  "签订劳动合同"
+            ],
+            "link": "https://rsj.nantong.gov.cn",
+            "linkLabel": "南通·人才房票购房补贴实施细则(通住建房〔2025〕113号)"
+      },
+      "graduate": {
+            "subsidy": 20000,
+            "subsidyLabel": "最高 2 万",
+            "subsidyKind": "生活补贴+租房补贴",
+            "conditions": [
+                  "应届全日制本科以上",
+                  "签1年以上劳动合同"
+            ],
+            "link": "https://rsj.nantong.gov.cn",
+            "linkLabel": "⚠️待核实·南通·生活补贴+租房补贴"
+      }
+}
+},
+{
+    "id": "yangzhou",
+    "name": "扬州",
+    "nameEn": "YANGZHOU",
+    "region": "南方",
+    "tier": "二线",
+    "glyph": "扬",
+    "c1": "#FFF3E2",
+    "c2": "#E8C470",
+    "desc": "淮左名都，历史文化名城。文旅+高端装备双特色，慢生活适合长期定居。",
+    "subsidy": 20000,
+    "subsidyLabel": "最高 2 万",
+    "subsidyKind": "生活补贴",
+    "cost": 2,
+    "jobs": 3,
+    "chill": 5,
+    "link": "https://yzzjj.yangzhou.gov.cn/zfxxgk/fdzdgknr/xwfbh/bmxwfbh/art/2025/art_a8a1605400c54745b9f0184392507250.html",
+    "linkLabel": "扬州人社·绿扬金凤",
+    "tags": [
+      {
+        "t": "慢生活",
+        "c": "green"
+      },
+      {
+        "t": "文旅名城",
+        "c": "rose"
+      },
+      {
+        "t": "宜居",
+        "c": "teal"
+      }
+    ],
+    "audience": [
+      "应届生",
+      "学生"
+    ]
+  ,
+  identityData: {
+      "entrepreneur": {
+            "subsidy": 10000,
+            "subsidyLabel": "最高 1 万",
+            "subsidyKind": "一次性创业补贴",
+            "conditions": [
+                  "毕业5年内",
+                  "正常经营3个月以上"
+            ],
+            "link": "https://rsj.yangzhou.gov.cn",
+            "linkLabel": "⚠️待核实·扬州·一次性创业补贴"
+      },
+      "overseas": {
+            "subsidy": 50000,
+            "subsidyLabel": "最高 5 万",
+            "subsidyKind": "安家补贴",
+            "conditions": [
+                  "海外学历认证",
+                  "签订劳动合同"
+            ],
+            "link": "https://rsj.yangzhou.gov.cn",
+            "linkLabel": "扬州·人才购房补贴政策(博士最高100万·硕10万·本5万)"
+      },
+      "graduate": {
+            "subsidy": 20000,
+            "subsidyLabel": "最高 2 万",
+            "subsidyKind": "生活补贴+租房补贴",
+            "conditions": [
+                  "应届全日制本科以上",
+                  "签1年以上劳动合同"
+            ],
+            "link": "https://rsj.yangzhou.gov.cn",
+            "linkLabel": "⚠️待核实·扬州·生活补贴+租房补贴"
+      }
+}
+},
+{
+    "id": "zhenjiang",
+    "name": "镇江",
+    "nameEn": "ZHENJIANG",
+    "region": "南方",
+    "tier": "二线",
+    "glyph": "镇",
+    "c1": "#E5F1D9",
+    "c2": "#9CC57E",
+    "desc": "山水名城，沪宁线价格洼地。靠近南京的区位优势+极低生活成本。",
+    "subsidy": 20000,
+    "subsidyLabel": "最高 2 万",
+    "subsidyKind": "生活补贴",
+    "cost": 2,
+    "jobs": 2,
+    "chill": 4,
+    "link": "http://hrss.zhenjiang.gov.cn/hrss/xsqdt/202510/f45444a6bbf04ddf9a284d8e3a7102c5.shtml",
+    "linkLabel": "镇江人社",
+    "tags": [
+      {
+        "t": "南京卫星城",
+        "c": "indigo"
+      },
+      {
+        "t": "价格洼地",
+        "c": "green"
+      }
+    ],
+    "audience": [
+      "应届生",
+      "学生"
+    ]
+  ,
+  identityData: {
+      "entrepreneur": {
+            "subsidy": 10000,
+            "subsidyLabel": "最高 1 万",
+            "subsidyKind": "一次性创业补贴",
+            "conditions": [
+                  "毕业5年内",
+                  "正常经营3个月以上"
+            ],
+            "link": "https://rsj.zhenjiang.gov.cn",
+            "linkLabel": "⚠️待核实·镇江·一次性创业补贴"
+      },
+      "overseas": {
+            "subsidy": 50000,
+            "subsidyLabel": "最高 5 万",
+            "subsidyKind": "安家补贴",
+            "conditions": [
+                  "海外学历认证",
+                  "签订劳动合同"
+            ],
+            "link": "https://rsj.zhenjiang.gov.cn",
+            "linkLabel": "镇江·归雁计划+聚镇计划(生活补贴+租房补贴+购房补贴)"
+      },
+      "graduate": {
+            "subsidy": 20000,
+            "subsidyLabel": "最高 2 万",
+            "subsidyKind": "生活补贴+租房补贴",
+            "conditions": [
+                  "应届全日制本科以上",
+                  "签1年以上劳动合同"
+            ],
+            "link": "https://rsj.zhenjiang.gov.cn",
+            "linkLabel": "⚠️待核实·镇江·生活补贴+租房补贴"
+      }
+}
+},
+{
+    "id": "hangzhou",
+    "name": "杭州",
+    "nameEn": "HANGZHOU",
+    "region": "南方",
+    "tier": "新一线",
+    "glyph": "杭",
+    "c1": "#DCEFEB",
+    "c2": "#7FC0B6",
+    "desc": "数字经济第一城，应届生生活补贴本科1万/硕士3万/博士10万，青荷礼包+租房补贴叠加。",
+    "subsidy": 100000,
+    "subsidyLabel": "最高 10 万",
+    "subsidyKind": "生活补贴+房补+青荷礼包",
+    "cost": 4,
+    "jobs": 5,
+    "chill": 3,
+    "link": "https://hrss.hangzhou.gov.cn/art/2025/3/3/art_1229564773_1849781.html",
+    "linkLabel": "应届生生活补贴指南",
+    "tags": [
+      {
+        "t": "就业机会多",
+        "c": "teal"
+      },
+      {
+        "t": "数字经济",
+        "c": "indigo"
+      },
+      {
+        "t": "应届生友好",
+        "c": "green"
+      }
+    ],
+    "audience": [
+      "应届生",
+      "互联网",
+      "硕士以上"
+    ]
+  ,
+  identityData: {
+      "entrepreneur": {
+            "subsidy": 100000,
+            "subsidyLabel": "最高 10 万",
+            "subsidyKind": "大学生创业资助+租金补贴",
+            "conditions": [
+                  "在校或毕业5年内",
+                  "经营满6个月",
+                  "优秀项目最高500万"
+            ],
+            "link": "https://hrss.hangzhou.gov.cn/col/col1587978/art/2026/art_12d996d8a03c4f4db333ea05d4f8485b.html",
+            "linkLabel": "杭州·大学生创业项目资助(最高50万)+一次性创业补贴指南"
+      },
+      "overseas": {
+            "subsidy": 100000,
+            "subsidyLabel": "博士10万",
+            "subsidyKind": "应届生生活补贴+房补",
+            "conditions": [
+                  "本科≤45/硕≤50/博≤55",
+                  "毕业2年内免社保落户",
+                  "余杭硕6万/博18万叠加"
+            ],
+            "link": "https://hrss.hangzhou.gov.cn/col/col1229230651/index.html",
+            "linkLabel": "杭州·海归补贴"
+      },
+      "graduate": {
+            "subsidy": 100000,
+            "subsidyLabel": "博士10万",
+            "subsidyKind": "生活补贴+租房补贴+青荷礼包",
+            "conditions": [
+                  "应届全日制本科以上",
+                  "连续参保6个月发首笔",
+                  "1万/年租房补贴最长6年"
+            ],
+            "link": "https://hrss.hangzhou.gov.cn/col/col1229230651/index.html",
+            "linkLabel": "杭州·应届毕业生生活补贴申请指南(本科1万/硕3万/博10万)"
+      }
+}
+},
+{
+    "id": "ningbo",
+    "name": "宁波",
+    "nameEn": "NINGBO",
+    "region": "南方",
+    "tier": "二线",
+    "glyph": "甬",
+    "c1": "#E6E8FB",
+    "c2": "#9DA5EF",
+    "desc": "东方大港，制造业单项冠军之城。博士购房补贴最高20万+安家补助。",
+    "subsidy": 200000,
+    "subsidyLabel": "最高 20 万",
+    "subsidyKind": "购房补贴+安家补助",
+    "cost": 3,
+    "jobs": 4,
+    "chill": 3,
+    "link": "http://www.ningbo.gov.cn/art/2025/6/12/art_1229881778_4637426.html",
+    "linkLabel": "宁波人社·甬江引才",
+    "tags": [
+      {
+        "t": "制造业冠军",
+        "c": "amber"
+      },
+      {
+        "t": "港口经济",
+        "c": "indigo"
+      },
+      {
+        "t": "购房补贴",
+        "c": "teal"
+      }
+    ],
+    "audience": [
+      "硕士以上",
+      "博士",
+      "应届生"
+    ]
+  ,
+  identityData: {
+      "entrepreneur": {
+            "subsidy": 10000,
+            "subsidyLabel": "最高 1 万",
+            "subsidyKind": "一次性创业补贴",
+            "conditions": [
+                  "毕业5年内",
+                  "正常经营3个月以上"
+            ],
+            "link": "http://www.ningbo.gov.cn/art/2025/6/12/art_1229881778_4637426.html",
+            "linkLabel": "⚠️待核实·宁波·一次性创业补贴"
+      },
+      "overseas": {
+            "subsidy": 50000,
+            "subsidyLabel": "最高 5 万",
+            "subsidyKind": "安家补贴",
+            "conditions": [
+                  "海外学历认证",
+                  "签订劳动合同"
+            ],
+            "link": "https://rsj.ningbo.gov.cn",
+            "linkLabel": "⚠️待核实·宁波·安家补贴"
+      },
+      "graduate": {
+            "subsidy": 20000,
+            "subsidyLabel": "最高 2 万",
+            "subsidyKind": "生活补贴+租房补贴",
+            "conditions": [
+                  "应届全日制本科以上",
+                  "签1年以上劳动合同"
+            ],
+            "link": "https://rsj.ningbo.gov.cn",
+            "linkLabel": "宁波·高校毕业生住房+购房补贴政策(博20万购房·本硕8万·1万/年租房补)"
+      }
+}
+},
+{
+    "id": "wenzhou",
+    "name": "温州",
+    "nameEn": "WENZHOU",
+    "region": "南方",
+    "tier": "二线",
+    "glyph": "温",
+    "c1": "#DCEFEB",
+    "c2": "#7FC0B6",
+    "desc": "民营经济发源地，创业氛围浓。引才以购房补贴+租房补贴为主，民企活力强。",
+    "subsidy": 20000,
+    "subsidyLabel": "最高 2 万",
+    "subsidyKind": "租房+购房补贴",
+    "cost": 3,
+    "jobs": 3,
+    "chill": 3,
+    "link": "https://hrss.wenzhou.gov.cn/col/col1228991519/art/2025/art_23d228d5ac3244e18f921262747b14a8.html",
+    "linkLabel": "温州人社·瓯越英才",
+    "tags": [
+      {
+        "t": "民营经济",
+        "c": "amber"
+      },
+      {
+        "t": "创业氛围",
+        "c": "indigo"
+      }
+    ],
+    "audience": [
+      "应届生",
+      "求职者",
+      "创业者"
+    ]
+  ,
+  identityData: {
+      "entrepreneur": {
+            "subsidy": 10000,
+            "subsidyLabel": "最高 1 万",
+            "subsidyKind": "一次性创业补贴",
+            "conditions": [
+                  "毕业5年内",
+                  "正常经营3个月以上"
+            ],
+            "link": "https://rsj.wenzhou.gov.cn",
+            "linkLabel": "⚠️待核实·温州·一次性创业补贴"
+      },
+      "overseas": {
+            "subsidy": 50000,
+            "subsidyLabel": "最高 5 万",
+            "subsidyKind": "安家补贴",
+            "conditions": [
+                  "海外学历认证",
+                  "签订劳动合同"
+            ],
+            "link": "https://rsj.wenzhou.gov.cn",
+            "linkLabel": "温州·510+行动计划(2025-2027)(博8万/硕4万/本1万+租房补)"
+      },
+      "graduate": {
+            "subsidy": 20000,
+            "subsidyLabel": "最高 2 万",
+            "subsidyKind": "生活补贴+租房补贴",
+            "conditions": [
+                  "应届全日制本科以上",
+                  "签1年以上劳动合同"
+            ],
+            "link": "https://rsj.wenzhou.gov.cn",
+            "linkLabel": "⚠️待核实·温州·生活补贴+租房补贴"
+      }
+}
+},
+{
+    "id": "jiaxing",
+    "name": "嘉兴",
+    "nameEn": "JIAXING",
+    "region": "南方",
+    "tier": "二线",
+    "glyph": "嘉",
+    "c1": "#E5F1D9",
+    "c2": "#9CC57E",
+    "desc": "红船启航地，长三角一体化核心区。紧邻上海杭州，引才政策实惠+区位无敌。",
+    "subsidy": 30000,
+    "subsidyLabel": "最高 3 万",
+    "subsidyKind": "生活补贴+住房",
+    "cost": 2,
+    "jobs": 3,
+    "chill": 4,
+    "link": "https://rsj.jiaxing.gov.cn/art/2024/7/1/art_1229046028_5311001.html",
+    "linkLabel": "嘉兴人社·创新嘉兴",
+    "tags": [
+      {
+        "t": "长三角核心",
+        "c": "indigo"
+      },
+      {
+        "t": "区位无敌",
+        "c": "amber"
+      },
+      {
+        "t": "宜居",
+        "c": "green"
+      }
+    ],
+    "audience": [
+      "应届生",
+      "求职者"
+    ]
+  ,
+  identityData: {
+      "entrepreneur": {
+            "subsidy": 10000,
+            "subsidyLabel": "最高 1 万",
+            "subsidyKind": "一次性创业补贴",
+            "conditions": [
+                  "毕业5年内",
+                  "正常经营3个月以上"
+            ],
+            "link": "https://rsj.jiaxing.gov.cn",
+            "linkLabel": "⚠️待核实·嘉兴·一次性创业补贴"
+      },
+      "overseas": {
+            "subsidy": 50000,
+            "subsidyLabel": "最高 5 万",
+            "subsidyKind": "安家补贴",
+            "conditions": [
+                  "海外学历认证",
+                  "签订劳动合同"
+            ],
+            "link": "https://rsj.jiaxing.gov.cn",
+            "linkLabel": "⚠️待核实·嘉兴·安家补贴"
+      },
+      "graduate": {
+            "subsidy": 20000,
+            "subsidyLabel": "最高 2 万",
+            "subsidyKind": "生活补贴+租房补贴",
+            "conditions": [
+                  "应届全日制本科以上",
+                  "签1年以上劳动合同"
+            ],
+            "link": "https://rsj.jiaxing.gov.cn",
+            "linkLabel": "嘉兴·高校毕业生人才补贴政策(博35万+硕15万房票·本10万房票)"
+      }
+}
+},
+{
+    "id": "shaoxing",
+    "name": "绍兴",
+    "nameEn": "SHAOXING",
+    "region": "南方",
+    "tier": "二线",
+    "glyph": "绍",
+    "c1": "#FFF3E2",
+    "c2": "#E8C470",
+    "desc": "名士之乡，纺织+黄酒+集成电路。杭绍同城化加速，引才政策叠加。",
+    "subsidy": 30000,
+    "subsidyLabel": "最高 3 万",
+    "subsidyKind": "生活补贴+安家",
+    "cost": 2,
+    "jobs": 3,
+    "chill": 4,
+    "link": "https://rsj.sx.gov.cn/col/col1488667/art/2025/art_4e050f090ebf40c3a0d335a208d6786f.html",
+    "linkLabel": "绍兴人社·名士之乡",
+    "tags": [
+      {
+        "t": "杭绍同城",
+        "c": "indigo"
+      },
+      {
+        "t": "集成电路",
+        "c": "amber"
+      },
+      {
+        "t": "名士之乡",
+        "c": "rose"
+      }
+    ],
+    "audience": [
+      "应届生",
+      "求职者"
+    ]
+  ,
+  identityData: {
+      "entrepreneur": {
+            "subsidy": 10000,
+            "subsidyLabel": "最高 1 万",
+            "subsidyKind": "一次性创业补贴",
+            "conditions": [
+                  "毕业5年内",
+                  "正常经营3个月以上"
+            ],
+            "link": "https://rsj.shaoxing.gov.cn",
+            "linkLabel": "⚠️待核实·绍兴·一次性创业补贴"
+      },
+      "overseas": {
+            "subsidy": 50000,
+            "subsidyLabel": "最高 5 万",
+            "subsidyKind": "安家补贴",
+            "conditions": [
+                  "海外学历认证",
+                  "签订劳动合同"
+            ],
+            "link": "https://rsj.shaoxing.gov.cn",
+            "linkLabel": "绍兴·高校毕业生人才政策(博9万+房票40万/硕6万+房票25万/本3万+房票15万)"
+      },
+      "graduate": {
+            "subsidy": 20000,
+            "subsidyLabel": "最高 2 万",
+            "subsidyKind": "生活补贴+租房补贴",
+            "conditions": [
+                  "应届全日制本科以上",
+                  "签1年以上劳动合同"
+            ],
+            "link": "https://rsj.shaoxing.gov.cn",
+            "linkLabel": "⚠️待核实·绍兴·生活补贴+租房补贴"
+      }
+}
+},
+{
+    "id": "jinhua",
+    "name": "金华",
+    "nameEn": "JINHUA",
+    "region": "南方",
+    "tier": "二线",
+    "glyph": "婺",
+    "c1": "#DCEFEB",
+    "c2": "#6BB1C6",
+    "desc": "浙江之心，义乌小商品全球中心。电商+物流产业集聚，创业成本低。",
+    "subsidy": 20000,
+    "subsidyLabel": "最高 2 万",
+    "subsidyKind": "生活补贴",
+    "cost": 2,
+    "jobs": 3,
+    "chill": 4,
+    "link": "https://rsj.jinhua.gov.cn/art/2025/5/20/art_1229162673_5940297.html",
+    "linkLabel": "金华人社·双龙引才",
+    "tags": [
+      {
+        "t": "电商之都",
+        "c": "amber"
+      },
+      {
+        "t": "创业成本低",
+        "c": "green"
+      },
+      {
+        "t": "义乌",
+        "c": "indigo"
+      }
+    ],
+    "audience": [
+      "应届生",
+      "创业者",
+      "求职者"
+    ]
+  ,
+  identityData: {
+      "entrepreneur": {
+            "subsidy": 10000,
+            "subsidyLabel": "最高 1 万",
+            "subsidyKind": "一次性创业补贴",
+            "conditions": [
+                  "毕业5年内",
+                  "正常经营3个月以上"
+            ],
+            "link": "https://rsj.jinhua.gov.cn",
+            "linkLabel": "⚠️待核实·金华·一次性创业补贴"
+      },
+      "overseas": {
+            "subsidy": 50000,
+            "subsidyLabel": "最高 5 万",
+            "subsidyKind": "安家补贴",
+            "conditions": [
+                  "海外学历认证",
+                  "签订劳动合同"
+            ],
+            "link": "https://rsj.jinhua.gov.cn",
+            "linkLabel": "⚠️待核实·金华·安家补贴"
+      },
+      "graduate": {
+            "subsidy": 20000,
+            "subsidyLabel": "最高 2 万",
+            "subsidyKind": "生活补贴+租房补贴",
+            "conditions": [
+                  "应届全日制本科以上",
+                  "签1年以上劳动合同"
+            ],
+            "link": "https://rsj.jinhua.gov.cn",
+            "linkLabel": "金华·智选金华高校毕业生人才补贴(博40万购房+25万生活·硕20万购房)"
+      }
+}
+},
+{
+    "id": "hefei",
+    "name": "合肥",
+    "nameEn": "HEFEI",
+    "region": "南方",
+    "tier": "二线",
+    "glyph": "合",
+    "c1": "#E6E8FB",
+    "c2": "#9DA5EF",
+    "desc": "最牛风投城市，京东方+蔚来+长鑫存储产业集聚。博士租房补贴2000元/月+购房优惠。",
+    "subsidy": 70000,
+    "subsidyLabel": "最高 7 万",
+    "subsidyKind": "租房补贴+购房优惠",
+    "cost": 2,
+    "jobs": 4,
+    "chill": 3,
+    "link": "https://rsj.hefei.gov.cn/zcfg/rcfw/202501/t20250115_5506439.html",
+    "linkLabel": "合肥人社·养人合肥",
+    "tags": [
+      {
+        "t": "产业爆发",
+        "c": "amber"
+      },
+      {
+        "t": "风投之城",
+        "c": "indigo"
+      },
+      {
+        "t": "生活成本适中",
+        "c": "green"
+      }
+    ],
+    "audience": [
+      "应届生",
+      "硕士以上",
+      "博士"
+    ]
+  ,
+  identityData: {
+      "entrepreneur": {
+            "subsidy": 10000,
+            "subsidyLabel": "1万+最高50万",
+            "subsidyKind": "一次性创业补贴+双创引导资金",
+            "conditions": [
+                  "毕业2年内",
+                  "运营满3个月",
+                  "创业团队扶持3-10万"
+            ],
+            "link": "https://www.hfxf.gov.cn/rsks/ysfwsc/18854737.html",
+            "linkLabel": "合肥·创业扶持"
+      },
+      "overseas": {
+            "subsidy": 200000,
+            "subsidyLabel": "博士20万+",
+            "subsidyKind": "博士后出站+生活补贴+购房",
+            "conditions": [
+                  "35岁以下+重点企业",
+                  "博士免费租住90㎡×3年",
+                  "购房博士最高12万"
+            ],
+            "link": "https://rsj.hefei.gov.cn",
+            "linkLabel": "合肥·重点产业人才安居政策(本1.5万/年·硕2万/年·博3.6万/年)"
+      },
+      "graduate": {
+            "subsidy": 70000,
+            "subsidyLabel": "最高 7 万",
+            "subsidyKind": "租房补贴+就业补贴",
+            "conditions": [
+                  "硕博免费租住3年",
+                  "博3.6万/年×3年",
+                  "面试交通补省外1千/省内5百"
+            ],
+            "link": "https://rsj.hefei.gov.cn",
+            "linkLabel": "合肥·服务人才发展若干政策修订版(博3.6万/年·硕2万/年·本1.5万/年租房补)"
+      }
+}
+},
+{
+    "id": "wuhu",
+    "name": "芜湖",
+    "nameEn": "WUHU",
+    "region": "南方",
+    "tier": "二线",
+    "glyph": "芜",
+    "c1": "#E5F1D9",
+    "c2": "#9CC57E",
+    "desc": "长江巨埠，奇瑞汽车总部。新能源+智能网联汽车产业集聚，引才以企业主导。",
+    "subsidy": 20000,
+    "subsidyLabel": "最高 2 万",
+    "subsidyKind": "生活补贴",
+    "cost": 2,
+    "jobs": 3,
+    "chill": 3,
+    "link": "https://rsj.wuhu.gov.cn/openness/public/6596391/40424788.html",
+    "linkLabel": "芜湖人社·紫云英人才",
+    "tags": [
+      {
+        "t": "奇瑞总部",
+        "c": "amber"
+      },
+      {
+        "t": "新能源车",
+        "c": "green"
+      },
+      {
+        "t": "江边宜居",
+        "c": "teal"
+      }
+    ],
+    "audience": [
+      "应届生",
+      "求职者"
+    ]
+  ,
+  identityData: {
+      "entrepreneur": {
+            "subsidy": 10000,
+            "subsidyLabel": "最高 1 万",
+            "subsidyKind": "一次性创业补贴",
+            "conditions": [
+                  "毕业5年内",
+                  "正常经营3个月以上"
+            ],
+            "link": "https://rsj.wuhu.gov.cn",
+            "linkLabel": "⚠️待核实·芜湖·一次性创业补贴"
+      },
+      "overseas": {
+            "subsidy": 50000,
+            "subsidyLabel": "最高 5 万",
+            "subsidyKind": "安家补贴",
+            "conditions": [
+                  "海外学历认证",
+                  "签订劳动合同"
+            ],
+            "link": "https://rsj.wuhu.gov.cn",
+            "linkLabel": "⚠️待核实·芜湖·安家补贴"
+      },
+      "graduate": {
+            "subsidy": 20000,
+            "subsidyLabel": "最高 2 万",
+            "subsidyKind": "生活补贴+租房补贴",
+            "conditions": [
+                  "应届全日制本科以上",
+                  "签1年以上劳动合同"
+            ],
+            "link": "https://rsj.wuhu.gov.cn",
+            "linkLabel": "芜湖·紫云英人才计划+鸠兹科创湾政策(博40万购房+生活补·硕安置2-5万)"
+      }
+}
+},
+{
+    "id": "fuzhou",
+    "name": "福州",
+    "nameEn": "FUZHOU",
+    "region": "南方",
+    "tier": "二线",
+    "glyph": "榕",
+    "c1": "#DCEFEB",
+    "c2": "#7FC0B6",
+    "desc": "有福之州，数字经济+海洋经济双引擎。引才含生活补贴+住房保障，省会资源集中。",
+    "subsidy": 50000,
+    "subsidyLabel": "最高 5 万",
+    "subsidyKind": "生活补贴+住房保障",
+    "cost": 3,
+    "jobs": 4,
+    "chill": 4,
+    "link": "https://www.fuzhou.gov.cn/zgfzzt/shsy/zcfg/rcfz/202504/t20250429_4999590.html",
+    "linkLabel": "福州人社·好年华聚福州",
+    "tags": [
+      {
+        "t": "省会资源",
+        "c": "indigo"
+      },
+      {
+        "t": "数字经济",
+        "c": "amber"
+      },
+      {
+        "t": "宜居",
+        "c": "teal"
+      }
+    ],
+    "audience": [
+      "应届生",
+      "硕士以上",
+      "求职者"
+    ]
+  ,
+  identityData: {
+      "entrepreneur": {
+            "subsidy": 10000,
+            "subsidyLabel": "最高 1 万",
+            "subsidyKind": "一次性创业补贴",
+            "conditions": [
+                  "毕业5年内",
+                  "正常经营3个月以上"
+            ],
+            "link": "https://rsj.fuzhou.gov.cn",
+            "linkLabel": "⚠️待核实·福州·一次性创业补贴"
+      },
+      "overseas": {
+            "subsidy": 50000,
+            "subsidyLabel": "最高 5 万",
+            "subsidyKind": "安家补贴",
+            "conditions": [
+                  "海外学历认证",
+                  "签订劳动合同"
+            ],
+            "link": "https://rsj.fuzhou.gov.cn",
+            "linkLabel": "福州·双一流高校毕业生引进奖励(本1.5万/硕3万+落地奖)"
+      },
+      "graduate": {
+            "subsidy": 20000,
+            "subsidyLabel": "最高 2 万",
+            "subsidyKind": "生活补贴+租房补贴",
+            "conditions": [
+                  "应届全日制本科以上",
+                  "签1年以上劳动合同"
+            ],
+            "link": "https://rsj.fuzhou.gov.cn",
+            "linkLabel": "⚠️待核实·福州·生活补贴+租房补贴"
+      }
+}
+},
+{
+    "id": "xiamen",
+    "name": "厦门",
+    "nameEn": "XIAMEN",
+    "region": "南方",
+    "tier": "二线",
+    "glyph": "鹭",
+    "c1": "#FBE3E7",
+    "c2": "#E8A0B0",
+    "desc": "海上花园，新引进人才博士8万/硕士5万生活补贴。互联网+金融+旅游三轮驱动。",
+    "subsidy": 80000,
+    "subsidyLabel": "最高 8 万",
+    "subsidyKind": "新引进人才生活补贴",
+    "cost": 4,
+    "jobs": 4,
+    "chill": 4,
+    "link": "http://www.xiangan.gov.cn/zwgk/hqzc/bszn/rsj/202507/t20250701_1106397.htm",
+    "linkLabel": "厦门人社·留厦六条",
+    "tags": [
+      {
+        "t": "海上花园",
+        "c": "teal"
+      },
+      {
+        "t": "生活补贴",
+        "c": "amber"
+      },
+      {
+        "t": "互联网",
+        "c": "indigo"
+      }
+    ],
+    "audience": [
+      "应届生",
+      "硕士以上",
+      "留学归国"
+    ]
+  ,
+  identityData: {
+      "entrepreneur": {
+            "subsidy": 10000,
+            "subsidyLabel": "最高 1 万",
+            "subsidyKind": "一次性创业补贴",
+            "conditions": [
+                  "毕业5年内",
+                  "正常经营3个月以上"
+            ],
+            "link": "https://rsj.xiamen.gov.cn",
+            "linkLabel": "⚠️待核实·厦门·一次性创业补贴"
+      },
+      "overseas": {
+            "subsidy": 50000,
+            "subsidyLabel": "最高 5 万",
+            "subsidyKind": "安家补贴",
+            "conditions": [
+                  "海外学历认证",
+                  "签订劳动合同"
+            ],
+            "link": "https://rsj.xiamen.gov.cn",
+            "linkLabel": "厦门·新引进人才生活补贴办事指南(博8万/硕5万/本3万)"
+      },
+      "graduate": {
+            "subsidy": 20000,
+            "subsidyLabel": "最高 2 万",
+            "subsidyKind": "生活补贴+租房补贴",
+            "conditions": [
+                  "应届全日制本科以上",
+                  "签1年以上劳动合同"
+            ],
+            "link": "https://rsj.xiamen.gov.cn",
+            "linkLabel": "⚠️待核实·厦门·生活补贴+租房补贴"
+      }
+}
+},
+{
+    "id": "quanzhou",
+    "name": "泉州",
+    "nameEn": "QUANZHOU",
+    "region": "南方",
+    "tier": "二线",
+    "glyph": "泉",
+    "c1": "#FFF3E2",
+    "c2": "#E8C470",
+    "desc": "海丝起点，民营经济之都。纺织鞋服+建材家居产业密集，创业氛围浓厚。",
+    "subsidy": 20000,
+    "subsidyLabel": "最高 2 万",
+    "subsidyKind": "生活补贴",
+    "cost": 2,
+    "jobs": 3,
+    "chill": 4,
+    "link": "https://www.quanzhou.gov.cn/zfb/xxgk/zfxxgkzl/qzdt/qzyw/202506/t20250630_3184205.htm",
+    "linkLabel": "泉州人社·涌泉行动",
+    "tags": [
+      {
+        "t": "民营经济",
+        "c": "amber"
+      },
+      {
+        "t": "海丝起点",
+        "c": "indigo"
+      },
+      {
+        "t": "创业友好",
+        "c": "green"
+      }
+    ],
+    "audience": [
+      "应届生",
+      "创业者"
+    ]
+  ,
+  identityData: {
+      "entrepreneur": {
+            "subsidy": 10000,
+            "subsidyLabel": "最高 1 万",
+            "subsidyKind": "一次性创业补贴",
+            "conditions": [
+                  "毕业5年内",
+                  "正常经营3个月以上"
+            ],
+            "link": "https://rsj.quanzhou.gov.cn",
+            "linkLabel": "⚠️待核实·泉州·一次性创业补贴"
+      },
+      "overseas": {
+            "subsidy": 50000,
+            "subsidyLabel": "最高 5 万",
+            "subsidyKind": "安家补贴",
+            "conditions": [
+                  "海外学历认证",
+                  "签订劳动合同"
+            ],
+            "link": "https://rsj.quanzhou.gov.cn",
+            "linkLabel": "泉州·人才双增行动方案(博8万购房+10万生活·晋江叠加博11万生活补)"
+      },
+      "graduate": {
+            "subsidy": 20000,
+            "subsidyLabel": "最高 2 万",
+            "subsidyKind": "生活补贴+租房补贴",
+            "conditions": [
+                  "应届全日制本科以上",
+                  "签1年以上劳动合同"
+            ],
+            "link": "https://rsj.quanzhou.gov.cn",
+            "linkLabel": "⚠️待核实·泉州·生活补贴+租房补贴"
+      }
+}
+},
+{
+    "id": "guangzhou",
+    "name": "广州",
+    "nameEn": "GUANGZHOU",
+    "region": "南方",
+    "tier": "一线",
+    "glyph": "穗",
+    "c1": "#FBE3E7",
+    "c2": "#C8556A",
+    "desc": "千年商都，南沙区博士12万入户+4000/月×30月租房补贴。落户零门槛全程网办秒批。",
+    "subsidy": 200000,
+    "subsidyLabel": "最高 20 万",
+    "subsidyKind": "入户奖励+租房补贴",
+    "cost": 4,
+    "jobs": 5,
+    "chill": 3,
+    "link": "http://www.gzns.gov.cn/zwgk/rdzt/hgazczl/cyzc/hgazxzc/rc/content/post_10365449.html",
+    "linkLabel": "广州人社·人才引进",
+    "tags": [
+      {
+        "t": "落户零门槛",
+        "c": "amber"
+      },
+      {
+        "t": "南沙力度最大",
+        "c": "indigo"
+      },
+      {
+        "t": "一线城市",
+        "c": "rose"
+      }
+    ],
+    "audience": [
+      "应届生",
+      "博士",
+      "硕士以上"
+    ]
+  ,
+  identityData: {
+      "entrepreneur": {
+            "subsidy": 10000,
+            "subsidyLabel": "最高 1 万",
+            "subsidyKind": "一次性创业资助+租金补贴",
+            "conditions": [
+                  "毕业5年内",
+                  "注册经营满6个月",
+                  "连续缴纳社保3个月"
+            ],
+            "link": "https://www.gz.gov.cn/gfxwj/szfgfxwj/gzsrmzfbgt/content/post_10343149.html",
+            "linkLabel": "广州·引进人才入户管理办法(穗府办规〔2025〕9号·含创业人才落户)"
+      },
+      "overseas": {
+            "subsidy": 200000,
+            "subsidyLabel": "博士12万",
+            "subsidyKind": "南沙入户奖励+租房补贴",
+            "conditions": [
+                  "海外学历认证",
+                  "南沙区就业优先",
+                  "分3年等额发放"
+            ],
+            "link": "https://rsj.gz.gov.cn",
+            "linkLabel": "广州·5项青年人才支持政策(安家费最高30万·最长30天免费住宿)含海归"
+      },
+      "graduate": {
+            "subsidy": 30000,
+            "subsidyLabel": "本科3万起",
+            "subsidyKind": "南沙入户奖励+月租房补贴",
+            "conditions": [
+                  "应届全日制本科以上",
+                  "落户零门槛秒批",
+                  "南沙博士12万+4千/月"
+            ],
+            "link": "https://rsj.gz.gov.cn",
+            "linkLabel": "广州·应届生落户补贴"
+      }
+}
+},
+{
+    "id": "shenzhen",
+    "name": "深圳",
+    "nameEn": "SHENZHEN",
+    "region": "南方",
+    "tier": "一线",
+    "glyph": "深",
+    "c1": "#E6E8FB",
+    "c2": "#9DA5EF",
+    "desc": "科创之都，2026新政策：博士入户10万+安居补贴1250元/月。青年人才认定后一网通办。",
+    "subsidy": 200000,
+    "subsidyLabel": "最高 20 万",
+    "subsidyKind": "入户补贴+安居补贴",
+    "cost": 5,
+    "jobs": 5,
+    "chill": 2,
+    "link": "https://www.sz.gov.cn/szzt2010/wgkzl/jcgk/jchgk/content/mpost_12551437.html",
+    "linkLabel": "深圳人才服务政策",
+    "tags": [
+      {
+        "t": "科创之都",
+        "c": "indigo"
+      },
+      {
+        "t": "入户补贴",
+        "c": "amber"
+      },
+      {
+        "t": "就业机会多",
+        "c": "teal"
+      }
+    ],
+    "audience": [
+      "留学归国",
+      "博士",
+      "硕士以上"
+    ]
+  ,
+  identityData: {
+      "entrepreneur": {
+            "subsidy": 100000,
+            "subsidyLabel": "最高 10 万",
+            "subsidyKind": "初创补贴+创业担保贷款",
+            "conditions": [
+                  "毕业5年内",
+                  "正常缴纳社保3-6月",
+                  "留创园入驻可叠加资助"
+            ],
+            "link": "https://stic.sz.gov.cn/xxgk/tzgg/content/post_12443312.html",
+            "linkLabel": "深圳·2025年孔雀团队项目申报通知(创业资助100万/50万/30万)"
+      },
+      "overseas": {
+            "subsidy": 200000,
+            "subsidyLabel": "最高 20 万",
+            "subsidyKind": "孔雀计划+入户补贴",
+            "conditions": [
+                  "境外学习≥1年",
+                  "本科≤35/硕≤40/博≤45",
+                  "入户后连续社保12月"
+            ],
+            "link": "https://www.sz.gov.cn/szzt2010/wgkzl/jcgk/jchgk/content/mpost_12551437.html",
+            "linkLabel": "深圳·青年人才来深发展服务保障若干措施(2026年1月起·含留学生专节)"
+      },
+      "graduate": {
+            "subsidy": 100000,
+            "subsidyLabel": "博士10万",
+            "subsidyKind": "入户补贴+安居补贴",
+            "conditions": [
+                  "双一流/QS前150高校",
+                  "首次在深就业",
+                  "最长24月安居补贴"
+            ],
+            "link": "https://hrss.sz.gov.cn/xxgk/zcfgjjd/zcfg/rcfw/",
+            "linkLabel": "深圳·青年人才来深发展服务保障若干措施(2026年1月起)"
+      }
+}
+},
+{
+    "id": "dongguan",
+    "name": "东莞",
+    "nameEn": "DONGGUAN",
+    "region": "南方",
+    "tier": "二线",
+    "glyph": "莞",
+    "c1": "#E5F1D9",
+    "c2": "#9CC57E",
+    "desc": "世界工厂，华为终端总部所在地。松山湖科创走廊+智能制造产业集聚。",
+    "subsidy": 50000,
+    "subsidyLabel": "最高 5 万",
+    "subsidyKind": "生活补贴+住房",
+    "cost": 3,
+    "jobs": 4,
+    "chill": 3,
+    "link": "https://dghrss.dg.gov.cn/gkmlpt/content/4/4434/post_4434505.html",
+    "linkLabel": "东莞人社·莞邑工匠",
+    "tags": [
+      {
+        "t": "华为终端",
+        "c": "amber"
+      },
+      {
+        "t": "松山湖",
+        "c": "indigo"
+      },
+      {
+        "t": "智能制造",
+        "c": "teal"
+      }
+    ],
+    "audience": [
+      "应届生",
+      "求职者",
+      "硕士以上"
+    ]
+  ,
+  identityData: {
+      "entrepreneur": {
+            "subsidy": 10000,
+            "subsidyLabel": "最高 1 万",
+            "subsidyKind": "一次性创业补贴",
+            "conditions": [
+                  "毕业5年内",
+                  "正常经营3个月以上"
+            ],
+            "link": "https://rsj.dg.gov.cn",
+            "linkLabel": "⚠️待核实·东莞·一次性创业补贴"
+      },
+      "overseas": {
+            "subsidy": 50000,
+            "subsidyLabel": "最高 5 万",
+            "subsidyKind": "安家补贴",
+            "conditions": [
+                  "海外学历认证",
+                  "签订劳动合同"
+            ],
+            "link": "https://rsj.dg.gov.cn",
+            "linkLabel": "⚠️待核实·东莞·安家补贴"
+      },
+      "graduate": {
+            "subsidy": 20000,
+            "subsidyLabel": "最高 2 万",
+            "subsidyKind": "生活补贴+租房补贴",
+            "conditions": [
+                  "应届全日制本科以上",
+                  "签1年以上劳动合同"
+            ],
+            "link": "https://rsj.dg.gov.cn",
+            "linkLabel": "东莞·省级以上人才住房补贴+生活补助申报公告(2025年)"
+      }
+}
+},
+{
+    "id": "foshan",
+    "name": "佛山",
+    "nameEn": "FOSHAN",
+    "region": "南方",
+    "tier": "二线",
+    "glyph": "禅",
+    "c1": "#FBE3E7",
+    "c2": "#E8A0B0",
+    "desc": "功夫之城，制造业万亿之城。美的/碧桂园总部，广州同城化享一线辐射。",
+    "subsidy": 50000,
+    "subsidyLabel": "最高 5 万",
+    "subsidyKind": "安家补贴+生活补",
+    "cost": 2,
+    "jobs": 4,
+    "chill": 3,
+    "link": "https://hrss.foshan.gov.cn/gkml/bmwj/gfxwj/content/post_5700990.html",
+    "linkLabel": "佛山人社·优粤佛山卡",
+    "tags": [
+      {
+        "t": "广州同城",
+        "c": "indigo"
+      },
+      {
+        "t": "制造业",
+        "c": "amber"
+      },
+      {
+        "t": "生活成本适中",
+        "c": "green"
+      }
+    ],
+    "audience": [
+      "应届生",
+      "求职者",
+      "硕士以上"
+    ]
+  ,
+  identityData: {
+      "entrepreneur": {
+            "subsidy": 10000,
+            "subsidyLabel": "最高 1 万",
+            "subsidyKind": "一次性创业补贴",
+            "conditions": [
+                  "毕业5年内",
+                  "正常经营3个月以上"
+            ],
+            "link": "https://rsj.foshan.gov.cn",
+            "linkLabel": "⚠️待核实·佛山·一次性创业补贴"
+      },
+      "overseas": {
+            "subsidy": 50000,
+            "subsidyLabel": "最高 5 万",
+            "subsidyKind": "安家补贴",
+            "conditions": [
+                  "海外学历认证",
+                  "签订劳动合同"
+            ],
+            "link": "https://rsj.foshan.gov.cn",
+            "linkLabel": "⚠️待核实·佛山·安家补贴"
+      },
+      "graduate": {
+            "subsidy": 20000,
+            "subsidyLabel": "最高 2 万",
+            "subsidyKind": "生活补贴+租房补贴",
+            "conditions": [
+                  "应届全日制本科以上",
+                  "签1年以上劳动合同"
+            ],
+            "link": "https://rsj.foshan.gov.cn",
+            "linkLabel": "佛山·人才引育扶持实施细则(硕750/月租房补·领军人才安家50-250万)"
+      }
+}
+},
+{
+    "id": "zhuhai",
+    "name": "珠海",
+    "nameEn": "ZHUHAI",
+    "region": "南方",
+    "tier": "二线",
+    "glyph": "珠",
+    "c1": "#DCEFEB",
+    "c2": "#6BB1C6",
+    "desc": "百岛之市，横琴粤澳深度合作区。博士25万购房补贴，环境宜居度大湾区第一。",
+    "subsidy": 250000,
+    "subsidyLabel": "最高 25 万",
+    "subsidyKind": "购房补贴+生活补贴",
+    "cost": 4,
+    "jobs": 3,
+    "chill": 5,
+    "link": "https://zjj.zhuhai.gov.cn/gkmlpt/content/3/3769/post_3769136.html",
+    "linkLabel": "珠海人社·珠海英才",
+    "tags": [
+      {
+        "t": "横琴合作区",
+        "c": "amber"
+      },
+      {
+        "t": "环境最优",
+        "c": "teal"
+      },
+      {
+        "t": "大湾区宜居",
+        "c": "green"
+      }
+    ],
+    "audience": [
+      "博士",
+      "硕士以上",
+      "留学归国"
+    ]
+  ,
+  identityData: {
+      "entrepreneur": {
+            "subsidy": 10000,
+            "subsidyLabel": "最高 1 万",
+            "subsidyKind": "一次性创业补贴",
+            "conditions": [
+                  "毕业5年内",
+                  "正常经营3个月以上"
+            ],
+            "link": "https://zjj.zhuhai.gov.cn/gkmlpt/content/3/3769/post_3769136.html",
+            "linkLabel": "⚠️待核实·珠海·一次性创业补贴"
+      },
+      "overseas": {
+            "subsidy": 50000,
+            "subsidyLabel": "最高 5 万",
+            "subsidyKind": "安家补贴",
+            "conditions": [
+                  "海外学历认证",
+                  "签订劳动合同"
+            ],
+            "link": "https://rsj.zhuhai.gov.cn",
+            "linkLabel": "⚠️待核实·珠海·安家补贴"
+      },
+      "graduate": {
+            "subsidy": 20000,
+            "subsidyLabel": "最高 2 万",
+            "subsidyKind": "生活补贴+租房补贴",
+            "conditions": [
+                  "应届全日制本科以上",
+                  "签1年以上劳动合同"
+            ],
+            "link": "https://rsj.zhuhai.gov.cn",
+            "linkLabel": "珠海·青年人才一免两减住房政策(珠委人才办〔2025〕1号·首年免租+次3折+三5折)"
+      }
+}
+},
+{
+    "id": "xianggang",
+    "name": "香港",
+    "nameEn": "HONG KONG",
+    "region": "南方",
+    "tier": "一线",
+    "glyph": "港",
+    "c1": "#FBE3E7",
+    "c2": "#C8556A",
+    "desc": "国际金融中心，高才通A类年入250万港币/B类名校+3年经验/C类配额制。优才计划无需雇主担保。",
+    "subsidy": 0,
+    "subsidyLabel": "无直接现金补贴",
+    "subsidyKind": "高才通/优才签证",
+    "cost": 5,
+    "jobs": 5,
+    "chill": 1,
+    "link": "https://www.immd.gov.hk/hkt/useful_information/admission-schemes-talents-professionals-entrepreneurs.html",
+    "linkLabel": "香港人才服务办公室",
+    "tags": [
+      {
+        "t": "高才通",
+        "c": "amber"
+      },
+      {
+        "t": "国际金融中心",
+        "c": "indigo"
+      },
+      {
+        "t": "优才计划",
+        "c": "rose"
+      }
+    ],
+    "audience": [
+      "留学归国",
+      "博士",
+      "硕士以上"
+    ]
+  ,
+  identityData: {
+      "entrepreneur": {
+            "subsidy": 0,
+            "subsidyLabel": "暂无相关政策",
+            "subsidyKind": "高才通/优才签证",
+            "conditions": [],
+            "link": "https://www.immd.gov.hk/hkt/useful_information/admission-schemes-talents-professionals-entrepreneurs.html",
+            "linkLabel": "香港·入境处·企业家来港投资入境计划+优才计划"
+      },
+      "overseas": {
+            "subsidy": 0,
+            "subsidyLabel": "无直接现金补贴",
+            "subsidyKind": "高才通A类250万港币门槛",
+            "conditions": [
+                  "A类:年入250万港币",
+                  "B类:名校+3年经验",
+                  "C类:名校+配额制"
+            ],
+            "link": "https://www.hkengage.gov.hk",
+            "linkLabel": "香港·人才服务办公室·高端人才通行证计划(高才通A/B/C类)"
+      },
+      "graduate": {
+            "subsidy": 0,
+            "subsidyLabel": "暂无相关政策",
+            "subsidyKind": "IANG签证留港就业",
+            "conditions": [
+                  "在港高校毕业",
+                  "可申请IANG签证"
+            ],
+            "link": "https://www.hkengage.gov.hk",
+            "linkLabel": "⚠️待核实·香港·IANG签证"
+      }
+}
+},
+{
+    "id": "wuhan",
+    "name": "武汉",
+    "nameEn": "WUHAN",
+    "region": "南方",
+    "tier": "新一线",
+    "glyph": "汉",
+    "c1": "#E5F1D9",
+    "c2": "#9CC57E",
+    "desc": "百万大学生之城，博士免2年租金+硕士免1年。人才安居平台线上申请配租。",
+    "subsidy": 72000,
+    "subsidyLabel": "最高 7.2 万",
+    "subsidyKind": "人才公寓+租金减免",
+    "cost": 2,
+    "jobs": 4,
+    "chill": 3,
+    "link": "https://www.hongshan.gov.cn/xxgk/zc/zcwd/202210/t20221011_2055327.shtml",
+    "linkLabel": "武汉人才安居平台",
+    "tags": [
+      {
+        "t": "大学生之城",
+        "c": "indigo"
+      },
+      {
+        "t": "租金减免",
+        "c": "amber"
+      },
+      {
+        "t": "落户便捷",
+        "c": "teal"
+      }
+    ],
+    "audience": [
+      "应届生",
+      "学生",
+      "求职者"
+    ]
+  ,
+  identityData: {
+      "entrepreneur": {
+            "subsidy": 8000,
+            "subsidyLabel": "8千+最高100万",
+            "subsidyKind": "一次性创业补贴+高新项目资助",
+            "conditions": [
+                  "毕业5年内",
+                  "经营满6个月",
+                  "带动2人以上就业"
+            ],
+            "link": "https://www.wuhan.gov.cn/hdjl/rdhy/202502/t20250226_2539696.shtml",
+            "linkLabel": "武汉·大学生创业政策(一次性补贴5千+5-50万项目资助+免费创业空间)"
+      },
+      "overseas": {
+            "subsidy": 100000,
+            "subsidyLabel": "最高 10 万",
+            "subsidyKind": "长江新区安家+人才公寓",
+            "conditions": [
+                  "海外学历认证",
+                  "毕业6年内",
+                  "博士免2年租金≤2千/月"
+            ],
+            "link": "https://www.wuhan.gov.cn/hdjl/rdhy/202502/t20250226_2539696.shtml",
+            "linkLabel": "武汉·大学生创业+海归政策(博士免2年租金·硕士免1年·购房最高200万)"
+      },
+      "graduate": {
+            "subsidy": 72000,
+            "subsidyLabel": "最高 7.2 万",
+            "subsidyKind": "人才公寓+租金减免",
+            "conditions": [
+                  "全日制大专以上",
+                  "毕业6年内",
+                  "博士免2年/硕士免1年租金"
+            ],
+            "link": "https://rcaj.wuhan.gov.cn",
+            "linkLabel": "武汉·人才安居平台"
+      }
+}
+},
+{
+    "id": "changsha",
+    "name": "长沙",
+    "nameEn": "CHANGSHA",
+    "region": "南方",
+    "tier": "二线",
+    "glyph": "星",
+    "c1": "#FBE3E7",
+    "c2": "#D88A98",
+    "desc": "房价洼地，工程机械之都+文创之都。博士购房补贴10万+生活补贴，性价比全国前三。",
+    "subsidy": 100000,
+    "subsidyLabel": "最高 10 万",
+    "subsidyKind": "购房补贴+生活补贴",
+    "cost": 1,
+    "jobs": 4,
+    "chill": 4,
+    "link": "https://www.changsha.gov.cn/zfgb/2025n/deq/202507/t20250721_11783717.html",
+    "linkLabel": "长沙人社·人才新政",
+    "tags": [
+      {
+        "t": "房价洼地",
+        "c": "amber"
+      },
+      {
+        "t": "性价比之王",
+        "c": "green"
+      },
+      {
+        "t": "工程机械",
+        "c": "indigo"
+      }
+    ],
+    "audience": [
+      "应届生",
+      "求职者",
+      "硕士以上"
+    ]
+  ,
+  identityData: {
+      "entrepreneur": {
+            "subsidy": 30000,
+            "subsidyLabel": "最高 3 万",
+            "subsidyKind": "一次性创业补贴+租金补贴",
+            "conditions": [
+                  "毕业5年内",
+                  "经营满12个月",
+                  "带动2人以上就业"
+            ],
+            "link": "http://rsj.changsha.gov.cn/zxzx_0/tzgg_131288/ldjy_131291/202503/t20250324_11789150.html",
+            "linkLabel": "长沙·2025年度一次性创业补贴申报通知(1万+租金800/月,最高3万)"
+      },
+      "overseas": {
+            "subsidy": 100000,
+            "subsidyLabel": "博士10万",
+            "subsidyKind": "购房补贴+生活补贴",
+            "conditions": [
+                  "35岁以下+毕业2年内",
+                  "落户长沙",
+                  "境外博士10万/硕2万/本1.2万"
+            ],
+            "link": "http://www.hn.xinhuanet.com/20251220/6ed0d542bb2b403ebf67a9b98c6efb79/c.html",
+            "linkLabel": "长沙·青睐长沙人才政策(含海归落户+博10万购房补+创业贷500万)"
+      },
+      "graduate": {
+            "subsidy": 100000,
+            "subsidyLabel": "博士10万",
+            "subsidyKind": "租房生活补贴+购房补贴",
+            "conditions": [
+                  "本科以上+落户",
+                  "35岁以下+毕业2年内",
+                  "博士购房10万/硕3万"
+            ],
+            "link": "https://www.hunan.gov.cn/zqt/hqzc/202510/t20251013_33824206.html",
+            "linkLabel": "长沙·引进人才生活补贴(博10万/硕2万/本1.2万·双肩包博12万/硕4万购房)"
+      }
+}
+},
+{
+    "id": "chengdu",
+    "name": "成都",
+    "nameEn": "CHENGDU",
+    "region": "南方",
+    "tier": "新一线",
+    "glyph": "蓉",
+    "c1": "#FBE3E7",
+    "c2": "#E8A0B0",
+    "desc": "天府之国，青年人才驿站免费住7-15天。人才公寓+安家补贴+三免三减政策。",
+    "subsidy": 72000,
+    "subsidyLabel": "最高 7.2 万",
+    "subsidyKind": "人才公寓+安家补贴",
+    "cost": 2,
+    "jobs": 4,
+    "chill": 5,
+    "link": "https://cdhrss.chengdu.gov.cn/cdrsj/c109727/2025-12/31/content_53632e3c2df34bd99feac07c51a20423.shtml",
+    "linkLabel": "成都人才安居服务",
+    "tags": [
+      {
+        "t": "生活成本低",
+        "c": "green"
+      },
+      {
+        "t": "慢生活",
+        "c": "rose"
+      },
+      {
+        "t": "美食之都",
+        "c": "teal"
+      }
+    ],
+    "audience": [
+      "应届生",
+      "求职者",
+      "学生"
+    ]
+  ,
+  identityData: {
+      "entrepreneur": {
+            "subsidy": 60000,
+            "subsidyLabel": "最高 6 万",
+            "subsidyKind": "海外应届生创业补贴+担保贷款",
+            "conditions": [
+                  "毕业5年内",
+                  "入驻创业孵化器",
+                  "硕士留学创业最高50万"
+            ],
+            "link": "https://cdhrss.chengdu.gov.cn/cdrsj/c151957/2025-06/27/content_5e8a500be13f465982609fb962151f07.shtml",
+            "linkLabel": "成都·优秀海外高校应届生创新创业补贴申报通知"
+      },
+      "overseas": {
+            "subsidy": 60000,
+            "subsidyLabel": "优秀海外应届6万",
+            "subsidyKind": "生活补贴+安家补贴",
+            "conditions": [
+                  "QS前200高校优先",
+                  "45岁以下+学历认证",
+                  "三免三减住房政策"
+            ],
+            "link": "https://cdhrss.chengdu.gov.cn/cdrsj/c109727/2025-12/31/content_53632e3c2df34bd99feac07c51a20423.shtml",
+            "linkLabel": "成都·引进急需紧缺人才实施办法(含海外人才专章·安家补贴)"
+      },
+      "graduate": {
+            "subsidy": 72000,
+            "subsidyLabel": "硕士≥3万 博士7.2万",
+            "subsidyKind": "人才公寓+安家补贴",
+            "conditions": [
+                  "全日制本科以上",
+                  "青年驿站免费7-30天",
+                  "人才公寓最高200㎡8.5折"
+            ],
+            "link": "https://cdzj.chengdu.gov.cn",
+            "linkLabel": "成都·应届生安居"
+      }
+}
+},
+{
+    "id": "chongqing",
+    "name": "重庆",
+    "nameEn": "CHONGQING",
+    "region": "南方",
+    "tier": "二线",
+    "glyph": "渝",
+    "c1": "#FBE3E7",
+    "c2": "#E8A0B0",
+    "desc": "山城，西部唯一直辖市。引才含购房补贴+安家补助，生活成本在直辖市中最低。",
+    "subsidy": 50000,
+    "subsidyLabel": "最高 5 万",
+    "subsidyKind": "购房补贴+安家补助",
+    "cost": 2,
+    "jobs": 4,
+    "chill": 4,
+    "link": "https://www.cq.gov.cn/zwgk/zfxxgkml/szfwj/qtgw/202503/t20250305_14371675.html",
+    "linkLabel": "重庆人社·重庆英才",
+    "tags": [
+      {
+        "t": "直辖市性价比",
+        "c": "amber"
+      },
+      {
+        "t": "山城",
+        "c": "indigo"
+      },
+      {
+        "t": "美食之都",
+        "c": "rose"
+      }
+    ],
+    "audience": [
+      "应届生",
+      "求职者",
+      "硕士以上"
+    ]
+  ,
+  identityData: {
+      "entrepreneur": {
+            "subsidy": 10000,
+            "subsidyLabel": "最高 1 万",
+            "subsidyKind": "一次性创业补贴+免租工位",
+            "conditions": [
+                  "离校2年内首次创业",
+                  "经营满1年",
+                  "1万免费创业工位"
+            ],
+            "link": "https://rlsbj.cq.gov.cn/zwxx_182/tzgg/202507/t20250711_14808848.html",
+            "linkLabel": "重庆·留学人员回国创业创新计划申报通知(2025年·创业资助最高50万)"
+      },
+      "overseas": {
+            "subsidy": 50000,
+            "subsidyLabel": "最高 5 万",
+            "subsidyKind": "安家补助+人才驿站",
+            "conditions": [
+                  "海外学历认证",
+                  "专科以上+社保",
+                  "2025年新政持续完善中"
+            ],
+            "link": "https://rlsbj.cq.gov.cn/zwgk_182/zfxxgkml/jytabl/zxta_145370/2025/202506/t20250609_14697510.html",
+            "linkLabel": "重庆·留学回国人员引进政策答复函(含安家补助+落户+职称)"
+      },
+      "graduate": {
+            "subsidy": 50000,
+            "subsidyLabel": "最高 5 万",
+            "subsidyKind": "购房补贴+安家补助",
+            "conditions": [
+                  "全日制专科以上",
+                  "1-7天免费住宿(61家驿站)",
+                  "青年安居贷已放款92.86亿"
+            ],
+            "link": "https://www.cq.gov.cn/zwgk/zfxxgkml/szfwj/qtgw/202503/t20250305_14371675.html",
+            "linkLabel": "重庆·促进2025年高校毕业生留渝来渝就业创业方案(渝府办发〔2025〕10号·含就业+创业+住房补贴)"
+      }
+}
+},
+{
+    "id": "nanchang",
+    "name": "南昌",
+    "nameEn": "NANCHANG",
+    "region": "南方",
+    "tier": "二线",
+    "glyph": "昌",
+    "c1": "#FBE3E7",
+    "c2": "#D88A98",
+    "desc": "英雄城，VR产业+航空制造特色。引才生活补贴+购房补贴，生活成本低。",
+    "subsidy": 30000,
+    "subsidyLabel": "最高 3 万",
+    "subsidyKind": "生活补贴+购房",
+    "cost": 1,
+    "jobs": 3,
+    "chill": 4,
+    "link": "https://www.nc.gov.cn/ncszf/rsjru/202509/9856cf50c5da40ada8cff63dfffeac97.shtml",
+    "linkLabel": "南昌人社·天下英雄城",
+    "tags": [
+      {
+        "t": "VR产业",
+        "c": "indigo"
+      },
+      {
+        "t": "生活成本低",
+        "c": "green"
+      },
+      {
+        "t": "航空制造",
+        "c": "amber"
+      }
+    ],
+    "audience": [
+      "应届生",
+      "学生"
+    ]
+  ,
+  identityData: {
+      "entrepreneur": {
+            "subsidy": 10000,
+            "subsidyLabel": "最高 1 万",
+            "subsidyKind": "一次性创业补贴",
+            "conditions": [
+                  "毕业5年内",
+                  "正常经营3个月以上"
+            ],
+            "link": "https://rsj.nanchang.gov.cn",
+            "linkLabel": "⚠️待核实·南昌·一次性创业补贴"
+      },
+      "overseas": {
+            "subsidy": 50000,
+            "subsidyLabel": "最高 5 万",
+            "subsidyKind": "安家补贴",
+            "conditions": [
+                  "海外学历认证",
+                  "签订劳动合同"
+            ],
+            "link": "https://rsj.nanchang.gov.cn",
+            "linkLabel": "南昌·关于支持高校毕业生来昌创业就业的若干措施(博10万+10万购房)"
+      },
+      "graduate": {
+            "subsidy": 20000,
+            "subsidyLabel": "最高 2 万",
+            "subsidyKind": "生活补贴+租房补贴",
+            "conditions": [
+                  "应届全日制本科以上",
+                  "签1年以上劳动合同"
+            ],
+            "link": "https://rsj.nanchang.gov.cn",
+            "linkLabel": "⚠️待核实·南昌·生活补贴+租房补贴"
+      }
+}
+},
+{
+    "id": "nanning",
+    "name": "南宁",
+    "nameEn": "NANNING",
+    "region": "南方",
+    "tier": "二线",
+    "glyph": "邕",
+    "c1": "#E5F1D9",
+    "c2": "#9CC57E",
+    "desc": "绿城，东盟门户。面向东南亚的区位优势+极低生活成本，引才政策逐步完善。",
+    "subsidy": 20000,
+    "subsidyLabel": "最高 2 万",
+    "subsidyKind": "生活补贴",
+    "cost": 1,
+    "jobs": 3,
+    "chill": 5,
+    "link": "https://www.nanning.gov.cn/zwgk/fdzdgknr/zfgb/2025nzfgb/d8q/bmwj/t6328080.html",
+    "linkLabel": "南宁人社·邕抱人才",
+    "tags": [
+      {
+        "t": "东盟门户",
+        "c": "amber"
+      },
+      {
+        "t": "绿城",
+        "c": "green"
+      },
+      {
+        "t": "生活成本低",
+        "c": "indigo"
+      }
+    ],
+    "audience": [
+      "应届生",
+      "学生"
+    ]
+  ,
+  identityData: {
+      "entrepreneur": {
+            "subsidy": 10000,
+            "subsidyLabel": "最高 1 万",
+            "subsidyKind": "一次性创业补贴",
+            "conditions": [
+                  "毕业5年内",
+                  "正常经营3个月以上"
+            ],
+            "link": "https://rsj.nanning.gov.cn",
+            "linkLabel": "⚠️待核实·南宁·一次性创业补贴"
+      },
+      "overseas": {
+            "subsidy": 50000,
+            "subsidyLabel": "最高 5 万",
+            "subsidyKind": "安家补贴",
+            "conditions": [
+                  "海外学历认证",
+                  "签订劳动合同"
+            ],
+            "link": "https://rsj.nanning.gov.cn",
+            "linkLabel": "南宁·应届大中专毕业生专项生活补助补充通知(南人社规〔2024〕3号)"
+      },
+      "graduate": {
+            "subsidy": 20000,
+            "subsidyLabel": "最高 2 万",
+            "subsidyKind": "生活补贴+租房补贴",
+            "conditions": [
+                  "应届全日制本科以上",
+                  "签1年以上劳动合同"
+            ],
+            "link": "https://rsj.nanning.gov.cn",
+            "linkLabel": "⚠️待核实·南宁·生活补贴+租房补贴"
+      }
+}
+},
+{
+    "id": "kunming",
+    "name": "昆明",
+    "nameEn": "KUNMING",
+    "region": "南方",
+    "tier": "二线",
+    "glyph": "昆",
+    "c1": "#DCEFEB",
+    "c2": "#7FC0B6",
+    "desc": "春城，面向南亚东南亚辐射中心。数字经济+生物医药产业方向引才。",
+    "subsidy": 30000,
+    "subsidyLabel": "最高 3 万",
+    "subsidyKind": "生活补贴+安家",
+    "cost": 2,
+    "jobs": 3,
+    "chill": 5,
+    "link": "http://www.kmpl.gov.cn/c/2025-07-15/7004921.shtml",
+    "linkLabel": "昆明人社·春城计划",
+    "tags": [
+      {
+        "t": "春城",
+        "c": "teal"
+      },
+      {
+        "t": "生物医药",
+        "c": "amber"
+      },
+      {
+        "t": "慢生活",
+        "c": "green"
+      }
+    ],
+    "audience": [
+      "应届生",
+      "学生"
+    ]
+  ,
+  identityData: {
+      "entrepreneur": {
+            "subsidy": 10000,
+            "subsidyLabel": "最高 1 万",
+            "subsidyKind": "一次性创业补贴",
+            "conditions": [
+                  "毕业5年内",
+                  "正常经营3个月以上"
+            ],
+            "link": "https://rsj.kunming.gov.cn",
+            "linkLabel": "⚠️待核实·昆明·一次性创业补贴"
+      },
+      "overseas": {
+            "subsidy": 50000,
+            "subsidyLabel": "最高 5 万",
+            "subsidyKind": "安家补贴",
+            "conditions": [
+                  "海外学历认证",
+                  "签订劳动合同"
+            ],
+            "link": "https://rsj.kunming.gov.cn",
+            "linkLabel": "⚠️待核实·昆明·安家补贴"
+      },
+      "graduate": {
+            "subsidy": 20000,
+            "subsidyLabel": "最高 2 万",
+            "subsidyKind": "生活补贴+租房补贴",
+            "conditions": [
+                  "应届全日制本科以上",
+                  "签1年以上劳动合同"
+            ],
+            "link": "https://rsj.kunming.gov.cn",
+            "linkLabel": "昆明·就业创业政策汇编(博8万购房·博8千租房·3千就业补)"
+      }
+}
+},
+{
+    "id": "guiyang",
+    "name": "贵阳",
+    "nameEn": "GUIYANG",
+    "region": "南方",
+    "tier": "二线",
+    "glyph": "筑",
+    "c1": "#E5F1D9",
+    "c2": "#9CC57E",
+    "desc": "中国数谷，大数据产业全国领先。引才含安家+生活补贴，气候凉爽宜人。",
+    "subsidy": 30000,
+    "subsidyLabel": "最高 3 万",
+    "subsidyKind": "安家+生活补贴",
+    "cost": 1,
+    "jobs": 3,
+    "chill": 5,
+    "link": "https://rsj.guiyang.gov.cn/rscms/front/s2/dtzx/yqdt/20251210/i14679.html",
+    "linkLabel": "贵阳人社·筑人才强省会",
+    "tags": [
+      {
+        "t": "大数据之都",
+        "c": "amber"
+      },
+      {
+        "t": "气候宜人",
+        "c": "teal"
+      },
+      {
+        "t": "生活成本低",
+        "c": "green"
+      }
+    ],
+    "audience": [
+      "应届生",
+      "学生",
+      "求职者"
+    ]
+  ,
+  identityData: {
+      "entrepreneur": {
+            "subsidy": 10000,
+            "subsidyLabel": "最高 1 万",
+            "subsidyKind": "一次性创业补贴",
+            "conditions": [
+                  "毕业5年内",
+                  "正常经营3个月以上"
+            ],
+            "link": "https://rsj.guiyang.gov.cn",
+            "linkLabel": "⚠️待核实·贵阳·一次性创业补贴"
+      },
+      "overseas": {
+            "subsidy": 50000,
+            "subsidyLabel": "最高 5 万",
+            "subsidyKind": "安家补贴",
+            "conditions": [
+                  "海外学历认证",
+                  "签订劳动合同"
+            ],
+            "link": "https://rsj.guiyang.gov.cn",
+            "linkLabel": "贵阳·人才租房购房补贴申请指南(博5万购房·安家费博4.8万)"
+      },
+      "graduate": {
+            "subsidy": 20000,
+            "subsidyLabel": "最高 2 万",
+            "subsidyKind": "生活补贴+租房补贴",
+            "conditions": [
+                  "应届全日制本科以上",
+                  "签1年以上劳动合同"
+            ],
+            "link": "https://rsj.guiyang.gov.cn",
+            "linkLabel": "⚠️待核实·贵阳·生活补贴+租房补贴"
+      }
+}
+},
+{
+    "id": "haikou",
+    "name": "海口",
+    "nameEn": "HAIKOU",
+    "region": "南方",
+    "tier": "二线",
+    "glyph": "琼",
+    "c1": "#DCEFEB",
+    "c2": "#6BB1C6",
+    "desc": "椰城，海南自贸港核心城市。自贸港税收优惠+人才引进双利好，发展潜力大。",
+    "subsidy": 20000,
+    "subsidyLabel": "最高 2 万",
+    "subsidyKind": "安家补贴",
+    "cost": 3,
+    "jobs": 2,
+    "chill": 5,
+    "link": "http://www.haikou.gov.cn/zfdt/hkyw/202508/t1441082.shtml",
+    "linkLabel": "海口人社·椰城优才",
+    "tags": [
+      {
+        "t": "自贸港",
+        "c": "amber"
+      },
+      {
+        "t": "税收优惠",
+        "c": "indigo"
+      },
+      {
+        "t": "海岛生活",
+        "c": "teal"
+      }
+    ],
+    "audience": [
+      "应届生",
+      "求职者",
+      "创业者"
+    ]
+  ,
+  identityData: {
+      "entrepreneur": {
+            "subsidy": 10000,
+            "subsidyLabel": "最高 1 万",
+            "subsidyKind": "一次性创业补贴",
+            "conditions": [
+                  "毕业5年内",
+                  "正常经营3个月以上"
+            ],
+            "link": "https://rsj.haikou.gov.cn",
+            "linkLabel": "⚠️待核实·海口·一次性创业补贴"
+      },
+      "overseas": {
+            "subsidy": 50000,
+            "subsidyLabel": "最高 5 万",
+            "subsidyKind": "安家补贴",
+            "conditions": [
+                  "海外学历认证",
+                  "签订劳动合同"
+            ],
+            "link": "https://rsj.haikou.gov.cn",
+            "linkLabel": "⚠️待核实·海口·安家补贴"
+      },
+      "graduate": {
+            "subsidy": 20000,
+            "subsidyLabel": "最高 2 万",
+            "subsidyKind": "生活补贴+租房补贴",
+            "conditions": [
+                  "应届全日制本科以上",
+                  "签1年以上劳动合同"
+            ],
+            "link": "https://rsj.haikou.gov.cn",
+            "linkLabel": "海口·致2025届高校毕业生政策公开信(含创业+社保+求职补贴)"
+      }
+}
+}
+];
+
+// ═══════════════════════════════════════════════════════════
+// SHARED COMPONENTS
+// ═══════════════════════════════════════════════════════════
+const Icon = ({ name, size = 16, strokeWidth = 1.8 }) => {
+  const paths = {
+    search: <><circle cx="11" cy="11" r="7" /><path d="m20 20-3.5-3.5" /></>,
+    heart: <path d="M12 21s-7-4.5-9.5-9A5 5 0 0 1 12 6a5 5 0 0 1 9.5 6c-2.5 4.5-9.5 9-9.5 9Z" />,
+    heartFill: <path d="M12 21s-7-4.5-9.5-9A5 5 0 0 1 12 6a5 5 0 0 1 9.5 6c-2.5 4.5-9.5 9-9.5 9Z" fill="currentColor" />,
+    arrow: <><path d="M5 12h14" /><path d="m13 6 6 6-6 6" /></>,
+    arrowLeft: <><path d="M19 12H5" /><path d="m11 6-6 6 6 6" /></>,
+    compass: <><circle cx="12" cy="12" r="9" /><path d="m15 9-2.5 5.5L7 17l2.5-5.5L15 9Z" /></>,
+    sparkles: <><path d="M12 3v4M12 17v4M5 12H1M23 12h-4M5.6 5.6 8 8M16 16l2.4 2.4M5.6 18.4 8 16M16 8l2.4-2.4" /></>,
+    bookmark: <path d="M6 4h12v17l-6-4-6 4V4Z" />,
+    chart: <><path d="M4 20V10" /><path d="M10 20V4" /><path d="M16 20v-7" /><path d="M22 20H2" /></>,
+    coins: <><circle cx="9" cy="9" r="6" /><path d="M15 9a6 6 0 1 0 0 12 6 6 0 0 0 0-12Z" /></>,
+    pin: <><path d="M12 22s7-7 7-12a7 7 0 0 0-14 0c0 5 7 12 7 12Z" /><circle cx="12" cy="10" r="2.5" /></>,
+    filter: <><path d="M3 5h18" /><path d="M6 12h12" /><path d="M10 19h4" /></>,
+    sliders: <><path d="M4 6h12M20 6h0" /><path d="M4 12h6M14 12h6" /><path d="M4 18h12M20 18h0" /><circle cx="18" cy="6" r="2" /><circle cx="12" cy="12" r="2" /><circle cx="18" cy="18" r="2" /></>,
+    check: <path d="m5 12 5 5 9-11" />,
+    x: <><path d="m6 6 12 12" /><path d="m6 18 12-12" /></>,
+    plus: <><path d="M12 5v14" /><path d="M5 12h14" /></>,
+    trash: <><path d="M4 7h16" /><path d="M9 7V4h6v3" /><path d="M6 7v13a1 1 0 0 0 1 1h10a1 1 0 0 0 1-1V7" /></>,
+    target: <><circle cx="12" cy="12" r="9" /><circle cx="12" cy="12" r="5" /><circle cx="12" cy="12" r="1.5" fill="currentColor" stroke="none" /></>,
+    trend: <><path d="M3 17 9 11l4 4 8-9" /><path d="M14 6h7v7" /></>,
+    leaf: <path d="M5 21c0-9 7-16 16-16 0 9-7 16-16 16Zm0 0 8-8" />,
+    flash: <path d="M13 2 3 14h7l-1 8 11-14h-7l1-6Z" />,
+    trophy: <><path d="M7 4h10v4a5 5 0 0 1-10 0V4Z" /><path d="M17 5h3v3a3 3 0 0 1-3 3" /><path d="M7 5H4v3a3 3 0 0 0 3 3" /><path d="M9 18h6l-1 3h-4l-1-3Z" /></>,
+    home: <><path d="m3 11 9-7 9 7" /><path d="M5 10v10h14V10" /></>,
+    book: <path d="M4 4h6a4 4 0 0 1 4 4v12a3 3 0 0 0-3-3H4V4ZM20 4h-6a4 4 0 0 0-4 4v12a3 3 0 0 1 3-3h7V4Z" />,
+    sunny: <><circle cx="12" cy="12" r="4" /><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4" /></>,
+    wallet: <><rect x="3" y="6" width="18" height="13" rx="2" /><path d="M16 13h3" /><path d="M3 10h18" /></>,
+    grad: <><path d="M3 9 12 5l9 4-9 4-9-4Z" /><path d="M7 11v4c0 1 2 2 5 2s5-1 5-2v-4" /></>,
+    briefcase: <><rect x="3" y="7" width="18" height="13" rx="2" /><path d="M9 7V5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2" /></>,
+    user: <><circle cx="12" cy="8" r="4" /><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7" /></>,
+    chevronDown: <path d="m6 9 6 6 6-6" />,
+  };
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={strokeWidth} strokeLinecap="round" strokeLinejoin="round">
+      {paths[name]}
+    </svg>
+  );
+};
+
+const DotLevel = ({ level, max = 5, color = "amber" }) => (
+  <span className={`dots ${color}`}>
+    {Array.from({ length: max }).map((_, i) => (
+      <span key={i} className={`d ${i < level ? "on" : ""}`} />
+    ))}
+  </span>
+);
+
+const Tag = ({ t, c = "" }) => <span className={`tag ${c}`}>{t}</span>;
+
+const Skyline = ({ variant = 0 }) => {
+  const sets = [
+    "M0 56h12v-28h8v18h6v-22h10v14h6v-30h12v34h8v-12h10v18h12v-8h10v18h-94Z",
+    "M0 56h10v-20h14v14h6v-26h8v26h12v-14h10v22h6v-10h12v16h16v-12h6v16h-100Z",
+    "M0 56h8v-16h10v22h8v-26h6v26h12v-10h6v18h10v-22h14v18h6v-8h20v18h-100Z",
+  ];
+  return (
+    <svg className="skyline" viewBox="0 0 100 56" preserveAspectRatio="xMidYMax slice">
+      <path d={sets[variant % sets.length]} fill="currentColor" opacity="0.9" />
+    </svg>
+  );
+};
+
+const Sparkline = ({ data = [4,7,5,9,8,12,10,14], color = "#E8842A", w = 110, h = 36 }) => {
+  const max = Math.max(...data), min = Math.min(...data);
+  const pts = data.map((v, i) => {
+    const x = (i / (data.length - 1)) * w;
+    const y = h - ((v - min) / (max - min || 1)) * (h - 4) - 2;
+    return `${x.toFixed(1)},${y.toFixed(1)}`;
+  }).join(" ");
+  return (
+    <svg className="spark" width={w} height={h} viewBox={`0 0 ${w} ${h}`}>
+      <polyline points={pts} fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+      <polyline points={`${pts} ${w},${h} 0,${h}`} fill={color} opacity="0.12" />
+    </svg>
+  );
+};
+
+// ═══════════════════════════════════════════════════════════
+// IDENTITY PICKER
+// ═══════════════════════════════════════════════════════════
+const IdentityPicker = ({ selectedIdentity, onChange }) => {
+  const [open, setOpen] = React.useState(false);
+  const wrapRef = React.useRef(null);
+
+  React.useEffect(() => {
+    if (!open) return;
+    const handler = (e) => {
+      if (wrapRef.current && !wrapRef.current.contains(e.target)) setOpen(false);
+    };
+    document.addEventListener('mousedown', handler);
+    return () => document.removeEventListener('mousedown', handler);
+  }, [open]);
+
+  const select = (v) => {
+    onChange(selectedIdentity === v ? null : v);
+    setOpen(false);
+  };
+
+  const displayLabel = selectedIdentity
+    ? IDENTITY_OPTIONS.find(o => o.v === selectedIdentity)?.t || "选择身份"
+    : "选择我的身份";
+
+  return (
+    <div className="identity-picker-wrap" ref={wrapRef}>
+      <button
+        className={`identity-btn ${selectedIdentity ? 'has-selection' : ''}`}
+        onClick={() => setOpen(o => !o)}
+      >
+        <Icon name="user" size={14} />
+        <span className="id-lbl">身份：</span>
+        <span className="id-val">{displayLabel}</span>
+        <Icon name="chevronDown" size={12} strokeWidth={2.5} style={{ opacity: 0.5, transform: open ? 'rotate(180deg)' : 'none', transition: 'transform 160ms ease' }} />
+      </button>
+
+      {open && (
+        <div className="identity-dropdown">
+          <div className="id-hd">
+            <div className="id-hd-title">选择身份</div>
+            <div className="id-hd-sub">单选 · 切换后展示对应补贴数据</div>
+          </div>
+          <div className="id-opts">
+            {IDENTITY_OPTIONS.map(opt => (
+              <button
+                key={opt.v}
+                className={`id-opt ${selectedIdentity === opt.v ? 'sel' : ''}`}
+                onClick={() => select(opt.v)}
+              >
+                <div className="id-opt-icon">{opt.icon}</div>
+                <div className="id-opt-text">{opt.t}</div>
+                <div className="id-opt-ck"></div>
+              </button>
+            ))}
+          </div>
+          <div className="id-foot">
+            {selectedIdentity && (
+              <button className="id-foot-clear" onClick={() => { onChange(null); setOpen(false); }}>清除选择</button>
+            )}
+            <button className="id-foot-done" onClick={() => setOpen(false)}>确定</button>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+};
+
+// ═══════════════════════════════════════════════════════════
+// EXPLORE VIEW
+// ═══════════════════════════════════════════════════════════
+// ===== Card Sub-Components =====
+const getIdentityData = (city, identity) => {
+  if (!identity || !city.identityData || !city.identityData[identity]) return null;
+  return city.identityData[identity];
+};
+
+const computeTagStyle = (hex) => {
+  const lookup = {
+    '#FBE3E7': { bg: 'rgba(251,227,231,0.45)', text: '#8B2E40' },
+    '#D88A98': { bg: 'rgba(216,138,152,0.35)', text: '#7A2E3A' },
+    '#C8556A': { bg: 'rgba(200,85,106,0.3)', text: '#8B2E40' },
+    '#FFE7C9': { bg: 'rgba(255,231,201,0.45)', text: '#8A4D10' },
+    '#FFB670': { bg: 'rgba(255,182,112,0.35)', text: '#8A4D10' },
+    '#E8C470': { bg: 'rgba(232,196,112,0.35)', text: '#7A4D10' },
+    '#FFF3E2': { bg: 'rgba(255,243,226,0.45)', text: '#8A4D10' },
+    '#DCEFEB': { bg: 'rgba(220,239,235,0.45)', text: '#1F5F58' },
+    '#7FC0B6': { bg: 'rgba(127,192,182,0.3)', text: '#1F5F58' },
+    '#6BB1C6': { bg: 'rgba(107,177,198,0.3)', text: '#1A5A6A' },
+    '#E6E8FB': { bg: 'rgba(230,232,251,0.45)', text: '#2E369B' },
+    '#9DA5EF': { bg: 'rgba(157,165,239,0.3)', text: '#2E369B' },
+    '#E5F1D9': { bg: 'rgba(229,241,217,0.45)', text: '#2F5E22' },
+    '#9CC57E': { bg: 'rgba(156,197,126,0.3)', text: '#2F5E22' },
+    '#E8A0B0': { bg: 'rgba(232,160,176,0.35)', text: '#7A2E3A' },
+  };
+  return lookup[hex] || { bg: 'rgba(245,158,66,0.2)', text: '#8A4D10' };
+};
+
+const SubsidyPill = ({ city, identity }) => {
+  const idata = getIdentityData(city, identity);
+  const s = idata ? idata.subsidy : city.subsidy;
+  const sl = idata ? idata.subsidyLabel : city.subsidyLabel;
+  const sk = idata ? idata.subsidyKind : city.subsidyKind;
+  const muted = idata && idata.subsidy === 0;
+  return (
+    <div className={`subsidy-pill-v2 ${muted ? 'muted' : ''}`}>
+      <span className="sn">{sl}</span>
+      <span className="sl">{sk}</span>
+    </div>
+  );
+};
+
+const ConditionsBlock = ({ city, identity }) => {
+  const idata = getIdentityData(city, identity);
+  if (!idata || !idata.conditions || idata.conditions.length === 0) {
+    return <div className="conditions-block"><span className="cond-item" style={{color:'var(--ink-3)'}}>暂无相关政策</span></div>;
+  }
+  return (
+    <div className="conditions-block">
+      {idata.conditions.map((cond, i) => (
+        <div key={i} className="cond-item">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round"><path d="m5 12 5 5 9-11"/></svg>
+          {cond}
+        </div>
+      ))}
+    </div>
+  );
+};
+
+const IdentityLink = ({ city, identity }) => {
+  const idata = getIdentityData(city, identity);
+  const link = idata ? idata.link : city.link;
+  const linkLabel = idata ? idata.linkLabel : city.linkLabel;
+  return (
+    <a href={link} target="_blank" rel="noopener noreferrer" className="identity-link">
+      查看政策详情 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14"/><path d="m13 6 6 6-6 6"/></svg>
+    </a>
+  );
+};
+
+const ExploreView = ({ cities, favs, toggleFav, onOpenMatch, selectedIdentity = null }) => {
+  const [query, setQuery] = React.useState("");
+  const [region, setRegion] = React.useState("全部");
+  const [sort, setSort] = React.useState("subsidy");
+
+  const regions = ["全部","北方","南方"];
+
+
+  const filtered = React.useMemo(() => {
+    let list = cities.filter(c => {
+      if (region !== "全部" && c.region !== region) return false;
+      if (query && !c.name.includes(query) && !c.nameEn.toLowerCase().includes(query.toLowerCase()) && !c.tags.some(t => t.t.includes(query))) return false;
+      return true;
+    });
+    if (sort === "subsidy") list = [...list].sort((a, b) => b.subsidy - a.subsidy);
+    if (sort === "cost")    list = [...list].sort((a, b) => a.cost - b.cost);
+    if (sort === "jobs")    list = [...list].sort((a, b) => b.jobs - a.jobs);
+
+    return list;
+  }, [cities, region, query, sort, selectedIdentity]);
+
+  const totalSubsidy = cities.reduce((s, c) => s + c.subsidy, 0);
+  const maxSubsidy = Math.max(...cities.map(c => c.subsidy));
+
+  return (
+    <div className="fade-in">
+      <section className="hero">
+        <div className="hero-inner">
+          <div>
+            <span className="hero-eyebrow"><span className="dot"></span>2026 春 · 政策已更新</span>
+            <h1>在哪座城市，<br/>能 <span className="accent">拿到最适合你的补贴</span>？</h1>
+            <p>我们整理了 64 座城市的人才引进政策、生活成本与就业活力，覆盖全国所有直辖市、省会及重点经济城市。每座城市都配有真实官方政策链接。</p>
+          </div>
+          <div className="hero-stats">
+            <div className="hero-stat">
+              <div className="num">{cities.length}</div>
+              <div className="lbl">收录城市</div>
+            </div>
+            <div className="hero-stat">
+              <div className="num">¥{(maxSubsidy / 10000).toFixed(0)}万</div>
+              <div className="lbl">最高补贴</div>
+            </div>
+            <div className="hero-stat">
+              <div className="num">¥{(totalSubsidy / 10000).toFixed(0)}万</div>
+              <div className="lbl">补贴池总额</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {selectedIdentity && (
+        <div className="persona-banner">
+          <Icon name="target" size={14} />
+          <span>
+            当前身份：<strong>{IDENTITY_OPTIONS.find(o => o.v === selectedIdentity)?.t}</strong> — 展示对应补贴数据与申领条件
+          </span>
+        </div>
+      )}
+
+      <div className="filter-bar">
+        <div className="searchbox">
+          <Icon name="search" size={17} />
+          <input value={query} onChange={e => setQuery(e.target.value)} placeholder="搜索城市、政策标签，如「留学」「应届」「购房」…" />
+          <span className="search-kbd">⌘ K</span>
+        </div>
+        <button className="btn warm" onClick={onOpenMatch}>
+          <Icon name="sparkles" size={15} />智能匹配
+        </button>
+      </div>
+
+      <div style={{ display:"flex", justifyContent:"space-between", alignItems:"center", margin:"4px 4px 14px", flexWrap:"wrap", gap:12 }}>
+        <div className="chip-row">
+          {regions.map(r => (
+            <button key={r} className={`chip ${region === r ? "active" : ""}`} onClick={() => setRegion(r)}>
+              {r === "全部" && <Icon name="compass" size={13} />}
+              {r === "北方" && <span className="ico">🏔</span>}
+              {r === "南方" && <span className="ico">🌊</span>}
+              {r}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      <div className="section-head">
+        <div className="st">为你筛选 <span style={{ color:"var(--amber-ink)" }}>{filtered.length}</span> 座城市</div>
+        <div className="sn">数据更新于 2026.06 · 每城均有官方链接 · 政策原文请以人社局公告为准</div>
+      </div>
+
+      <div className="city-grid">
+        {filtered.map((c, i) => {
+          return (
+            <article key={c.id} className="city-card" style={{ "--c1": c.c1, "--c2": c.c2, animationDelay: `${i * 40}ms` }}>
+              <div className="banner">
+                <span className="city-pin">{c.region} · {c.tier}</span>
+                <button className={`fav-btn ${favs.includes(c.id) ? "active" : ""}`} onClick={() => toggleFav(c.id)} aria-label="收藏">
+                  <Icon name={favs.includes(c.id) ? "heartFill" : "heart"} size={15} strokeWidth={2} />
+                </button>
+              </div>
+              <div className="body">
+                <div className="name">{c.name}</div>
+                <div className="name-en">{c.nameEn}</div>
+                <SubsidyPill city={c} identity={selectedIdentity} />
+                <ConditionsBlock city={c} identity={selectedIdentity} />
+                <p className="desc">{c.desc}</p>
+                <div className="tags">
+                  {c.tags.map(t => {
+                    const style = computeTagStyle(c.c1);
+                    return <span key={t.t} className="tag themed" style={{ background: style.bg, color: style.text }}>{t.t}</span>;
+                  })}
+                </div>
+                <IdentityLink city={c} identity={selectedIdentity} />
+              </div>
+            </article>
+          );
+        })}
+      </div>
+    </div>
+  );
+};
+
+// ═══════════════════════════════════════════════════════════
+// MATCH VIEW
+// ═══════════════════════════════════════════════════════════
+const QUESTIONS = [
+  { id:"priority", title:"你更看重哪些因素？", sub:"可以多选 — 我们会根据你的优先级综合打分。", type:"multi",
+    options:[{v:"subsidy",icon:"💰",t:"补贴金额高",d:"看重一次性安家费或长期补贴"},{v:"cost",icon:"🍜",t:"生活成本低",d:"希望吃住行不至于太紧张"},{v:"jobs",icon:"💼",t:"就业机会多",d:"重视产业活力与岗位密度"},{v:"chill",icon:"🌿",t:"节奏轻松",d:"宜居、生活慢一点更舒服"}] },
+  { id:"subsidy", title:"是否一定要有政府补贴？", sub:"单选 — 这会影响候选城市的初筛。", type:"single",
+    options:[{v:"must",icon:"✅",t:"必须有",d:"补贴是决定性因素"},{v:"prefer",icon:"👍",t:"最好有",d:"锦上添花，不强求"},{v:"any",icon:"🤷",t:"不重要",d:"其他因素更重要"}] },
+  { id:"vibe", title:"你想要的城市规模？", sub:"单选 — 决定你日常的城市节奏。", type:"single",
+    options:[{v:"big",icon:"🏙",t:"一线大城市",d:"机会多，节奏快"},{v:"new",icon:"🌆",t:"新一线",d:"兼顾产业与生活成本"},{v:"quiet",icon:"🏞",t:"安静慢城",d:"舒服、宜居、压力小"}] },
+  { id:"budget", title:"预期月度生活预算？", sub:"拖动滑块 — 我们会匹配生活成本合理的城市。", type:"slider", min:3000, max:15000, step:500, default:7500 },
+  { id:"role", title:"你的身份是？", sub:"单选 — 不同政策面向不同人群。", type:"single",
+    options:[{v:"entrepreneur",icon:"💡",t:"创业者",d:"正在或计划创业"},{v:"overseas",icon:"✈️",t:"留学归国",d:"海外硕博，回国发展"},{v:"graduate",icon:"📜",t:"应届毕业生",d:"刚毕业，找工作中"}] },
+];
+
+const scoreCity = (city, answers) => {
+  let s = 0;
+  const priority = answers.priority || [];
+  if (priority.includes("subsidy")) s += city.subsidy / 30000;
+  if (priority.includes("cost"))    s += (6 - city.cost) * 1.4;
+  if (priority.includes("jobs"))    s += city.jobs * 1.4;
+  if (priority.includes("chill"))   s += city.chill * 1.4;
+  if (answers.subsidy === "must" && city.subsidy < 50000) s -= 4;
+  if (answers.subsidy === "prefer" && city.subsidy < 30000) s -= 1;
+  if (answers.vibe === "big" && city.tier === "一线") s += 3;
+  if (answers.vibe === "new" && city.tier === "新一线") s += 2;
+  if (answers.vibe === "quiet" && city.chill >= 4) s += 2.5;
+  const budget = answers.budget ?? 7500;
+  const costMoney = [0,3500,5000,7000,9500,13000][city.cost] || 8000;
+  if (budget >= costMoney) s += 1.5; else s -= (costMoney - budget) / 1500;
+  const roleMap = { entrepreneur:"创业者", overseas:"留学归国", graduate:"应届生" };
+  if (answers.role && city.audience.includes(roleMap[answers.role])) s += 2.5;
+  return s;
+};
+
+const MatchView = ({ cities, favs, toggleFav, onPickCity, selectedIdentity = [] }) => {
+  const getInitialRole = () => {
+    if (selectedIdentity && ['entrepreneur', 'overseas', 'graduate'].includes(selectedIdentity)) {
+      return selectedIdentity;
+    }
+    return 'graduate';
+  };
+
+  const [step, setStep] = React.useState(0);
+  const [answers, setAnswers] = React.useState(() => ({
+    priority: ["subsidy","cost"], subsidy: "prefer", vibe: "new", budget: 7500, role: getInitialRole()
+  }));
+  const [done, setDone] = React.useState(false);
+
+  const q = QUESTIONS[step];
+  const totalSteps = QUESTIONS.length;
+  const progress = done ? 100 : Math.round((step / totalSteps) * 100);
+
+  const toggleAnswer = (qId, v, multi) => {
+    setAnswers(prev => {
+      if (multi) {
+        const cur = prev[qId] || [];
+        return { ...prev, [qId]: cur.includes(v) ? cur.filter(x => x !== v) : [...cur, v] };
+      }
+      return { ...prev, [qId]: v };
+    });
+  };
+
+  const ranked = React.useMemo(() => {
+    if (!done) return [];
+    const scored = cities.map(c => ({ city: c, score: scoreCity(c, answers) }));
+    scored.sort((a, b) => b.score - a.score);
+    const max = scored[0].score;
+    return scored.map(s => ({ ...s, pct: Math.max(40, Math.min(99, Math.round(60 + (s.score / max) * 38))) }));
+  }, [done, answers, cities]);
+
+  const restart = () => { setStep(0); setDone(false); };
+
+  if (done) {
+    const top = ranked[0];
+    const alts = ranked.slice(1, 4);
+    const c = top.city;
+    const reasons = [];
+    if (c.subsidy >= 100000) reasons.push({ ico:"💰", c:"amber", t:"补贴力度高", d:`最高可达 ¥${(c.subsidy/10000).toFixed(0)} 万 · ${c.subsidyKind}` });
+    if (c.cost <= 2) reasons.push({ ico:"🌿", c:"green", t:"生活成本友好", d:"吃住行压力小，可观月结余" });
+    if (c.jobs >= 4) reasons.push({ ico:"💼", c:"indigo", t:"就业机会充足", d:"产业链完整、新岗位密度高" });
+    if (c.chill >= 4) reasons.push({ ico:"☕", c:"teal", t:"城市节奏轻松", d:"通勤舒适、生活舒服自由" });
+    if (c.audience.includes("留学归国") && answers.role === "overseas") reasons.push({ ico:"✈️", c:"rose", t:"留学生专项政策", d:"针对海外硕博士有专项通道" });
+    while (reasons.length < 4) reasons.push({ ico:"📜", c:"teal", t:"政策可申请", d:"符合多数毕业生 / 求职者条件" });
+    return (
+      <div className="fade-in">
+        <div className="result-hero">
+          <span className="ribbon"><Icon name="sparkles" size={12} /> 为你匹配的最佳城市</span>
+          <h2>{c.name}</h2>
+          <div className="en">{c.nameEn} · {c.region} · {c.tier}</div>
+          <div className="match-bar">
+            <span className="lbl">匹配度</span>
+            <div className="bar"><div className="fill" style={{ width:`${top.pct}%` }} /></div>
+            <span className="pct">{top.pct}%</span>
+          </div>
+        </div>
+        <div className="reason-grid">
+          {reasons.slice(0, 4).map((r, i) => (
+            <div key={i} className="reason">
+              <div className={`ri ${r.c}`}>{r.ico}</div>
+              <div className="rt"><div className="rt-title">{r.t}</div><div className="rt-desc">{r.d}</div></div>
+            </div>
+          ))}
+        </div>
+        <div className="alt-row">
+          <span className="alt-lbl">备选<br/>城市</span>
+          {alts.map(a => (
+            <div key={a.city.id} className="alt-card">
+              <div><div className="an">{a.city.name}</div><div className="as">{a.city.region} · 匹配 {a.pct}%</div></div>
+              <div className="ap">{a.city.subsidyLabel}</div>
+            </div>
+          ))}
+        </div>
+        <div style={{ display:"flex", gap:12, marginTop:20, justifyContent:"flex-end" }}>
+          <button className="btn ghost" onClick={restart}><Icon name="arrowLeft" size={14} /> 重新匹配</button>
+          <button className="btn ghost" onClick={() => toggleFav(c.id)}>
+            <Icon name={favs.includes(c.id) ? "heartFill" : "heart"} size={14} />
+            {favs.includes(c.id) ? "已收藏" : "收藏此城市"}
+          </button>
+          <a href={c.link} target="_blank" rel="noopener noreferrer" className="btn warm">
+            查看 {c.name} 详细政策 <Icon name="arrow" size={14} />
+          </a>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="match-wrap fade-in">
+      <aside className="match-side">
+        <h3>智能匹配</h3>
+        <p className="lead">回答 {totalSteps} 个轻量问题，30 秒内推荐适合你的城市。</p>
+        <div className="step-list">
+          {QUESTIONS.map((qi, i) => (
+            <div key={qi.id} className={`step-item ${i < step ? "done" : ""} ${i === step ? "active" : ""}`}>
+              <span className="num">{i < step ? "✓" : i + 1}</span>
+              <span>{qi.title.replace("？","")}</span>
+            </div>
+          ))}
+        </div>
+        <div className="progress-block">
+          <div className="pl">完成进度</div>
+          <div className="pv">{progress}%</div>
+          <div className="progress-bar"><div className="fill" style={{ width:`${progress}%` }} /></div>
+        </div>
+      </aside>
+
+      <section className="match-main">
+        <div className="q-step-label">问题 {step + 1} / {totalSteps}</div>
+        <h2 className="q-title">{q.title}</h2>
+        <p className="q-sub">{q.sub}</p>
+
+        {q.type === "multi" && (
+          <div className="choice-grid cols-2">
+            {q.options.map(o => {
+              const sel = (answers[q.id] || []).includes(o.v);
+              return (
+                <button key={o.v} className={`choice ${sel ? "selected" : ""}`} onClick={() => toggleAnswer(q.id, o.v, true)}>
+                  <div className="ci">{o.icon}</div>
+                  <div className="ct"><div className="ct-title">{o.t}</div><div className="ct-desc">{o.d}</div></div>
+                  <div className="ck"></div>
+                </button>
+              );
+            })}
+          </div>
+        )}
+
+        {q.type === "single" && (
+          <div className={`choice-grid ${q.options.length === 3 ? "cols-3" : "cols-2"}`}>
+            {q.options.map(o => {
+              const sel = answers[q.id] === o.v;
+              return (
+                <button key={o.v} className={`choice ${sel ? "selected" : ""}`} onClick={() => toggleAnswer(q.id, o.v, false)}>
+                  <div className="ci">{o.icon}</div>
+                  <div className="ct"><div className="ct-title">{o.t}</div><div className="ct-desc">{o.d}</div></div>
+                  <div className="ck"></div>
+                </button>
+              );
+            })}
+          </div>
+        )}
+
+        {q.type === "slider" && (
+          <div className="slider-block">
+            <div className="slider-readout">
+              <span className="v">¥{(answers.budget ?? q.default).toLocaleString()}</span>
+              <span className="r">月生活预算 · ¥{q.min.toLocaleString()} – ¥{q.max.toLocaleString()}</span>
+            </div>
+            <input type="range" className="slider-range" min={q.min} max={q.max} step={q.step}
+              value={answers.budget ?? q.default}
+              onChange={e => setAnswers(prev => ({ ...prev, budget: +e.target.value }))}
+              style={{ "--p": `${(((answers.budget ?? q.default) - q.min) / (q.max - q.min)) * 100}%` }}
+            />
+            <div className="slider-ticks">
+              <span>紧凑 ¥3k</span><span>适中 ¥7.5k</span><span>宽松 ¥15k</span>
+            </div>
+          </div>
+        )}
+
+        <div className="q-foot">
+          <span className="meta">{step === 0 ? "你可以随时回到首页浏览" : `已完成 ${step} / ${totalSteps}`}</span>
+          <div style={{ display:"flex", gap:10 }}>
+            {step > 0 && (
+              <button className="btn ghost" onClick={() => setStep(s => s - 1)}>
+                <Icon name="arrowLeft" size={14} /> 上一题
+              </button>
+            )}
+            {step < totalSteps - 1 ? (
+              <button className="btn warm" onClick={() => setStep(s => s + 1)}>下一题 <Icon name="arrow" size={14} /></button>
+            ) : (
+              <button className="btn warm" onClick={() => setDone(true)}><Icon name="sparkles" size={14} /> 查看匹配结果</button>
+            )}
+          </div>
+        </div>
+      </section>
+    </div>
+  );
+};
+
+// ═══════════════════════════════════════════════════════════
+// FAVORITES VIEW
+// ═══════════════════════════════════════════════════════════
+const FavoritesView = ({ cities, favs, toggleFav, onOpenExplore }) => {
+  const favCities = cities.filter(c => favs.includes(c.id));
+  const totalSubsidy = favCities.reduce((s, c) => s + c.subsidy, 0);
+  const maxSubsidy = favCities.length ? Math.max(...favCities.map(c => c.subsidy)) : 0;
+  const topCity = favCities.find(c => c.subsidy === maxSubsidy);
+  const avgCost = favCities.length ? (favCities.reduce((s, c) => s + c.cost, 0) / favCities.length) : 0;
+
+  if (!favCities.length) {
+    return (
+      <div className="fade-in">
+        <div className="empty-state">
+          <div className="ei">🗂</div>
+          <div className="et">还没有收藏的城市</div>
+          <div className="ed">回到首页点击 ❤ 把感兴趣的城市加进来，这里会自动汇总你的总补贴池。</div>
+          <button className="btn warm" style={{ marginTop:18 }} onClick={onOpenExplore}>
+            <Icon name="compass" size={14} /> 去探索城市
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="fade-in">
+      <div className="stat-row">
+        <div className="stat-card feature">
+          <div className="sc-head"><div className="sc-ico">🏆</div><div className="sc-lbl">Highest Subsidy · 最高补贴</div></div>
+          <div className="sc-val"><span className="currency">¥</span>{(maxSubsidy/10000).toFixed(0)}<span style={{ fontSize:24, marginLeft:2 }}>万</span></div>
+          <div className="sc-foot"><Icon name="pin" size={12} /> 来自 <span className="from">{topCity?.name}</span> · {topCity?.subsidyKind}</div>
+          <Sparkline data={[3,5,8,7,12,14,18,maxSubsidy/16000]} color="#E8842A" />
+        </div>
+        <div className="stat-card feature green">
+          <div className="sc-head"><div className="sc-ico">💰</div><div className="sc-lbl">Total Available · 收藏总补贴</div></div>
+          <div className="sc-val"><span className="currency">¥</span>{(totalSubsidy/10000).toFixed(1)}<span style={{ fontSize:24, marginLeft:2 }}>万</span></div>
+          <div className="sc-foot"><Icon name="chart" size={12} /> 共 <span className="from">{favCities.length} 座城市</span> · 累加可申请金额</div>
+          <Sparkline data={[2,4,6,9,12,18,22,totalSubsidy/14000]} color="#4F8F3A" />
+        </div>
+        <div className="stat-card">
+          <div className="sc-head"><div className="sc-ico" style={{ background:"var(--bg-2)" }}>🌿</div><div className="sc-lbl">Avg. Cost · 平均生活成本</div></div>
+          <div className="sc-val" style={{ fontSize:30 }}>{["","极低","较低","中等","偏高","高"][Math.round(avgCost)]}</div>
+          <div className="sc-foot"><DotLevel level={Math.round(avgCost)} color="amber" /><span style={{ marginLeft:4 }}>5 级评分中的 <span className="from">{avgCost.toFixed(1)}</span></span></div>
+        </div>
+      </div>
+
+      <div className="section-head">
+        <div className="st">收藏的城市</div>
+        <div className="sn">{favCities.length} 座 · 点击 <Icon name="trash" size={11} /> 移除</div>
+      </div>
+
+      <div className="fav-list">
+        {favCities.map(c => (
+          <div key={c.id} className="fav-row" style={{ "--c1":c.c1, "--c2":c.c2 }}>
+            <div className="glyph">{c.glyph}</div>
+            <div className="meta-block">
+              <div className="name">{c.name} <span style={{ color:"var(--ink-3)", fontWeight:400, fontSize:13, marginLeft:6 }}>{c.nameEn}</span></div>
+              <div className="desc">{c.region} · {c.tier} · {c.subsidyKind}</div>
+            </div>
+            <div className="ftags">{c.tags.slice(0, 2).map(t => <Tag key={t.t} t={t.t} c={t.c} />)}</div>
+            <div className="level">
+              <div>
+                <div style={{ fontSize:11, color:"var(--ink-3)", textTransform:"uppercase", letterSpacing:"0.05em", marginBottom:3 }}>生活成本</div>
+                <DotLevel level={c.cost} color="amber" />
+              </div>
+            </div>
+            <div className="data" style={{ marginRight:6 }}>
+              <span className="v">{c.subsidyLabel}</span>
+              <span className="l">{c.subsidyKind}</span>
+            </div>
+            <button className="rm-btn" onClick={() => toggleFav(c.id)} aria-label="移除收藏">
+              <Icon name="trash" size={15} />
+            </button>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+};
+
+// ═══════════════════════════════════════════════════════════
+// APP ROOT
+// ═══════════════════════════════════════════════════════════
+const TWEAK_DEFAULTS = { "accent":"amber", "rounded":"soft", "showSkyline":true };
+
+const ACCENT_PRESETS = {
+  amber:  { "--amber":"#F59E42","--amber-2":"#E8842A","--amber-bg":"#FFF3E2","--amber-bg-2":"#FFE7C9","--amber-ink":"#8A4D10","--gradient-amber":"linear-gradient(135deg, #F8A94E 0%, #E8842A 100%)" },
+  rose:   { "--amber":"#E07A8B","--amber-2":"#C8556A","--amber-bg":"#FBE3E7","--amber-bg-2":"#F4C9D2","--amber-ink":"#8B2E40","--gradient-amber":"linear-gradient(135deg, #E89AA8 0%, #C8556A 100%)" },
+  teal:   { "--amber":"#4FA89C","--amber-2":"#2E8C81","--amber-bg":"#DCEFEB","--amber-bg-2":"#BEDFD8","--amber-ink":"#1F5F58","--gradient-amber":"linear-gradient(135deg, #6FB8AD 0%, #2E8C81 100%)" },
+  indigo: { "--amber":"#6E78DE","--amber-2":"#4F5BD5","--amber-bg":"#E6E8FB","--amber-bg-2":"#D0D4F4","--amber-ink":"#2E369B","--gradient-amber":"linear-gradient(135deg, #8189E2 0%, #4F5BD5 100%)" },
+};
+
+const App = () => {
+  const [tweaks, setTweak] = useTweaks(TWEAK_DEFAULTS);
+  const [tab, setTab] = React.useState("explore");
+  const [favs, setFavs] = React.useState(() => {
+    try { return JSON.parse(localStorage.getItem("city-favs") || "[]"); } catch { return []; }
+  });
+  const [selectedIdentity, setSelectedIdentity] = React.useState(() => {
+    try {
+      const raw = localStorage.getItem("city-identity");
+      if (!raw) return null;
+      const parsed = JSON.parse(raw);
+      if (Array.isArray(parsed)) {
+        const mapping = { student: "graduate", grad: "graduate", overseas: "overseas", jobseek: "graduate", master: "graduate", doctor: "overseas" };
+        const valid = parsed.map(v => mapping[v]).filter(Boolean);
+        const result = valid[0] || null;
+        localStorage.setItem("city-identity", JSON.stringify(result));
+        return result;
+      }
+      if (typeof parsed === "string" && ["entrepreneur","overseas","graduate"].includes(parsed)) return parsed;
+      return null;
+    } catch { return null; }
+  });
+  const [toast, setToast] = React.useState(null);
+
+  React.useEffect(() => { localStorage.setItem("city-favs", JSON.stringify(favs)); }, [favs]);
+  React.useEffect(() => { localStorage.setItem("city-identity", JSON.stringify(selectedIdentity)); }, [selectedIdentity]);
+
+  React.useEffect(() => {
+    const preset = ACCENT_PRESETS[tweaks.accent] || ACCENT_PRESETS.amber;
+    Object.entries(preset).forEach(([k, v]) => document.documentElement.style.setProperty(k, v));
+    const r = tweaks.rounded === "sharp"
+      ? { lg:"10px", md:"8px", sm:"6px" }
+      : tweaks.rounded === "extra"
+        ? { lg:"28px", md:"22px", sm:"14px" }
+        : { lg:"22px", md:"16px", sm:"10px" };
+    document.documentElement.style.setProperty("--radius-lg", r.lg);
+    document.documentElement.style.setProperty("--radius", r.md);
+    document.documentElement.style.setProperty("--radius-sm", r.sm);
+  }, [tweaks.accent, tweaks.rounded]);
+
+  const toggleFav = (id) => {
+    setFavs(prev => {
+      const adding = !prev.includes(id);
+      const next = adding ? [...prev, id] : prev.filter(x => x !== id);
+      const city = CITIES.find(c => c.id === id);
+      showToast(adding ? `已收藏 ${city?.name}` : `已移除 ${city?.name}`, adding ? "✓" : "✕");
+      return next;
+    });
+  };
+
+  const showToast = (msg, ico) => {
+    setToast({ msg, ico, at: Date.now() });
+    clearTimeout(window.__toastT);
+    window.__toastT = setTimeout(() => setToast(null), 2200);
+  };
+
+  const tabs = [
+    { id:"explore", label:"探索城市", en:"Explore", ico:"compass" },
+    { id:"match",   label:"智能匹配", en:"Match",   ico:"sparkles" },
+    { id:"favs",    label:"收藏夹",   en:"Saved",   ico:"bookmark", badge: favs.length || null },
+  ];
+
+  return (
+    <div className="shell">
+      <header className="topbar">
+        <div className="brand">
+          <div className="brand-mark">补</div>
+          <div>
+            <div>城市补贴指南</div>
+            <div className="brand-sub">CityMatch · 人才政策一站式比较</div>
+          </div>
+        </div>
+
+        <nav className="tabs" role="tablist">
+          {tabs.map(tt => (
+            <button key={tt.id} className={`tab ${tab === tt.id ? "active" : ""}`} role="tab" onClick={() => setTab(tt.id)}>
+              <Icon name={tt.ico} size={14} />
+              {tt.label}
+              {tt.badge ? <span className="badge">{tt.badge}</span> : null}
+            </button>
+          ))}
+        </nav>
+
+        <div className="top-user">
+          <IdentityPicker selectedIdentity={selectedIdentity} onChange={setSelectedIdentity} />
+          <div className="avatar">W</div>
+        </div>
+      </header>
+
+      <main>
+        {tab === "explore" && <ExploreView cities={CITIES} favs={favs} toggleFav={toggleFav} onOpenMatch={() => setTab("match")} selectedIdentity={selectedIdentity} />}
+        {tab === "match"   && <MatchView   cities={CITIES} favs={favs} toggleFav={toggleFav} onPickCity={() => setTab("explore")} selectedIdentity={selectedIdentity} />}
+        {tab === "favs"    && <FavoritesView cities={CITIES} favs={favs} toggleFav={toggleFav} onOpenExplore={() => setTab("explore")} />}
+      </main>
+
+      <div className={`toast ${toast ? "show" : ""}`}>
+        <span>{toast?.ico}</span>{toast?.msg}
+      </div>
+
+      <TweaksPanel title="Tweaks">
+        <TweakSection label="主题配色">
+          <TweakRadio
+            label="强调色"
+            value={tweaks.accent}
+            options={[{ label:"琥珀", value:"amber" },{ label:"玫瑰", value:"rose" },{ label:"墨绿", value:"teal" },{ label:"靛蓝", value:"indigo" }]}
+            onChange={v => setTweak("accent", v)}
+          />
+          <TweakRadio
+            label="卡片圆角"
+            value={tweaks.rounded}
+            options={[{ label:"锐利", value:"sharp" },{ label:"柔和", value:"soft" },{ label:"强烈", value:"extra" }]}
+            onChange={v => setTweak("rounded", v)}
+          />
+        </TweakSection>
+      </TweaksPanel>
+    </div>
+  );
+};
+
+ReactDOM.createRoot(document.getElementById("root")).render(<App />);
+  </script>
+</body>
+</html>

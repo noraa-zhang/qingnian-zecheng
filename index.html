@@ -762,6 +762,54 @@ input[type=range].slider-range::-webkit-slider-thumb {
 .twk-seg-thumb{position:absolute;top:2px;bottom:2px;border-radius:6px;background:rgba(255,255,255,.9);box-shadow:0 1px 2px rgba(0,0,0,.12);transition:left .15s cubic-bezier(.3,.7,.4,1),width .15s}
 .twk-seg.dragging .twk-seg-thumb{transition:none}
 .twk-seg button{appearance:none;position:relative;z-index:1;flex:1;border:0;background:transparent;color:inherit;font:inherit;font-weight:500;min-height:22px;border-radius:6px;cursor:default;padding:4px 6px;line-height:1.2;overflow-wrap:anywhere}
+/* ===== Match v2: Two-Column Layout ===== */
+.match-v2-wrap {
+  display: grid; grid-template-columns: 380px 1fr; gap: 22px;
+  min-height: 500px;
+}
+.match-v2-left, .match-v2-right {
+  background: var(--surface); border: 1px solid var(--line);
+  border-radius: var(--radius); padding: 24px;
+  box-shadow: var(--shadow-sm);
+}
+.match-v2-title { font-size: 16px; font-weight: 600; margin-bottom: 18px; letter-spacing: -0.01em; }
+.match-v2-q { margin-bottom: 18px; }
+.match-v2-q-label { display: flex; align-items: center; gap: 6px; font-size: 13px; font-weight: 600; color: var(--ink); margin-bottom: 2px; }
+.match-v2-q-icon { font-size: 14px; }
+.match-v2-q-hint { font-size: 10px; color: var(--ink-3); font-weight: 400; margin-left: 4px; background: var(--bg-2); padding: 1px 6px; border-radius: 4px; }
+
+.match-v2-textarea {
+  width: 100%; padding: 14px; border: 1px solid var(--line); border-radius: 12px;
+  background: var(--bg); font-size: 14px; line-height: 1.6; resize: vertical;
+  font-family: inherit; color: var(--ink);
+  transition: border-color 140ms ease;
+}
+.match-v2-textarea:focus { outline: none; border-color: var(--amber); box-shadow: 0 0 0 3px rgba(245,158,66,.1); }
+.match-v2-textarea::placeholder { color: var(--ink-3); font-size: 13px; }
+
+/* Results */
+.match-v2-row {
+  display: flex; align-items: center; gap: 14px;
+  padding: 14px 16px; background: var(--bg); border-radius: 12px;
+  margin-bottom: 8px; border: 1px solid transparent;
+  transition: all 140ms ease;
+  animation: fade-in 300ms ease both;
+}
+.match-v2-row:hover { background: #fff; border-color: var(--line-2); box-shadow: var(--shadow-sm); }
+.match-v2-rank { display: flex; flex-direction: column; align-items: center; gap: 2px; min-width: 44px; }
+.match-v2-rank-num { font-size: 20px; font-weight: 700; color: var(--ink); }
+.match-v2-rank-pct { font-size: 11px; color: var(--amber-ink); font-weight: 600; }
+.match-v2-info { flex: 1; min-width: 0; }
+.match-v2-city { font-size: 15px; font-weight: 600; }
+.match-v2-subsidy { font-size: 12px; color: var(--amber-ink); margin-top: 2px; font-weight: 500; }
+.match-v2-reasons { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 4px; }
+.match-v2-reason-tag { font-size: 10px; padding: 2px 7px; border-radius: 4px; background: var(--amber-bg-2); color: var(--amber-ink); font-weight: 500; }
+.match-v2-link { font-size: 12px; color: var(--indigo); font-weight: 500; white-space: nowrap; text-decoration: none; padding: 6px 10px; border-radius: 8px; transition: all 140ms ease; }
+.match-v2-link:hover { background: var(--indigo-bg); }
+
+@media (max-width: 900px) {
+  .match-v2-wrap { grid-template-columns: 1fr; }
+}
   </style>
 </head>
 <body>
@@ -5964,220 +6012,223 @@ const ExploreView = ({ cities, favs, toggleFav, onOpenMatch, selectedIdentity = 
 };
 
 // ═══════════════════════════════════════════════════════════
-// MATCH VIEW
+// MATCH VIEW — Two-Column Smart Match
 // ═══════════════════════════════════════════════════════════
-const QUESTIONS = [
-  { id:"priority", title:"你更看重哪些因素？", sub:"可以多选 — 我们会根据你的优先级综合打分。", type:"multi",
-    options:[{v:"subsidy",icon:"💰",t:"补贴金额高",d:"看重一次性安家费或长期补贴"},{v:"cost",icon:"🍜",t:"生活成本低",d:"希望吃住行不至于太紧张"},{v:"jobs",icon:"💼",t:"就业机会多",d:"重视产业活力与岗位密度"},{v:"chill",icon:"🌿",t:"节奏轻松",d:"宜居、生活慢一点更舒服"}] },
-  { id:"subsidy", title:"是否一定要有政府补贴？", sub:"单选 — 这会影响候选城市的初筛。", type:"single",
-    options:[{v:"must",icon:"✅",t:"必须有",d:"补贴是决定性因素"},{v:"prefer",icon:"👍",t:"最好有",d:"锦上添花，不强求"},{v:"any",icon:"🤷",t:"不重要",d:"其他因素更重要"}] },
-  { id:"vibe", title:"你想要的城市规模？", sub:"单选 — 决定你日常的城市节奏。", type:"single",
-    options:[{v:"big",icon:"🏙",t:"一线大城市",d:"机会多，节奏快"},{v:"new",icon:"🌆",t:"新一线",d:"兼顾产业与生活成本"},{v:"quiet",icon:"🏞",t:"安静慢城",d:"舒服、宜居、压力小"}] },
-  { id:"budget", title:"预期月度生活预算？", sub:"拖动滑块 — 我们会匹配生活成本合理的城市。", type:"slider", min:3000, max:15000, step:500, default:7500 },
-  { id:"role", title:"你的身份是？", sub:"单选 — 不同政策面向不同人群。", type:"single",
-    options:[{v:"entrepreneur",icon:"💡",t:"创业者",d:"正在或计划创业"},{v:"overseas",icon:"✈️",t:"留学归国",d:"海外硕博，回国发展"},{v:"graduate",icon:"📜",t:"应届毕业生",d:"刚毕业，找工作中"}] },
+const MATCH_QUESTIONS = [
+  { id:"region", label:"想在哪里生活", icon:"📍", multi:true,
+    options:[
+      {v:"south",t:"南方"},{v:"north",t:"北方"},{v:"coastal",t:"沿海"},
+      {v:"tier1",t:"一线"},{v:"new1",t:"新一线"},{v:"tier2",t:"二线"},
+    ]
+  },
+  { id:"degree", label:"学历", icon:"🎓", multi:false,
+    options:[
+      {v:"bachelor",t:"本科"},{v:"master",t:"硕士"},{v:"doctor",t:"博士"},{v:"overseas",t:"留学归国"},
+    ]
+  },
+  { id:"major", label:"学什么专业", icon:"📚", multi:true,
+    options:[
+      {v:"stem",t:"理工科"},{v:"business",t:"商科"},{v:"arts",t:"文科/艺术"},
+      {v:"medical",t:"医学"},{v:"any",t:"不限"},
+    ]
+  },
+  { id:"company", label:"想入职哪类公司", icon:"🏢", multi:true,
+    options:[
+      {v:"tech",t:"互联网大厂"},{v:"soe",t:"国企"},{v:"foreign",t:"外企"},
+      {v:"startup",t:"创业公司"},{v:"gov",t:"事业单位"},{v:"any",t:"不限"},
+    ]
+  },
 ];
 
-const scoreCity = (city, answers) => {
-  let s = 0;
-  const priority = answers.priority || [];
-  if (priority.includes("subsidy")) s += city.subsidy / 30000;
-  if (priority.includes("cost"))    s += (6 - city.cost) * 1.4;
-  if (priority.includes("jobs"))    s += city.jobs * 1.4;
-  if (priority.includes("chill"))   s += city.chill * 1.4;
-  if (answers.subsidy === "must" && city.subsidy < 50000) s -= 4;
-  if (answers.subsidy === "prefer" && city.subsidy < 30000) s -= 1;
-  if (answers.vibe === "big" && city.tier === "一线") s += 3;
-  if (answers.vibe === "new" && city.tier === "新一线") s += 2;
-  if (answers.vibe === "quiet" && city.chill >= 4) s += 2.5;
-  const budget = answers.budget ?? 7500;
-  const costMoney = [0,3500,5000,7000,9500,13000][city.cost] || 8000;
-  if (budget >= costMoney) s += 1.5; else s -= (costMoney - budget) / 1500;
-  const roleMap = { entrepreneur:"创业者", overseas:"留学归国", graduate:"应届生" };
-  if (answers.role && city.audience.includes(roleMap[answers.role])) s += 2.5;
-  return s;
+// Scoring: map question answers to city features
+const scoreMatch = (city, selections, freeText) => {
+  let score = 0;
+  const reasons = [];
+  const sel = selections || {};
+
+  // Region matching
+  const regionSel = sel.region || [];
+  if (regionSel.length > 0) {
+    const regionMap = { south: /南方/, north: /北方/, coastal: /沿海|青岛|大连|厦门|珠海|海口|深圳|上海|天津|宁波|温州|烟台|威海/ };
+    let regionMatch = false;
+    if (regionSel.includes('south') && city.region === '南方') regionMatch = true;
+    if (regionSel.includes('north') && city.region === '北方') regionMatch = true;
+    if (regionSel.includes('coastal') && regionMap.coastal.test(city.desc + city.name + city.tags.map(t=>t.t).join())) regionMatch = true;
+    if (regionMatch) { score += 3; reasons.push(`符合地域偏好`); }
+    // Tier matching
+    if (regionSel.includes('tier1') && city.tier === '一线') { score += 3; reasons.push('一线城市'); }
+    if (regionSel.includes('new1') && city.tier === '新一线') { score += 2; reasons.push('新一线城市'); }
+    if (regionSel.includes('tier2') && city.tier === '二线') { score += 2; reasons.push('二线城市'); }
+  }
+
+  // Degree → audience matching
+  const degree = sel.degree;
+  if (degree) {
+    const audienceMap = { bachelor:'应届生', master:'硕士以上', doctor:'博士', overseas:'留学归国' };
+    const audience = audienceMap[degree];
+    if (audience && city.audience.includes(audience)) { score += 2.5; reasons.push(`学历对口(${audience})`); }
+  }
+
+  // Major → industry matching
+  const majorSel = sel.major || [];
+  if (majorSel.length > 0 && !majorSel.includes('any')) {
+    const majorTagMap = {
+      stem: /科技|制造|工程|工业|航天|汽车|化工|钢铁|稀土|装备|光电|芯片|集成电路|AI|人工智能|生物医药|新能源|硬科技|半导体/,
+      business: /金融|商贸|物流|经济|数字经济|电商|互联网|创业|民营|港口/,
+      arts: /文创|文旅|文化|媒体|教育|设计|艺术/,
+      medical: /医药|医疗|生物|健康/,
+    };
+    for (const m of majorSel) {
+      const pattern = majorTagMap[m];
+      if (pattern) {
+        const haystack = city.desc + city.tags.map(t=>t.t).join(' ');
+        if (pattern.test(haystack)) { score += 2; reasons.push(`专业方向匹配(${m})`); break; }
+      }
+    }
+  }
+
+  // Company type matching
+  const companySel = sel.company || [];
+  if (companySel.length > 0 && !companySel.includes('any')) {
+    const companyTagMap = {
+      tech: /互联网|科技|数字|软件|IT|信息/,
+      soe: /国企|央企|国资/,
+      foreign: /外企|外资|国际/,
+      startup: /创业|创新|孵化|中小/,
+      gov: /事业|公务|机关|行政/,
+    };
+    for (const c of companySel) {
+      const pattern = companyTagMap[c];
+      if (pattern) {
+        const haystack = city.desc + city.tags.map(t=>t.t).join(' ');
+        if (pattern.test(haystack)) { score += 1.5; reasons.push(c === 'startup' ? '创业友好' : '企业类型匹配'); break; }
+      }
+    }
+  }
+
+  // Subsidy boost — always factors in
+  score += city.subsidy / 50000;
+
+  return { score, reasons };
 };
 
-const MatchView = ({ cities, favs, toggleFav, onPickCity, selectedIdentity = [] }) => {
-  const getInitialRole = () => {
-    if (selectedIdentity && ['entrepreneur', 'overseas', 'graduate'].includes(selectedIdentity)) {
-      return selectedIdentity;
-    }
-    return 'graduate';
-  };
+const MatchView = ({ cities, favs, toggleFav, selectedIdentity = null }) => {
+  const [selections, setSelections] = React.useState({});
+  const [freeText, setFreeText] = React.useState("");
+  const [results, setResults] = React.useState(null);
+  const [loading, setLoading] = React.useState(false);
 
-  const [step, setStep] = React.useState(0);
-  const [answers, setAnswers] = React.useState(() => ({
-    priority: ["subsidy","cost"], subsidy: "prefer", vibe: "new", budget: 7500, role: getInitialRole()
-  }));
-  const [done, setDone] = React.useState(false);
-
-  const q = QUESTIONS[step];
-  const totalSteps = QUESTIONS.length;
-  const progress = done ? 100 : Math.round((step / totalSteps) * 100);
-
-  const toggleAnswer = (qId, v, multi) => {
-    setAnswers(prev => {
+  const toggleOption = (qId, v, multi) => {
+    setSelections(prev => {
       if (multi) {
         const cur = prev[qId] || [];
         return { ...prev, [qId]: cur.includes(v) ? cur.filter(x => x !== v) : [...cur, v] };
       }
-      return { ...prev, [qId]: v };
+      return { ...prev, [qId]: prev[qId] === v ? undefined : v };
     });
   };
 
-  const ranked = React.useMemo(() => {
-    if (!done) return [];
-    const scored = cities.map(c => ({ city: c, score: scoreCity(c, answers) }));
-    scored.sort((a, b) => b.score - a.score);
-    const max = scored[0].score;
-    return scored.map(s => ({ ...s, pct: Math.max(40, Math.min(99, Math.round(60 + (s.score / max) * 38))) }));
-  }, [done, answers, cities]);
+  const runMatch = () => {
+    setLoading(true);
+    // Simulate brief processing delay for UX feedback
+    setTimeout(() => {
+      const scored = cities.map(c => {
+        const { score, reasons } = scoreMatch(c, selections, freeText);
+        return { city: c, score, reasons };
+      });
+      scored.sort((a, b) => b.score - a.score);
+      const max = scored[0]?.score || 1;
+      const ranked = scored.slice(0, 12).map(s => ({
+        ...s,
+        pct: Math.max(40, Math.min(99, Math.round(50 + (s.score / max) * 49)))
+      }));
+      setResults(ranked);
+      setLoading(false);
+    }, 300);
+  };
 
-  const restart = () => { setStep(0); setDone(false); };
-
-  if (done) {
-    const top = ranked[0];
-    const alts = ranked.slice(1, 4);
-    const c = top.city;
-    const reasons = [];
-    if (c.subsidy >= 100000) reasons.push({ ico:"💰", c:"amber", t:"补贴力度高", d:`最高可达 ¥${(c.subsidy/10000).toFixed(0)} 万 · ${c.subsidyKind}` });
-    if (c.cost <= 2) reasons.push({ ico:"🌿", c:"green", t:"生活成本友好", d:"吃住行压力小，可观月结余" });
-    if (c.jobs >= 4) reasons.push({ ico:"💼", c:"indigo", t:"就业机会充足", d:"产业链完整、新岗位密度高" });
-    if (c.chill >= 4) reasons.push({ ico:"☕", c:"teal", t:"城市节奏轻松", d:"通勤舒适、生活舒服自由" });
-    if (c.audience.includes("留学归国") && answers.role === "overseas") reasons.push({ ico:"✈️", c:"rose", t:"留学生专项政策", d:"针对海外硕博士有专项通道" });
-    while (reasons.length < 4) reasons.push({ ico:"📜", c:"teal", t:"政策可申请", d:"符合多数毕业生 / 求职者条件" });
-    return (
-      <div className="fade-in">
-        <div className="result-hero">
-          <span className="ribbon"><Icon name="sparkles" size={12} /> 为你匹配的最佳城市</span>
-          <h2>{c.name}</h2>
-          <div className="en">{c.nameEn} · {c.region} · {c.tier}</div>
-          <div className="match-bar">
-            <span className="lbl">匹配度</span>
-            <div className="bar"><div className="fill" style={{ width:`${top.pct}%` }} /></div>
-            <span className="pct">{top.pct}%</span>
-          </div>
-        </div>
-        <div className="reason-grid">
-          {reasons.slice(0, 4).map((r, i) => (
-            <div key={i} className="reason">
-              <div className={`ri ${r.c}`}>{r.ico}</div>
-              <div className="rt"><div className="rt-title">{r.t}</div><div className="rt-desc">{r.d}</div></div>
-            </div>
-          ))}
-        </div>
-        <div className="alt-row">
-          <span className="alt-lbl">备选<br/>城市</span>
-          {alts.map(a => (
-            <div key={a.city.id} className="alt-card">
-              <div><div className="an">{a.city.name}</div><div className="as">{a.city.region} · 匹配 {a.pct}%</div></div>
-              <div className="ap">{a.city.subsidyLabel}</div>
-            </div>
-          ))}
-        </div>
-        <div style={{ display:"flex", gap:12, marginTop:20, justifyContent:"flex-end" }}>
-          <button className="btn ghost" onClick={restart}><Icon name="arrowLeft" size={14} /> 重新匹配</button>
-          <button className="btn ghost" onClick={() => toggleFav(c.id)}>
-            <Icon name={favs.includes(c.id) ? "heartFill" : "heart"} size={14} />
-            {favs.includes(c.id) ? "已收藏" : "收藏此城市"}
-          </button>
-          <a href={c.link} target="_blank" rel="noopener noreferrer" className="btn warm">
-            查看 {c.name} 详细政策 <Icon name="arrow" size={14} />
-          </a>
-        </div>
-      </div>
-    );
-  }
+  const hasSelection = Object.values(selections).some(v =>
+    v && (Array.isArray(v) ? v.length > 0 : true)
+  );
 
   return (
-    <div className="match-wrap fade-in">
-      <aside className="match-side">
-        <h3>智能匹配</h3>
-        <p className="lead">回答 {totalSteps} 个轻量问题，30 秒内推荐适合你的城市。</p>
-        <div className="step-list">
-          {QUESTIONS.map((qi, i) => (
-            <div key={qi.id} className={`step-item ${i < step ? "done" : ""} ${i === step ? "active" : ""}`}>
-              <span className="num">{i < step ? "✓" : i + 1}</span>
-              <span>{qi.title.replace("？","")}</span>
-            </div>
-          ))}
+    <div className="fade-in">
+      <div className="match-v2-wrap">
+        {/* Left Column: Structured Questions */}
+        <div className="match-v2-left">
+          <h3 className="match-v2-title">📋 告诉我你的情况</h3>
+          {MATCH_QUESTIONS.map(q => {
+            const val = selections[q.id];
+            const isMulti = q.multi;
+            return (
+              <div key={q.id} className="match-v2-q">
+                <div className="match-v2-q-label">
+                  <span className="match-v2-q-icon">{q.icon}</span> {q.label}
+                  <span className="match-v2-q-hint">{isMulti ? '多选' : '单选'}</span>
+                </div>
+                <div className="chip-row" style={{ marginTop: 6 }}>
+                  {q.options.map(o => {
+                    const active = isMulti ? (val || []).includes(o.v) : val === o.v;
+                    return (
+                      <button key={o.v} className={`chip ${active ? 'active warm' : ''}`}
+                        onClick={() => toggleOption(q.id, o.v, isMulti)}>
+                        {o.t}
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+            );
+          })}
+          <button className="btn warm" style={{ width:'100%', marginTop: 16, padding: '12px 0', fontSize: 15 }}
+            onClick={runMatch} disabled={loading}>
+            {loading ? '⏳ 匹配中...' : (hasSelection ? '🔍 智能匹配' : '🔍 直接匹配（使用默认偏好）')}
+          </button>
         </div>
-        <div className="progress-block">
-          <div className="pl">完成进度</div>
-          <div className="pv">{progress}%</div>
-          <div className="progress-bar"><div className="fill" style={{ width:`${progress}%` }} /></div>
-        </div>
-      </aside>
 
-      <section className="match-main">
-        <div className="q-step-label">问题 {step + 1} / {totalSteps}</div>
-        <h2 className="q-title">{q.title}</h2>
-        <p className="q-sub">{q.sub}</p>
+        {/* Right Column: Natural Language + Results */}
+        <div className="match-v2-right">
+          <h3 className="match-v2-title">💬 或直接告诉我你的想法</h3>
+          <textarea
+            className="match-v2-textarea"
+            placeholder="可以告诉我们你的专业、个人优势以及想要的工作环境等等"
+            value={freeText}
+            onChange={e => setFreeText(e.target.value)}
+            rows={4}
+          />
+          <button className="btn warm" style={{ width:'100%', marginTop: 8, padding: '12px 0', fontSize: 15 }}
+            onClick={runMatch} disabled={loading}>
+            {loading ? '⏳ 匹配中...' : '🔍 智能匹配'}
+          </button>
 
-        {q.type === "multi" && (
-          <div className="choice-grid cols-2">
-            {q.options.map(o => {
-              const sel = (answers[q.id] || []).includes(o.v);
-              return (
-                <button key={o.v} className={`choice ${sel ? "selected" : ""}`} onClick={() => toggleAnswer(q.id, o.v, true)}>
-                  <div className="ci">{o.icon}</div>
-                  <div className="ct"><div className="ct-title">{o.t}</div><div className="ct-desc">{o.d}</div></div>
-                  <div className="ck"></div>
-                </button>
-              );
-            })}
-          </div>
-        )}
-
-        {q.type === "single" && (
-          <div className={`choice-grid ${q.options.length === 3 ? "cols-3" : "cols-2"}`}>
-            {q.options.map(o => {
-              const sel = answers[q.id] === o.v;
-              return (
-                <button key={o.v} className={`choice ${sel ? "selected" : ""}`} onClick={() => toggleAnswer(q.id, o.v, false)}>
-                  <div className="ci">{o.icon}</div>
-                  <div className="ct"><div className="ct-title">{o.t}</div><div className="ct-desc">{o.d}</div></div>
-                  <div className="ck"></div>
-                </button>
-              );
-            })}
-          </div>
-        )}
-
-        {q.type === "slider" && (
-          <div className="slider-block">
-            <div className="slider-readout">
-              <span className="v">¥{(answers.budget ?? q.default).toLocaleString()}</span>
-              <span className="r">月生活预算 · ¥{q.min.toLocaleString()} – ¥{q.max.toLocaleString()}</span>
+          {/* Results Area */}
+          {results && (
+            <div className="match-v2-results" style={{ marginTop: 20 }}>
+              <div className="section-head" style={{ margin: '0 0 12px' }}>
+                <div className="st">匹配结果 <span style={{ color:'var(--amber-ink)', fontSize: 14 }}>Top {Math.min(6, results.length)}</span></div>
+              </div>
+              {results.slice(0, 6).map((r, i) => (
+                <div key={r.city.id} className="match-v2-row" style={{ animationDelay: `${i*60}ms` }}>
+                  <div className="match-v2-rank">
+                    <span className="match-v2-rank-num">{i + 1}</span>
+                    <span className="match-v2-rank-pct">{r.pct}%</span>
+                  </div>
+                  <div className="match-v2-info">
+                    <div className="match-v2-city">{r.city.name} <span style={{fontSize:11,color:'var(--ink-3)',fontWeight:400}}>{r.city.region}·{r.city.tier}</span></div>
+                    <div className="match-v2-subsidy">{r.city.subsidyLabel} · {r.city.subsidyKind}</div>
+                    {r.reasons.length > 0 && (
+                      <div className="match-v2-reasons">
+                        {r.reasons.map((rs, j) => <span key={j} className="match-v2-reason-tag">{rs}</span>)}
+                      </div>
+                    )}
+                  </div>
+                  <a href={r.city.link} target="_blank" rel="noopener noreferrer" className="match-v2-link">查看政策 →</a>
+                </div>
+              ))}
             </div>
-            <input type="range" className="slider-range" min={q.min} max={q.max} step={q.step}
-              value={answers.budget ?? q.default}
-              onChange={e => setAnswers(prev => ({ ...prev, budget: +e.target.value }))}
-              style={{ "--p": `${(((answers.budget ?? q.default) - q.min) / (q.max - q.min)) * 100}%` }}
-            />
-            <div className="slider-ticks">
-              <span>紧凑 ¥3k</span><span>适中 ¥7.5k</span><span>宽松 ¥15k</span>
-            </div>
-          </div>
-        )}
-
-        <div className="q-foot">
-          <span className="meta">{step === 0 ? "你可以随时回到首页浏览" : `已完成 ${step} / ${totalSteps}`}</span>
-          <div style={{ display:"flex", gap:10 }}>
-            {step > 0 && (
-              <button className="btn ghost" onClick={() => setStep(s => s - 1)}>
-                <Icon name="arrowLeft" size={14} /> 上一题
-              </button>
-            )}
-            {step < totalSteps - 1 ? (
-              <button className="btn warm" onClick={() => setStep(s => s + 1)}>下一题 <Icon name="arrow" size={14} /></button>
-            ) : (
-              <button className="btn warm" onClick={() => setDone(true)}><Icon name="sparkles" size={14} /> 查看匹配结果</button>
-            )}
-          </div>
+          )}
         </div>
-      </section>
+      </div>
     </div>
   );
 };

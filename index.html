@@ -807,6 +807,11 @@ input[type=range].slider-range::-webkit-slider-thumb {
 .match-v2-link { font-size: 12px; color: var(--indigo); font-weight: 500; white-space: nowrap; text-decoration: none; padding: 6px 10px; border-radius: 8px; transition: all 140ms ease; }
 .match-v2-link:hover { background: var(--indigo-bg); }
 
+.match-v2-warn { background: #FBE3E7 !important; color: #8B2E40 !important; }
+.match-v2-ent-counts { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 6px; }
+.match-v2-ent-badge { font-size: 10px; padding: 2px 7px; border-radius: 4px; background: var(--indigo-bg); color: var(--indigo-ink); font-weight: 500; }
+.match-v2-ent-badge strong { font-weight: 700; }
+
 @media (max-width: 900px) {
   .match-v2-wrap { grid-template-columns: 1fr; }
 }
@@ -6019,8 +6024,7 @@ const ExploreView = ({ cities, favs, toggleFav, onOpenMatch, selectedIdentity = 
 };
 
 // ═══════════════════════════════════════════════════════════
-// MATCH VIEW — Two-Column Smart Match
-// ═══════════════════════════════════════════════════════════
+// MATCH VIEW — Two-Column Smart Match (v3: Hard Filter + Dual-Factor Ranking)
 const MATCH_QUESTIONS = [
   { id:"region", label:"想在哪里生活", icon:"📍", multi:true,
     options:[
@@ -6058,75 +6062,144 @@ const MATCH_QUESTIONS = [
   },
 ];
 
-// Age bracket → numeric midpoint for eligibility checking
 const ageMidpoint = { under25: 23, '25to30': 28, '30to35': 33, '35to40': 38, over40: 43 };
+const COMPANY_TYPE_MAP = { soe:"soe_institution_count", foreign:"foreign_enterprise_count", private:"private_enterprise_count", startup:"startup_count" };
 
-// Scoring: map question answers to city features
-const scoreMatch = (city, selections, freeText) => {
-  let score = 0;
-  const reasons = [];
-  const sel = selections || {};
-
-  // Region matching
-  const regionSel = sel.region || [];
-  if (regionSel.length > 0) {
-    if (regionSel.includes('south') && city.region === '南方') { score += 3; reasons.push('符合地域偏好(南方)'); }
-    if (regionSel.includes('north') && city.region === '北方') { score += 3; reasons.push('符合地域偏好(北方)'); }
-    if (regionSel.includes('coastal') && /沿海|青岛|大连|厦门|珠海|海口|深圳|上海|天津|宁波|温州|烟台|威海/.test(city.desc + city.name + city.tags.map(t=>t.t).join())) {
-      score += 2; reasons.push('沿海城市');
+// Phase 1: Hard filter
+const filterCandidatePool = (cities, selections, identityType) => {
+  const regionSel = selections.region || [];
+  const isCoastal = (city) => /沿海|青岛|大连|厦门|珠海|海口|深圳|上海|天津|宁波|温州|烟台|威海/.test(city.desc + city.name + city.tags.map(t=>t.t).join(''));
+  
+  return cities.filter(city => {
+    // Layer 1: Region hard filter
+    if (regionSel.length > 0) {
+      let match = false;
+      if (regionSel.includes('south') && city.region === '南方') match = true;
+      if (regionSel.includes('north') && city.region === '北方') match = true;
+      if (regionSel.includes('tier1') && city.tier === '一线') match = true;
+      if (regionSel.includes('new1') && city.tier === '新一线') match = true;
+      if (regionSel.includes('tier2') && city.tier === '二线') match = true;
+      if (regionSel.includes('coastal') && isCoastal(city)) match = true;
+      if (!match) return false;
     }
-    if (regionSel.includes('tier1') && city.tier === '一线') { score += 3; reasons.push('一线城市'); }
-    if (regionSel.includes('new1') && city.tier === '新一线') { score += 2; reasons.push('新一线城市'); }
-    if (regionSel.includes('tier2') && city.tier === '二线') { score += 2; reasons.push('二线城市'); }
-  }
 
-  // Degree → audience matching
-  const degree = sel.degree;
-  if (degree) {
-    const audienceMap = { bachelor:'应届生', master:'硕士以上', doctor:'博士', overseas:'留学归国' };
-    const audience = audienceMap[degree];
-    if (audience && city.audience.includes(audience)) { score += 2.5; reasons.push(`学历对口(${audience})`); }
-  }
-
-  // Age eligibility: check against identityData age_max
-  if (sel.age) {
-    const userAge = ageMidpoint[sel.age] || 30;
-    // Check graduate identity data for age limits
-    const gData = city.identityData?.graduate;
-    if (gData && gData.age_max) {
-      if (userAge <= gData.age_max) { score += 2; reasons.push('年龄符合补贴要求'); }
-      else { score -= 3; reasons.push('⚠年龄超过补贴上限'); }
+    // Layer 1: Age hard filter
+    if (selections.age) {
+      const userAge = ageMidpoint[selections.age];
+      const idata = identityType ? (city.identityData?.[identityType] || city.identityData?.graduate) : city.identityData?.graduate;
+      if (idata?.age_max && userAge > idata.age_max) return false;
     }
-  }
 
-  // Social security eligibility
-  if (sel.socialSecurity) {
-    const gData = city.identityData?.graduate;
-    const ssMonths = { none:0, lt6:3, '6to12':9, gt12:15 }[sel.socialSecurity] || 0;
-    if (gData && gData.social_security_min_months) {
-      if (ssMonths >= gData.social_security_min_months) { score += 1.5; reasons.push('社保符合申领条件'); }
-      else { score -= 2; reasons.push('⚠社保未达申领门槛'); }
+    // Layer 2: Subsidy availability filter
+    if (identityType) {
+      const idata = getIdentityData(city, identityType);
+      if (!idata || idata.subsidy <= 0) return false;
     }
+
+    return true;
+  });
+};
+
+// Phase 2: Dual-factor ranking within candidate pool
+const rankCandidates = (pool, selections, identityType) => {
+  if (pool.length === 0) return [];
+
+  // Factor 1: Subsidy amount normalization (0-10)
+  const amounts = pool.map(c => {
+    const idata = identityType ? getIdentityData(c, identityType) : null;
+    return idata ? idata.subsidy : c.subsidy;
+  });
+  const amtMax = Math.max(...amounts); const amtMin = Math.min(...amounts);
+  const normAmt = (v) => amtMax === amtMin ? 10 : ((v - amtMin) / (amtMax - amtMin)) * 10;
+
+  // Factor 2: Enterprise count normalization (0-10)
+  const companySel = (selections.company || []).filter(v => v !== 'any');
+  let entScores = pool.map(() => 0);
+  
+  if (companySel.length > 0) {
+    const typeKeys = companySel.map(v => COMPANY_TYPE_MAP[v]).filter(Boolean);
+    // For each selected type, compute per-city normalized score, then average
+    const typeScores = typeKeys.map(key => {
+      const vals = pool.map(c => c.enterpriseData?.[key] || 0);
+      const vMax = Math.max(...vals); const vMin = Math.min(...vals);
+      return { key, vals, max: vMax, min: vMin };
+    });
+    entScores = pool.map((_, i) => {
+      const scores = typeScores.map(ts => ts.max === ts.min ? 10 : ((ts.vals[i] - ts.min) / (ts.max - ts.min)) * 10);
+      return scores.reduce((a, b) => a + b, 0) / scores.length; // average = 0-10
+    });
+  } else {
+    // No company type selected: use total of all 4 types
+    const totals = pool.map(c => {
+      const ed = c.enterpriseData || {};
+      return (ed.soe_institution_count || 0) + (ed.foreign_enterprise_count || 0) + (ed.private_enterprise_count || 0) + (ed.startup_count || 0);
+    });
+    const tMax = Math.max(...totals); const tMin = Math.min(...totals);
+    entScores = totals.map(v => tMax === tMin ? 10 : ((v - tMin) / (tMax - tMin)) * 10);
   }
 
-  // Hukou willingness vs policy requirement
-  if (sel.hukou && sel.hukou !== 'unsure') {
-    const gData = city.identityData?.graduate;
-    if (gData && gData.requires_hukou) {
-      if (gData.requires_hukou === '必须落户' && sel.hukou === 'no') {
-        score -= 3; reasons.push('⚠该城补贴须落户');
-      } else if (gData.requires_hukou === '落户优先（非必须）' && sel.hukou === 'no') {
-        score -= 1; reasons.push('落户可获更高补贴');
-      } else if (sel.hukou === 'yes') {
-        score += 1.5; reasons.push('落户意愿匹配政策要求');
+  // Combined score
+  const scored = pool.map((city, i) => ({
+    city,
+    amtRaw: amounts[i],
+    amtScore: normAmt(amounts[i]),
+    entScore: entScores[i],
+    totalScore: normAmt(amounts[i]) * 0.7 + entScores[i] * 0.3,
+  }));
+  
+  // Collect reason tags
+  const topSubsidy = amtMax;
+  scored.forEach(s => {
+    s.reasons = [];
+    // Region match tags
+    const regionSel = selections.region || [];
+    if (regionSel.includes('south') && s.city.region === '南方') s.reasons.push('南方');
+    if (regionSel.includes('north') && s.city.region === '北方') s.reasons.push('北方');
+    if (regionSel.includes('coastal') && /沿海|青岛|大连|厦门|珠海|海口|深圳|上海|天津|宁波|温州|烟台|威海/.test(s.city.desc + s.city.name + s.city.tags.map(t=>t.t).join(''))) s.reasons.push('沿海');
+    if (regionSel.includes('tier1') && s.city.tier === '一线') s.reasons.push('一线城市');
+    if (regionSel.includes('new1') && s.city.tier === '新一线') s.reasons.push('新一线');
+    if (regionSel.includes('tier2') && s.city.tier === '二线') s.reasons.push('二线城市');
+    // Subsidy advantage
+    if (s.amtRaw >= topSubsidy * 0.9) s.reasons.push('补贴金额Top');
+    // Enterprise rank
+    if (companySel.length > 0) {
+      const ed = s.city.enterpriseData || {};
+      for (const v of companySel) {
+        const key = COMPANY_TYPE_MAP[v];
+        const label = {soe:'国企', foreign:'外企', private:'民企', startup:'创业公司'}[v];
+        const val = ed[key] || 0;
+        const sorted = [...pool].sort((a,b) => (b.enterpriseData?.[key]||0) - (a.enterpriseData?.[key]||0));
+        const rank = sorted.findIndex(c => c.id === s.city.id) + 1;
+        if (rank <= 3) s.reasons.push(`${label}数量Top${rank}`);
       }
     }
-  }
+    // Eligibility warnings
+    if (selections.age) {
+      const idata = identityType ? getIdentityData(s.city, identityType) : getIdentityData(s.city, 'graduate');
+      if (idata?.age_max && ageMidpoint[selections.age] > idata.age_max) s.reasons.push('⚠年龄超限');
+    }
+    const ssSel = selections.socialSecurity;
+    if (ssSel && ssSel !== 'none') {
+      const ssMonths = { lt6:3, '6to12':9, gt12:15 }[ssSel];
+      const idata = identityType ? getIdentityData(s.city, identityType) : getIdentityData(s.city, 'graduate');
+      if (idata?.social_security_min_months && ssMonths < idata.social_security_min_months) s.reasons.push('⚠社保不足');
+    }
+    if (selections.hukou === 'no') {
+      const idata = identityType ? getIdentityData(s.city, identityType) : getIdentityData(s.city, 'graduate');
+      if (idata?.requires_hukou === '必须落户') s.reasons.push('⚠须落户');
+    }
+  });
 
-  // Subsidy boost — always factors in
-  score += city.subsidy / 50000;
+  scored.sort((a, b) => b.totalScore - a.totalScore);
+  const topScore = scored[0]?.totalScore || 1;
+  return scored.map(s => ({ ...s, pct: Math.round(50 + (s.totalScore / topScore) * 49) }));
+};
 
-  return { score, reasons };
+// Helper: format large numbers
+const fmtNum = (n) => {
+  if (n >= 10000) return (n / 10000).toFixed(1) + '万';
+  if (n >= 1000) return (n / 1000).toFixed(1) + '千';
+  return String(n);
 };
 
 const MatchView = ({ cities, favs, toggleFav, selectedIdentity = null }) => {
@@ -6134,6 +6207,7 @@ const MatchView = ({ cities, favs, toggleFav, selectedIdentity = null }) => {
   const [freeText, setFreeText] = React.useState("");
   const [results, setResults] = React.useState(null);
   const [loading, setLoading] = React.useState(false);
+  const [poolSize, setPoolSize] = React.useState(null);
 
   const toggleOption = (qId, v, multi) => {
     setSelections(prev => {
@@ -6145,21 +6219,27 @@ const MatchView = ({ cities, favs, toggleFav, selectedIdentity = null }) => {
     });
   };
 
+  // Map degree to identity type for subsidy lookup
+  const resolveIdentityType = () => {
+    if (selectedIdentity) return selectedIdentity;
+    const deg = selections.degree;
+    if (deg === 'overseas') return 'overseas';
+    return 'graduate'; // bachelor/master/doctor → graduate
+  };
+
   const runMatch = () => {
     setLoading(true);
-    // Simulate brief processing delay for UX feedback
     setTimeout(() => {
-      const scored = cities.map(c => {
-        const { score, reasons } = scoreMatch(c, selections, freeText);
-        return { city: c, score, reasons };
-      });
-      scored.sort((a, b) => b.score - a.score);
-      const max = scored[0]?.score || 1;
-      const ranked = scored.slice(0, 12).map(s => ({
-        ...s,
-        pct: Math.max(40, Math.min(99, Math.round(50 + (s.score / max) * 49)))
-      }));
-      setResults(ranked);
+      const identityType = resolveIdentityType();
+      const pool = filterCandidatePool(cities, selections, identityType);
+      setPoolSize(pool.length);
+      if (pool.length === 0) {
+        setResults([]);
+        setLoading(false);
+        return;
+      }
+      const ranked = rankCandidates(pool, selections, identityType);
+      setResults(ranked.slice(0, 12));
       setLoading(false);
     }, 300);
   };
@@ -6168,10 +6248,12 @@ const MatchView = ({ cities, favs, toggleFav, selectedIdentity = null }) => {
     v && (Array.isArray(v) ? v.length > 0 : true)
   );
 
+  const companySel = (selections.company || []).filter(v => v !== 'any');
+
   return (
     <div className="fade-in">
       <div className="match-v2-wrap">
-        {/* Left Column: Structured Questions */}
+        {/* Left Column */}
         <div className="match-v2-left">
           <h3 className="match-v2-title">📋 告诉我你的情况</h3>
           {MATCH_QUESTIONS.map(q => {
@@ -6199,32 +6281,40 @@ const MatchView = ({ cities, favs, toggleFav, selectedIdentity = null }) => {
           })}
           <button className="btn warm" style={{ width:'100%', marginTop: 16, padding: '12px 0', fontSize: 15 }}
             onClick={runMatch} disabled={loading}>
-            {loading ? '⏳ 匹配中...' : (hasSelection ? '🔍 智能匹配' : '🔍 直接匹配（使用默认偏好）')}
+            {loading ? '⏳ 匹配中...' : '🔍 智能匹配'}
           </button>
+          {poolSize !== null && (
+            <div style={{ marginTop: 12, fontSize: 12, color: 'var(--ink-3)', textAlign: 'center' }}>
+              候选池: <strong>{poolSize}</strong> 城 → 展示 Top {Math.min(12, results?.length || 0)}
+            </div>
+          )}
         </div>
 
-        {/* Right Column: Natural Language + Results */}
+        {/* Right Column */}
         <div className="match-v2-right">
           <h3 className="match-v2-title">💬 或直接告诉我你的想法</h3>
-          <textarea
-            className="match-v2-textarea"
+          <textarea className="match-v2-textarea"
             placeholder="可以告诉我们你的专业、个人优势以及想要的工作环境等等"
-            value={freeText}
-            onChange={e => setFreeText(e.target.value)}
-            rows={4}
-          />
+            value={freeText} onChange={e => setFreeText(e.target.value)} rows={4} />
           <button className="btn warm" style={{ width:'100%', marginTop: 8, padding: '12px 0', fontSize: 15 }}
             onClick={runMatch} disabled={loading}>
             {loading ? '⏳ 匹配中...' : '🔍 智能匹配'}
           </button>
 
-          {/* Results Area */}
-          {results && (
+          {results !== null && results.length === 0 && (
+            <div style={{ marginTop: 30, textAlign: 'center', color: 'var(--ink-3)', padding: 40, background: 'var(--bg)', borderRadius: 12 }}>
+              <div style={{ fontSize: 32, marginBottom: 8 }}>🔍</div>
+              <div style={{ fontSize: 15, fontWeight: 600, color: 'var(--ink)' }}>无匹配城市</div>
+              <div style={{ fontSize: 13, marginTop: 4 }}>请放宽地域或年龄条件后重试</div>
+            </div>
+          )}
+
+          {results && results.length > 0 && (
             <div className="match-v2-results" style={{ marginTop: 20 }}>
               <div className="section-head" style={{ margin: '0 0 12px' }}>
-                <div className="st">匹配结果 <span style={{ color:'var(--amber-ink)', fontSize: 14 }}>Top {Math.min(6, results.length)}</span></div>
+                <div className="st">匹配结果 <span style={{ color:'var(--amber-ink)', fontSize: 14 }}>Top {results.length}</span></div>
               </div>
-              {results.slice(0, 6).map((r, i) => (
+              {results.map((r, i) => (
                 <div key={r.city.id} className="match-v2-row" style={{ animationDelay: `${i*60}ms` }}>
                   <div className="match-v2-rank">
                     <span className="match-v2-rank-num">{i + 1}</span>
@@ -6235,7 +6325,20 @@ const MatchView = ({ cities, favs, toggleFav, selectedIdentity = null }) => {
                     <div className="match-v2-subsidy">{r.city.subsidyLabel} · {r.city.subsidyKind}</div>
                     {r.reasons.length > 0 && (
                       <div className="match-v2-reasons">
-                        {r.reasons.map((rs, j) => <span key={j} className="match-v2-reason-tag">{rs}</span>)}
+                        {r.reasons.map((rs, j) => (
+                          <span key={j} className={`match-v2-reason-tag ${rs.startsWith('⚠') ? 'match-v2-warn' : ''}`}>{rs}</span>
+                        ))}
+                      </div>
+                    )}
+                    {/* Enterprise count display */}
+                    {companySel.length > 0 && (
+                      <div className="match-v2-ent-counts">
+                        {companySel.map(v => {
+                          const key = COMPANY_TYPE_MAP[v];
+                          const val = r.city.enterpriseData?.[key] || 0;
+                          const label = {soe:'国企/事业', foreign:'外企', private:'民企', startup:'创业公司'}[v];
+                          return <span key={v} className="match-v2-ent-badge">{label}: <strong>{fmtNum(val)}</strong></span>;
+                        })}
                       </div>
                     )}
                   </div>
@@ -6248,10 +6351,7 @@ const MatchView = ({ cities, favs, toggleFav, selectedIdentity = null }) => {
       </div>
     </div>
   );
-};
-
-// ═══════════════════════════════════════════════════════════
-// FAVORITES VIEW
+};// FAVORITES VIEW
 // ═══════════════════════════════════════════════════════════
 const FavoritesView = ({ cities, favs, toggleFav, onOpenExplore }) => {
   const favCities = cities.filter(c => favs.includes(c.id));

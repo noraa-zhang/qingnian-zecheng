@@ -50,14 +50,23 @@
 ## 本地运行
 
 ```bash
-# 直接浏览器打开即可，零依赖
+# 1. 配置 API key（首次）
+cp config.example.js config.js
+# 编辑 config.js，填入你的 DeepSeek API key
+
+# 2. 直接浏览器打开即可
 open index.html
 ```
+
+> 💡 `config.js` 已在 `.gitignore` 中，不会提交到 Git。
 
 ## 项目结构
 
 ```
-├── index.html    # 完整应用（React组件 + 数据 + 样式）
+├── index.html          # 完整应用（React组件 + 数据 + 样式 + Prompt Chain）
+├── config.example.js   # 配置文件模板（安全提交）
+├── config.js           # 本地配置（已 gitignore，含 API key）
+├── .gitignore
 └── README.md
 ```
 

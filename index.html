@@ -6394,6 +6394,14 @@ const MatchView = ({ cities, favs, toggleFav, selectedIdentity = null }) => {
                       </div>
                     )}
                   </div>
+                  <button
+                    className={`fav-btn ${favs.includes(r.city.id) ? "active" : ""}`}
+                    onClick={(e) => { e.preventDefault(); toggleFav(r.city.id); }}
+                    aria-label="收藏"
+                    style={{ position: 'relative', top: 0, right: 0, flexShrink: 0 }}
+                  >
+                    <Icon name={favs.includes(r.city.id) ? "heartFill" : "heart"} size={16} strokeWidth={2} />
+                  </button>
                   <a href={r.city.link} target="_blank" rel="noopener noreferrer" className="match-v2-link">查看政策 →</a>
                 </div>
               ))}

@@ -7,7 +7,6 @@
   <script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
   <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
   <script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
-  <script src="config.js"></script>
   <style>
 /* ===== Base ===== */
 * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -987,8 +986,8 @@ const CITIES = [
       "硕士以上",
       "留学归国"
     ]
-  ,
-  enterpriseData: {"soe_institution_count": 185000, "foreign_enterprise_count": 42000, "private_enterprise_count": 2100000, "startup_count": 280000, "enterprise_data_quality": "官方数据", "enterprise_data_source": "北京市统计公报、A股数据、世界500强数据", "enterprise_data_remark": "A股上市公司484家，世界500强46家，AI企业19家（胡润50强）"}identityData: {
+  enterpriseData: {"soe_institution_count": 185000, "foreign_enterprise_count": 42000, "private_enterprise_count": 2100000, "startup_count": 280000, "enterprise_data_quality": "官方数据", "enterprise_data_source": "北京市统计公报、A股数据、世界500强数据", "enterprise_data_remark": "A股上市公司484家，世界500强46家，AI企业19家（胡润50强）"},
+identityData: {
       "entrepreneur": {
             "subsidy": 100000,
             "subsidyLabel": "最高 10 万",
@@ -1064,8 +1063,8 @@ const CITIES = [
       "硕士以上",
       "求职者"
     ]
-  ,
-  enterpriseData: {"soe_institution_count": 58000, "foreign_enterprise_count": 22000, "private_enterprise_count": 950000, "startup_count": 120000, "enterprise_data_quality": "官方数据", "enterprise_data_source": "天津市统计公报", "enterprise_data_remark": "直辖市，滨海新区外资企业集中"}identityData: {
+  enterpriseData: {"soe_institution_count": 58000, "foreign_enterprise_count": 22000, "private_enterprise_count": 950000, "startup_count": 120000, "enterprise_data_quality": "官方数据", "enterprise_data_source": "天津市统计公报", "enterprise_data_remark": "直辖市，滨海新区外资企业集中"},
+identityData: {
       "entrepreneur": {
             "subsidy": 300000,
             "subsidyLabel": "最高 30 万",
@@ -1141,8 +1140,8 @@ const CITIES = [
       "学生",
       "求职者"
     ]
-  ,
-  enterpriseData: {"soe_institution_count": 35000, "foreign_enterprise_count": 5000, "private_enterprise_count": 680000, "startup_count": 85000, "enterprise_data_quality": "估算", "enterprise_data_source": "基于城市经济规模、产业结构及公开数据估算", "enterprise_data_remark": "河北省会"}identityData: {
+  enterpriseData: {"soe_institution_count": 35000, "foreign_enterprise_count": 5000, "private_enterprise_count": 680000, "startup_count": 85000, "enterprise_data_quality": "估算", "enterprise_data_source": "基于城市经济规模、产业结构及公开数据估算", "enterprise_data_remark": "河北省会"},
+identityData: {
       "entrepreneur": {
             "subsidy": 10000,
             "subsidyLabel": "最高 1 万",
@@ -1215,8 +1214,8 @@ const CITIES = [
       "求职者"
     ]
   ,
-  ,
-  enterpriseData: {"soe_institution_count": 28000, "foreign_enterprise_count": 4000, "private_enterprise_count": 550000, "startup_count": 70000, "enterprise_data_quality": "估算", "enterprise_data_source": "基于城市经济规模、产业结构及公开数据估算", "enterprise_data_remark": "重工业城市"}identityData: {
+  enterpriseData: {"soe_institution_count": 28000, "foreign_enterprise_count": 4000, "private_enterprise_count": 550000, "startup_count": 70000, "enterprise_data_quality": "估算", "enterprise_data_source": "基于城市经济规模、产业结构及公开数据估算", "enterprise_data_remark": "重工业城市"},
+identityData: {
       "entrepreneur": {
             "subsidy": 10000,
             "subsidyLabel": "最高 1 万",
@@ -1289,7 +1288,8 @@ const CITIES = [
       "学生"
     ]
   ,
-  enterpriseData: {"soe_institution_count": 12000, "foreign_enterprise_count": 3500, "private_enterprise_count": 280000, "startup_count": 35000, "enterprise_data_quality": "估算", "enterprise_data_source": "基于城市经济规模、产业结构及公开数据估算", "enterprise_data_remark": "港口旅游城市"}identityData: {
+  enterpriseData: {"soe_institution_count": 12000, "foreign_enterprise_count": 3500, "private_enterprise_count": 280000, "startup_count": 35000, "enterprise_data_quality": "估算", "enterprise_data_source": "基于城市经济规模、产业结构及公开数据估算", "enterprise_data_remark": "港口旅游城市"},
+identityData: {
       "entrepreneur": {
             "subsidy": 10000,
             "subsidyLabel": "最高 1 万",
@@ -1362,7 +1362,8 @@ const CITIES = [
       "学生"
     ]
   ,
-  enterpriseData: {"soe_institution_count": 15000, "foreign_enterprise_count": 2000, "private_enterprise_count": 420000, "startup_count": 50000, "enterprise_data_quality": "估算", "enterprise_data_source": "基于城市经济规模、产业结构及公开数据估算", "enterprise_data_remark": "钢铁工业"}identityData: {
+  enterpriseData: {"soe_institution_count": 15000, "foreign_enterprise_count": 2000, "private_enterprise_count": 420000, "startup_count": 50000, "enterprise_data_quality": "估算", "enterprise_data_source": "基于城市经济规模、产业结构及公开数据估算", "enterprise_data_remark": "钢铁工业"},
+identityData: {
       "entrepreneur": {
             "subsidy": 10000,
             "subsidyLabel": "最高 1 万",
@@ -1436,7 +1437,8 @@ const CITIES = [
       "应届生"
     ]
   ,
-  enterpriseData: {"soe_institution_count": 28000, "foreign_enterprise_count": 3500, "private_enterprise_count": 480000, "startup_count": 60000, "enterprise_data_quality": "估算", "enterprise_data_source": "基于城市经济规模、产业结构及公开数据估算", "enterprise_data_remark": "山西省会，能源重镇"}identityData: {
+  enterpriseData: {"soe_institution_count": 28000, "foreign_enterprise_count": 3500, "private_enterprise_count": 480000, "startup_count": 60000, "enterprise_data_quality": "估算", "enterprise_data_source": "基于城市经济规模、产业结构及公开数据估算", "enterprise_data_remark": "山西省会，能源重镇"},
+identityData: {
       "entrepreneur": {
             "subsidy": 10000,
             "subsidyLabel": "最高 1 万",
@@ -1508,7 +1510,8 @@ const CITIES = [
       "应届生"
     ]
   ,
-  enterpriseData: {"soe_institution_count": 12000, "foreign_enterprise_count": 1500, "private_enterprise_count": 220000, "startup_count": 28000, "enterprise_data_quality": "估算", "enterprise_data_source": "基于城市经济规模、产业结构及公开数据估算", "enterprise_data_remark": "能源城市"}identityData: {
+  enterpriseData: {"soe_institution_count": 12000, "foreign_enterprise_count": 1500, "private_enterprise_count": 220000, "startup_count": 28000, "enterprise_data_quality": "估算", "enterprise_data_source": "基于城市经济规模、产业结构及公开数据估算", "enterprise_data_remark": "能源城市"},
+identityData: {
       "entrepreneur": {
             "subsidy": 10000,
             "subsidyLabel": "最高 1 万",
@@ -1582,7 +1585,8 @@ const CITIES = [
       "硕士以上"
     ]
   ,
-  enterpriseData: {"soe_institution_count": 15000, "foreign_enterprise_count": 2500, "private_enterprise_count": 320000, "startup_count": 40000, "enterprise_data_quality": "估算", "enterprise_data_source": "基于城市经济规模、产业结构及公开数据估算", "enterprise_data_remark": "内蒙古首府"}identityData: {
+  enterpriseData: {"soe_institution_count": 15000, "foreign_enterprise_count": 2500, "private_enterprise_count": 320000, "startup_count": 40000, "enterprise_data_quality": "估算", "enterprise_data_source": "基于城市经济规模、产业结构及公开数据估算", "enterprise_data_remark": "内蒙古首府"},
+identityData: {
       "entrepreneur": {
             "subsidy": 10000,
             "subsidyLabel": "最高 1 万",
@@ -1655,7 +1659,8 @@ const CITIES = [
       "求职者"
     ]
   ,
-  enterpriseData: {"soe_institution_count": 18000, "foreign_enterprise_count": 2000, "private_enterprise_count": 280000, "startup_count": 35000, "enterprise_data_quality": "估算", "enterprise_data_source": "基于城市经济规模、产业结构及公开数据估算", "enterprise_data_remark": "稀土之都"}identityData: {
+  enterpriseData: {"soe_institution_count": 18000, "foreign_enterprise_count": 2000, "private_enterprise_count": 280000, "startup_count": 35000, "enterprise_data_quality": "估算", "enterprise_data_source": "基于城市经济规模、产业结构及公开数据估算", "enterprise_data_remark": "稀土之都"},
+identityData: {
       "entrepreneur": {
             "subsidy": 10000,
             "subsidyLabel": "最高 1 万",
@@ -1728,7 +1733,8 @@ const CITIES = [
       "求职者"
     ]
   ,
-  enterpriseData: {"soe_institution_count": 15000, "foreign_enterprise_count": 1800, "private_enterprise_count": 250000, "startup_count": 32000, "enterprise_data_quality": "估算", "enterprise_data_source": "基于城市经济规模、产业结构及公开数据估算", "enterprise_data_remark": "能源经济"}identityData: {
+  enterpriseData: {"soe_institution_count": 15000, "foreign_enterprise_count": 1800, "private_enterprise_count": 250000, "startup_count": 32000, "enterprise_data_quality": "估算", "enterprise_data_source": "基于城市经济规模、产业结构及公开数据估算", "enterprise_data_remark": "能源经济"},
+identityData: {
       "entrepreneur": {
             "subsidy": 10000,
             "subsidyLabel": "最高 1 万",
@@ -1802,7 +1808,8 @@ const CITIES = [
       "求职者"
     ]
   ,
-  enterpriseData: {"soe_institution_count": 35000, "foreign_enterprise_count": 6000, "private_enterprise_count": 680000, "startup_count": 85000, "enterprise_data_quality": "估算", "enterprise_data_source": "基于城市经济规模、产业结构及公开数据估算", "enterprise_data_remark": "东北老工业基地"}identityData: {
+  enterpriseData: {"soe_institution_count": 35000, "foreign_enterprise_count": 6000, "private_enterprise_count": 680000, "startup_count": 85000, "enterprise_data_quality": "估算", "enterprise_data_source": "基于城市经济规模、产业结构及公开数据估算", "enterprise_data_remark": "东北老工业基地"},
+identityData: {
       "entrepreneur": {
             "subsidy": 10000,
             "subsidyLabel": "最高 1 万",
@@ -1876,7 +1883,8 @@ const CITIES = [
       "硕士以上"
     ]
   ,
-  enterpriseData: {"soe_institution_count": 28000, "foreign_enterprise_count": 8000, "private_enterprise_count": 580000, "startup_count": 75000, "enterprise_data_quality": "估算", "enterprise_data_source": "基于城市经济规模、产业结构及公开数据估算", "enterprise_data_remark": "东北亚航运中心"}identityData: {
+  enterpriseData: {"soe_institution_count": 28000, "foreign_enterprise_count": 8000, "private_enterprise_count": 580000, "startup_count": 75000, "enterprise_data_quality": "估算", "enterprise_data_source": "基于城市经济规模、产业结构及公开数据估算", "enterprise_data_remark": "东北亚航运中心"},
+identityData: {
       "entrepreneur": {
             "subsidy": 10000,
             "subsidyLabel": "最高 1 万",
@@ -1944,7 +1952,8 @@ const CITIES = [
       "应届生"
     ]
   ,
-  enterpriseData: {"soe_institution_count": 15000, "foreign_enterprise_count": 2000, "private_enterprise_count": 280000, "startup_count": 35000, "enterprise_data_quality": "估算", "enterprise_data_source": "基于城市经济规模、产业结构及公开数据估算", "enterprise_data_remark": "钢铁城市"}identityData: {
+  enterpriseData: {"soe_institution_count": 15000, "foreign_enterprise_count": 2000, "private_enterprise_count": 280000, "startup_count": 35000, "enterprise_data_quality": "估算", "enterprise_data_source": "基于城市经济规模、产业结构及公开数据估算", "enterprise_data_remark": "钢铁城市"},
+identityData: {
       "entrepreneur": {
             "subsidy": 10000,
             "subsidyLabel": "最高 1 万",
@@ -2018,7 +2027,8 @@ const CITIES = [
       "求职者"
     ]
   ,
-  enterpriseData: {"soe_institution_count": 22000, "foreign_enterprise_count": 4000, "private_enterprise_count": 480000, "startup_count": 60000, "enterprise_data_quality": "估算", "enterprise_data_source": "基于城市经济规模、产业结构及公开数据估算", "enterprise_data_remark": "汽车城"}identityData: {
+  enterpriseData: {"soe_institution_count": 22000, "foreign_enterprise_count": 4000, "private_enterprise_count": 480000, "startup_count": 60000, "enterprise_data_quality": "估算", "enterprise_data_source": "基于城市经济规模、产业结构及公开数据估算", "enterprise_data_remark": "汽车城"},
+identityData: {
       "entrepreneur": {
             "subsidy": 10000,
             "subsidyLabel": "最高 1 万",
@@ -2091,7 +2101,8 @@ const CITIES = [
       "学生"
     ]
   ,
-  enterpriseData: {"soe_institution_count": 12000, "foreign_enterprise_count": 1500, "private_enterprise_count": 220000, "startup_count": 28000, "enterprise_data_quality": "估算", "enterprise_data_source": "基于城市经济规模、产业结构及公开数据估算", "enterprise_data_remark": "化工基地"}identityData: {
+  enterpriseData: {"soe_institution_count": 12000, "foreign_enterprise_count": 1500, "private_enterprise_count": 220000, "startup_count": 28000, "enterprise_data_quality": "估算", "enterprise_data_source": "基于城市经济规模、产业结构及公开数据估算", "enterprise_data_remark": "化工基地"},
+identityData: {
       "entrepreneur": {
             "subsidy": 10000,
             "subsidyLabel": "最高 1 万",
@@ -2165,7 +2176,8 @@ const CITIES = [
       "应届生"
     ]
   ,
-  enterpriseData: {"soe_institution_count": 25000, "foreign_enterprise_count": 3500, "private_enterprise_count": 520000, "startup_count": 65000, "enterprise_data_quality": "估算", "enterprise_data_source": "基于城市经济规模、产业结构及公开数据估算", "enterprise_data_remark": "黑龙江省会"}identityData: {
+  enterpriseData: {"soe_institution_count": 25000, "foreign_enterprise_count": 3500, "private_enterprise_count": 520000, "startup_count": 65000, "enterprise_data_quality": "估算", "enterprise_data_source": "基于城市经济规模、产业结构及公开数据估算", "enterprise_data_remark": "黑龙江省会"},
+identityData: {
       "entrepreneur": {
             "subsidy": 10000,
             "subsidyLabel": "最高 1 万",
@@ -2233,7 +2245,8 @@ const CITIES = [
       "应届生"
     ]
   ,
-  enterpriseData: {"soe_institution_count": 18000, "foreign_enterprise_count": 2000, "private_enterprise_count": 280000, "startup_count": 35000, "enterprise_data_quality": "估算", "enterprise_data_source": "基于城市经济规模、产业结构及公开数据估算", "enterprise_data_remark": "石油城"}identityData: {
+  enterpriseData: {"soe_institution_count": 18000, "foreign_enterprise_count": 2000, "private_enterprise_count": 280000, "startup_count": 35000, "enterprise_data_quality": "估算", "enterprise_data_source": "基于城市经济规模、产业结构及公开数据估算", "enterprise_data_remark": "石油城"},
+identityData: {
       "entrepreneur": {
             "subsidy": 10000,
             "subsidyLabel": "最高 1 万",
@@ -2307,7 +2320,8 @@ const CITIES = [
       "应届生"
     ]
   ,
-  enterpriseData: {"soe_institution_count": 32000, "foreign_enterprise_count": 5500, "private_enterprise_count": 720000, "startup_count": 90000, "enterprise_data_quality": "估算", "enterprise_data_source": "基于城市经济规模、产业结构及公开数据估算", "enterprise_data_remark": "山东省会"}identityData: {
+  enterpriseData: {"soe_institution_count": 32000, "foreign_enterprise_count": 5500, "private_enterprise_count": 720000, "startup_count": 90000, "enterprise_data_quality": "估算", "enterprise_data_source": "基于城市经济规模、产业结构及公开数据估算", "enterprise_data_remark": "山东省会"},
+identityData: {
       "entrepreneur": {
             "subsidy": 500000,
             "subsidyLabel": "最高 50 万",
@@ -2384,7 +2398,8 @@ const CITIES = [
       "留学归国"
     ]
   ,
-  enterpriseData: {"soe_institution_count": 42000, "foreign_enterprise_count": 12000, "private_enterprise_count": 980000, "startup_count": 130000, "enterprise_data_quality": "官方数据", "enterprise_data_source": "青岛市统计公报", "enterprise_data_remark": "市场主体约205.1万户"}identityData: {
+  enterpriseData: {"soe_institution_count": 42000, "foreign_enterprise_count": 12000, "private_enterprise_count": 980000, "startup_count": 130000, "enterprise_data_quality": "官方数据", "enterprise_data_source": "青岛市统计公报", "enterprise_data_remark": "市场主体约205.1万户"},
+identityData: {
       "entrepreneur": {
             "subsidy": 150000,
             "subsidyLabel": "博士15万",
@@ -2456,7 +2471,8 @@ const CITIES = [
       "硕士以上"
     ]
   ,
-  enterpriseData: {"soe_institution_count": 22000, "foreign_enterprise_count": 6000, "private_enterprise_count": 580000, "startup_count": 72000, "enterprise_data_quality": "估算", "enterprise_data_source": "基于城市经济规模、产业结构及公开数据估算", "enterprise_data_remark": "制造业强市"}identityData: {
+  enterpriseData: {"soe_institution_count": 22000, "foreign_enterprise_count": 6000, "private_enterprise_count": 580000, "startup_count": 72000, "enterprise_data_quality": "估算", "enterprise_data_source": "基于城市经济规模、产业结构及公开数据估算", "enterprise_data_remark": "制造业强市"},
+identityData: {
       "entrepreneur": {
             "subsidy": 10000,
             "subsidyLabel": "最高 1 万",
@@ -2529,7 +2545,8 @@ const CITIES = [
       "求职者"
     ]
   ,
-  enterpriseData: {"soe_institution_count": 12000, "foreign_enterprise_count": 4500, "private_enterprise_count": 320000, "startup_count": 40000, "enterprise_data_quality": "估算", "enterprise_data_source": "基于城市经济规模、产业结构及公开数据估算", "enterprise_data_remark": "滨海城市"}identityData: {
+  enterpriseData: {"soe_institution_count": 12000, "foreign_enterprise_count": 4500, "private_enterprise_count": 320000, "startup_count": 40000, "enterprise_data_quality": "估算", "enterprise_data_source": "基于城市经济规模、产业结构及公开数据估算", "enterprise_data_remark": "滨海城市"},
+identityData: {
       "entrepreneur": {
             "subsidy": 10000,
             "subsidyLabel": "最高 1 万",
@@ -2598,7 +2615,8 @@ const CITIES = [
       "求职者"
     ]
   ,
-  enterpriseData: {"soe_institution_count": 18000, "foreign_enterprise_count": 3500, "private_enterprise_count": 550000, "startup_count": 68000, "enterprise_data_quality": "估算", "enterprise_data_source": "基于城市经济规模、产业结构及公开数据估算", "enterprise_data_remark": "农业+制造业"}identityData: {
+  enterpriseData: {"soe_institution_count": 18000, "foreign_enterprise_count": 3500, "private_enterprise_count": 550000, "startup_count": 68000, "enterprise_data_quality": "估算", "enterprise_data_source": "基于城市经济规模、产业结构及公开数据估算", "enterprise_data_remark": "农业+制造业"},
+identityData: {
       "entrepreneur": {
             "subsidy": 10000,
             "subsidyLabel": "最高 1 万",
@@ -2672,7 +2690,8 @@ const CITIES = [
       "求职者"
     ]
   ,
-  enterpriseData: {"soe_institution_count": 15000, "foreign_enterprise_count": 2500, "private_enterprise_count": 420000, "startup_count": 52000, "enterprise_data_quality": "估算", "enterprise_data_source": "基于城市经济规模、产业结构及公开数据估算", "enterprise_data_remark": "化工基地"}identityData: {
+  enterpriseData: {"soe_institution_count": 15000, "foreign_enterprise_count": 2500, "private_enterprise_count": 420000, "startup_count": 52000, "enterprise_data_quality": "估算", "enterprise_data_source": "基于城市经济规模、产业结构及公开数据估算", "enterprise_data_remark": "化工基地"},
+identityData: {
       "entrepreneur": {
             "subsidy": 10000,
             "subsidyLabel": "最高 1 万",
@@ -2746,7 +2765,8 @@ const CITIES = [
       "求职者"
     ]
   ,
-  enterpriseData: {"soe_institution_count": 45000, "foreign_enterprise_count": 8000, "private_enterprise_count": 850000, "startup_count": 110000, "enterprise_data_quality": "官方数据", "enterprise_data_source": "郑州市统计公报", "enterprise_data_remark": "河南省会，国家中心城市"}identityData: {
+  enterpriseData: {"soe_institution_count": 45000, "foreign_enterprise_count": 8000, "private_enterprise_count": 850000, "startup_count": 110000, "enterprise_data_quality": "官方数据", "enterprise_data_source": "郑州市统计公报", "enterprise_data_remark": "河南省会，国家中心城市"},
+identityData: {
       "entrepreneur": {
             "subsidy": 10000,
             "subsidyLabel": "1万+最高50万",
@@ -2822,7 +2842,8 @@ const CITIES = [
       "学生"
     ]
   ,
-  enterpriseData: {"soe_institution_count": 18000, "foreign_enterprise_count": 3000, "private_enterprise_count": 480000, "startup_count": 60000, "enterprise_data_quality": "估算", "enterprise_data_source": "基于城市经济规模、产业结构及公开数据估算", "enterprise_data_remark": "古都工业"}identityData: {
+  enterpriseData: {"soe_institution_count": 18000, "foreign_enterprise_count": 3000, "private_enterprise_count": 480000, "startup_count": 60000, "enterprise_data_quality": "估算", "enterprise_data_source": "基于城市经济规模、产业结构及公开数据估算", "enterprise_data_remark": "古都工业"},
+identityData: {
       "entrepreneur": {
             "subsidy": 10000,
             "subsidyLabel": "最高 1 万",
@@ -2896,7 +2917,8 @@ const CITIES = [
       "求职者"
     ]
   ,
-  enterpriseData: {"soe_institution_count": 68000, "foreign_enterprise_count": 8000, "private_enterprise_count": 1080000, "startup_count": 150000, "enterprise_data_quality": "官方数据", "enterprise_data_source": "西安市统计公报", "enterprise_data_remark": "市场主体约289.7万户，A股63家"}identityData: {
+  enterpriseData: {"soe_institution_count": 68000, "foreign_enterprise_count": 8000, "private_enterprise_count": 1080000, "startup_count": 150000, "enterprise_data_quality": "官方数据", "enterprise_data_source": "西安市统计公报", "enterprise_data_remark": "市场主体约289.7万户，A股63家"},
+identityData: {
       "entrepreneur": {
             "subsidy": 10000,
             "subsidyLabel": "1万+最高100万",
@@ -2968,7 +2990,8 @@ const CITIES = [
       "硕士以上"
     ]
   ,
-  enterpriseData: {"soe_institution_count": 18000, "foreign_enterprise_count": 2000, "private_enterprise_count": 320000, "startup_count": 40000, "enterprise_data_quality": "估算", "enterprise_data_source": "基于城市经济规模、产业结构及公开数据估算", "enterprise_data_remark": "甘肃省会"}identityData: {
+  enterpriseData: {"soe_institution_count": 18000, "foreign_enterprise_count": 2000, "private_enterprise_count": 320000, "startup_count": 40000, "enterprise_data_quality": "估算", "enterprise_data_source": "基于城市经济规模、产业结构及公开数据估算", "enterprise_data_remark": "甘肃省会"},
+identityData: {
       "entrepreneur": {
             "subsidy": 10000,
             "subsidyLabel": "最高 1 万",
@@ -3041,7 +3064,8 @@ const CITIES = [
       "学生"
     ]
   ,
-  enterpriseData: {"soe_institution_count": 12000, "foreign_enterprise_count": 1500, "private_enterprise_count": 220000, "startup_count": 28000, "enterprise_data_quality": "估算", "enterprise_data_source": "基于城市经济规模、产业结构及公开数据估算", "enterprise_data_remark": "宁夏首府"}identityData: {
+  enterpriseData: {"soe_institution_count": 12000, "foreign_enterprise_count": 1500, "private_enterprise_count": 220000, "startup_count": 28000, "enterprise_data_quality": "估算", "enterprise_data_source": "基于城市经济规模、产业结构及公开数据估算", "enterprise_data_remark": "宁夏首府"},
+identityData: {
       "entrepreneur": {
             "subsidy": 10000,
             "subsidyLabel": "最高 1 万",
@@ -3110,7 +3134,8 @@ const CITIES = [
       "求职者"
     ]
   ,
-  enterpriseData: {"soe_institution_count": 15000, "foreign_enterprise_count": 2500, "private_enterprise_count": 350000, "startup_count": 45000, "enterprise_data_quality": "估算", "enterprise_data_source": "基于城市经济规模、产业结构及公开数据估算", "enterprise_data_remark": "新疆首府，世界500强1家"}identityData: {
+  enterpriseData: {"soe_institution_count": 15000, "foreign_enterprise_count": 2500, "private_enterprise_count": 350000, "startup_count": 45000, "enterprise_data_quality": "估算", "enterprise_data_source": "基于城市经济规模、产业结构及公开数据估算", "enterprise_data_remark": "新疆首府，世界500强1家"},
+identityData: {
       "entrepreneur": {
             "subsidy": 10000,
             "subsidyLabel": "最高 1 万",
@@ -3182,8 +3207,8 @@ const CITIES = [
       "留学归国",
       "博士",
       "硕士以上"
-    ]
-  enterpriseData: {"soe_institution_count": 165000, "foreign_enterprise_count": 68000, "private_enterprise_count": 2450000, "startup_count": 320000, "enterprise_data_quality": "官方数据", "enterprise_data_source": "上海市统计公报、A股数据", "enterprise_data_remark": "A股上市公司452家，世界500强12家，市场主体约328.4万户"}identityData: {
+    ]enterpriseData: {"soe_institution_count": 165000, "foreign_enterprise_count": 68000, "private_enterprise_count": 2450000, "startup_count": 320000, "enterprise_data_quality": "官方数据", "enterprise_data_source": "上海市统计公报、A股数据", "enterprise_data_remark": "A股上市公司452家，世界500强12家，市场主体约328.4万户"},
+identityData: {
       "entrepreneur": {
             "subsidy": 300000,
             "subsidyLabel": "最高 30 万",
@@ -3260,8 +3285,8 @@ const CITIES = [
       "硕士以上"
     ]
   ,
-  ,
-  enterpriseData: {"soe_institution_count": 55000, "foreign_enterprise_count": 16000, "private_enterprise_count": 1100000, "startup_count": 150000, "enterprise_data_quality": "官方数据", "enterprise_data_source": "南京市统计公报", "enterprise_data_remark": "科创板上市公司16家"}identityData: {
+  enterpriseData: {"soe_institution_count": 55000, "foreign_enterprise_count": 16000, "private_enterprise_count": 1100000, "startup_count": 150000, "enterprise_data_quality": "官方数据", "enterprise_data_source": "南京市统计公报", "enterprise_data_remark": "科创板上市公司16家"},
+identityData: {
       "entrepreneur": {
             "subsidy": 2000,
             "subsidyLabel": "2千+最高50万",
@@ -3338,7 +3363,8 @@ const CITIES = [
       "硕士以上"
     ]
   ,
-  enterpriseData: {"soe_institution_count": 48000, "foreign_enterprise_count": 32000, "private_enterprise_count": 1550000, "startup_count": 180000, "enterprise_data_quality": "官方数据", "enterprise_data_source": "苏州市统计公报", "enterprise_data_remark": "科创板上市公司56家（全国第三），市场主体约287万户"}identityData: {
+  enterpriseData: {"soe_institution_count": 48000, "foreign_enterprise_count": 32000, "private_enterprise_count": 1550000, "startup_count": 180000, "enterprise_data_quality": "官方数据", "enterprise_data_source": "苏州市统计公报", "enterprise_data_remark": "科创板上市公司56家（全国第三），市场主体约287万户"},
+identityData: {
       "entrepreneur": {
             "subsidy": 300000,
             "subsidyLabel": "最高 30 万",
@@ -3415,7 +3441,8 @@ const CITIES = [
       "应届生"
     ]
   ,
-  enterpriseData: {"soe_institution_count": 48600, "foreign_enterprise_count": 7300, "private_enterprise_count": 432900, "startup_count": 47500, "enterprise_data_quality": "官方数据", "enterprise_data_source": "无锡市2025年国民经济和社会发展统计公报", "enterprise_data_remark": "年末登记企业总数48.87万户，个体工商户69.17万户"}identityData: {
+  enterpriseData: {"soe_institution_count": 48600, "foreign_enterprise_count": 7300, "private_enterprise_count": 432900, "startup_count": 47500, "enterprise_data_quality": "官方数据", "enterprise_data_source": "无锡市2025年国民经济和社会发展统计公报", "enterprise_data_remark": "年末登记企业总数48.87万户，个体工商户69.17万户"},
+identityData: {
       "entrepreneur": {
             "subsidy": 10000,
             "subsidyLabel": "最高 1 万",
@@ -3489,8 +3516,8 @@ const CITIES = [
       "求职者"
     ]
   ,
-  ,
-  enterpriseData: {"soe_institution_count": 18000, "foreign_enterprise_count": 8000, "private_enterprise_count": 520000, "startup_count": 65000, "enterprise_data_quality": "估算", "enterprise_data_source": "基于城市经济规模、产业结构及公开数据估算", "enterprise_data_remark": "制造业强市"}identityData: {
+  enterpriseData: {"soe_institution_count": 18000, "foreign_enterprise_count": 8000, "private_enterprise_count": 520000, "startup_count": 65000, "enterprise_data_quality": "估算", "enterprise_data_source": "基于城市经济规模、产业结构及公开数据估算", "enterprise_data_remark": "制造业强市"},
+identityData: {
       "entrepreneur": {
             "subsidy": 10000,
             "subsidyLabel": "最高 1 万",
@@ -3563,7 +3590,8 @@ const CITIES = [
       "求职者"
     ]
   ,
-  enterpriseData: {"soe_institution_count": 22000, "foreign_enterprise_count": 6000, "private_enterprise_count": 680000, "startup_count": 85000, "enterprise_data_quality": "估算", "enterprise_data_source": "基于城市经济规模、产业结构及公开数据估算", "enterprise_data_remark": "建筑+纺织"}identityData: {
+  enterpriseData: {"soe_institution_count": 22000, "foreign_enterprise_count": 6000, "private_enterprise_count": 680000, "startup_count": 85000, "enterprise_data_quality": "估算", "enterprise_data_source": "基于城市经济规模、产业结构及公开数据估算", "enterprise_data_remark": "建筑+纺织"},
+identityData: {
       "entrepreneur": {
             "subsidy": 10000,
             "subsidyLabel": "最高 1 万",
@@ -3636,7 +3664,8 @@ const CITIES = [
       "学生"
     ]
   ,
-  enterpriseData: {"soe_institution_count": 15000, "foreign_enterprise_count": 4500, "private_enterprise_count": 420000, "startup_count": 52000, "enterprise_data_quality": "估算", "enterprise_data_source": "基于城市经济规模、产业结构及公开数据估算", "enterprise_data_remark": "历史文化名城"}identityData: {
+  enterpriseData: {"soe_institution_count": 15000, "foreign_enterprise_count": 4500, "private_enterprise_count": 420000, "startup_count": 52000, "enterprise_data_quality": "估算", "enterprise_data_source": "基于城市经济规模、产业结构及公开数据估算", "enterprise_data_remark": "历史文化名城"},
+identityData: {
       "entrepreneur": {
             "subsidy": 10000,
             "subsidyLabel": "最高 1 万",
@@ -3705,7 +3734,8 @@ const CITIES = [
       "学生"
     ]
   ,
-  enterpriseData: {"soe_institution_count": 12000, "foreign_enterprise_count": 3500, "private_enterprise_count": 320000, "startup_count": 40000, "enterprise_data_quality": "估算", "enterprise_data_source": "基于城市经济规模、产业结构及公开数据估算", "enterprise_data_remark": "化工+制造"}identityData: {
+  enterpriseData: {"soe_institution_count": 12000, "foreign_enterprise_count": 3500, "private_enterprise_count": 320000, "startup_count": 40000, "enterprise_data_quality": "估算", "enterprise_data_source": "基于城市经济规模、产业结构及公开数据估算", "enterprise_data_remark": "化工+制造"},
+identityData: {
       "entrepreneur": {
             "subsidy": 10000,
             "subsidyLabel": "最高 1 万",
@@ -3779,7 +3809,8 @@ const CITIES = [
       "硕士以上"
     ]
   ,
-  enterpriseData: {"soe_institution_count": 52000, "foreign_enterprise_count": 18000, "private_enterprise_count": 1680000, "startup_count": 220000, "enterprise_data_quality": "官方数据", "enterprise_data_source": "杭州市统计公报、世界500强数据", "enterprise_data_remark": "世界500强8家（民企4家），胡润中国500强26家"}identityData: {
+  enterpriseData: {"soe_institution_count": 52000, "foreign_enterprise_count": 18000, "private_enterprise_count": 1680000, "startup_count": 220000, "enterprise_data_quality": "官方数据", "enterprise_data_source": "杭州市统计公报、世界500强数据", "enterprise_data_remark": "世界500强8家（民企4家），胡润中国500强26家"},
+identityData: {
       "entrepreneur": {
             "subsidy": 100000,
             "subsidyLabel": "最高 10 万",
@@ -3856,7 +3887,8 @@ const CITIES = [
       "应届生"
     ]
   ,
-  enterpriseData: {"soe_institution_count": 28000, "foreign_enterprise_count": 14000, "private_enterprise_count": 920000, "startup_count": 110000, "enterprise_data_quality": "官方数据", "enterprise_data_source": "宁波市统计公报", "enterprise_data_remark": "胡润中国500强10家，4家独角兽企业"}identityData: {
+  enterpriseData: {"soe_institution_count": 28000, "foreign_enterprise_count": 14000, "private_enterprise_count": 920000, "startup_count": 110000, "enterprise_data_quality": "官方数据", "enterprise_data_source": "宁波市统计公报", "enterprise_data_remark": "胡润中国500强10家，4家独角兽企业"},
+identityData: {
       "entrepreneur": {
             "subsidy": 10000,
             "subsidyLabel": "最高 1 万",
@@ -3926,7 +3958,8 @@ const CITIES = [
       "创业者"
     ]
   ,
-  enterpriseData: {"soe_institution_count": 18000, "foreign_enterprise_count": 5500, "private_enterprise_count": 780000, "startup_count": 95000, "enterprise_data_quality": "估算", "enterprise_data_source": "基于城市经济规模、产业结构及公开数据估算", "enterprise_data_remark": "民营经济发源地"}identityData: {
+  enterpriseData: {"soe_institution_count": 18000, "foreign_enterprise_count": 5500, "private_enterprise_count": 780000, "startup_count": 95000, "enterprise_data_quality": "估算", "enterprise_data_source": "基于城市经济规模、产业结构及公开数据估算", "enterprise_data_remark": "民营经济发源地"},
+identityData: {
       "entrepreneur": {
             "subsidy": 10000,
             "subsidyLabel": "最高 1 万",
@@ -3999,7 +4032,8 @@ const CITIES = [
       "求职者"
     ]
   ,
-  enterpriseData: {"soe_institution_count": 15000, "foreign_enterprise_count": 7000, "private_enterprise_count": 520000, "startup_count": 65000, "enterprise_data_quality": "估算", "enterprise_data_source": "基于城市经济规模、产业结构及公开数据估算", "enterprise_data_remark": "长三角核心"}identityData: {
+  enterpriseData: {"soe_institution_count": 15000, "foreign_enterprise_count": 7000, "private_enterprise_count": 520000, "startup_count": 65000, "enterprise_data_quality": "估算", "enterprise_data_source": "基于城市经济规模、产业结构及公开数据估算", "enterprise_data_remark": "长三角核心"},
+identityData: {
       "entrepreneur": {
             "subsidy": 10000,
             "subsidyLabel": "最高 1 万",
@@ -4072,7 +4106,8 @@ const CITIES = [
       "求职者"
     ]
   ,
-  enterpriseData: {"soe_institution_count": 15000, "foreign_enterprise_count": 5000, "private_enterprise_count": 580000, "startup_count": 72000, "enterprise_data_quality": "估算", "enterprise_data_source": "基于城市经济规模、产业结构及公开数据估算", "enterprise_data_remark": "纺织+黄酒"}identityData: {
+  enterpriseData: {"soe_institution_count": 15000, "foreign_enterprise_count": 5000, "private_enterprise_count": 580000, "startup_count": 72000, "enterprise_data_quality": "估算", "enterprise_data_source": "基于城市经济规模、产业结构及公开数据估算", "enterprise_data_remark": "纺织+黄酒"},
+identityData: {
       "entrepreneur": {
             "subsidy": 10000,
             "subsidyLabel": "最高 1 万",
@@ -4146,7 +4181,8 @@ const CITIES = [
       "求职者"
     ]
   ,
-  enterpriseData: {"soe_institution_count": 14000, "foreign_enterprise_count": 4500, "private_enterprise_count": 550000, "startup_count": 68000, "enterprise_data_quality": "估算", "enterprise_data_source": "基于城市经济规模、产业结构及公开数据估算", "enterprise_data_remark": "小商品+物流"}identityData: {
+  enterpriseData: {"soe_institution_count": 14000, "foreign_enterprise_count": 4500, "private_enterprise_count": 550000, "startup_count": 68000, "enterprise_data_quality": "估算", "enterprise_data_source": "基于城市经济规模、产业结构及公开数据估算", "enterprise_data_remark": "小商品+物流"},
+identityData: {
       "entrepreneur": {
             "subsidy": 10000,
             "subsidyLabel": "最高 1 万",
@@ -4220,7 +4256,8 @@ const CITIES = [
       "博士"
     ]
   ,
-  enterpriseData: {"soe_institution_count": 32000, "foreign_enterprise_count": 6000, "private_enterprise_count": 720000, "startup_count": 95000, "enterprise_data_quality": "官方数据", "enterprise_data_source": "合肥市统计公报", "enterprise_data_remark": "独角兽企业10家（全国第七），A股88家"}identityData: {
+  enterpriseData: {"soe_institution_count": 32000, "foreign_enterprise_count": 6000, "private_enterprise_count": 720000, "startup_count": 95000, "enterprise_data_quality": "官方数据", "enterprise_data_source": "合肥市统计公报", "enterprise_data_remark": "独角兽企业10家（全国第七），A股88家"},
+identityData: {
       "entrepreneur": {
             "subsidy": 10000,
             "subsidyLabel": "1万+最高50万",
@@ -4296,7 +4333,8 @@ const CITIES = [
       "求职者"
     ]
   ,
-  enterpriseData: {"soe_institution_count": 12000, "foreign_enterprise_count": 4000, "private_enterprise_count": 380000, "startup_count": 48000, "enterprise_data_quality": "估算", "enterprise_data_source": "基于城市经济规模、产业结构及公开数据估算", "enterprise_data_remark": "奇瑞汽车基地"}identityData: {
+  enterpriseData: {"soe_institution_count": 12000, "foreign_enterprise_count": 4000, "private_enterprise_count": 380000, "startup_count": 48000, "enterprise_data_quality": "估算", "enterprise_data_source": "基于城市经济规模、产业结构及公开数据估算", "enterprise_data_remark": "奇瑞汽车基地"},
+identityData: {
       "entrepreneur": {
             "subsidy": 10000,
             "subsidyLabel": "最高 1 万",
@@ -4370,7 +4408,8 @@ const CITIES = [
       "求职者"
     ]
   ,
-  enterpriseData: {"soe_institution_count": 22000, "foreign_enterprise_count": 6000, "private_enterprise_count": 680000, "startup_count": 85000, "enterprise_data_quality": "估算", "enterprise_data_source": "基于城市经济规模、产业结构及公开数据估算", "enterprise_data_remark": "福建省会"}identityData: {
+  enterpriseData: {"soe_institution_count": 22000, "foreign_enterprise_count": 6000, "private_enterprise_count": 680000, "startup_count": 85000, "enterprise_data_quality": "估算", "enterprise_data_source": "基于城市经济规模、产业结构及公开数据估算", "enterprise_data_remark": "福建省会"},
+identityData: {
       "entrepreneur": {
             "subsidy": 10000,
             "subsidyLabel": "最高 1 万",
@@ -4444,7 +4483,8 @@ const CITIES = [
       "留学归国"
     ]
   ,
-  enterpriseData: {"soe_institution_count": 18000, "foreign_enterprise_count": 8500, "private_enterprise_count": 520000, "startup_count": 65000, "enterprise_data_quality": "估算", "enterprise_data_source": "基于城市经济规模、产业结构及公开数据估算", "enterprise_data_remark": "经济特区"}identityData: {
+  enterpriseData: {"soe_institution_count": 18000, "foreign_enterprise_count": 8500, "private_enterprise_count": 520000, "startup_count": 65000, "enterprise_data_quality": "估算", "enterprise_data_source": "基于城市经济规模、产业结构及公开数据估算", "enterprise_data_remark": "经济特区"},
+identityData: {
       "entrepreneur": {
             "subsidy": 10000,
             "subsidyLabel": "最高 1 万",
@@ -4517,7 +4557,8 @@ const CITIES = [
       "创业者"
     ]
   ,
-  enterpriseData: {"soe_institution_count": 18000, "foreign_enterprise_count": 7000, "private_enterprise_count": 720000, "startup_count": 90000, "enterprise_data_quality": "估算", "enterprise_data_source": "基于城市经济规模、产业结构及公开数据估算", "enterprise_data_remark": "制造业+品牌"}identityData: {
+  enterpriseData: {"soe_institution_count": 18000, "foreign_enterprise_count": 7000, "private_enterprise_count": 720000, "startup_count": 90000, "enterprise_data_quality": "估算", "enterprise_data_source": "基于城市经济规模、产业结构及公开数据估算", "enterprise_data_remark": "制造业+品牌"},
+identityData: {
       "entrepreneur": {
             "subsidy": 10000,
             "subsidyLabel": "最高 1 万",
@@ -4591,7 +4632,8 @@ const CITIES = [
       "硕士以上"
     ]
   ,
-  enterpriseData: {"soe_institution_count": 95000, "foreign_enterprise_count": 28000, "private_enterprise_count": 1980000, "startup_count": 841000, "enterprise_data_quality": "官方数据", "enterprise_data_source": "广州市统计公报、新注册企业数据", "enterprise_data_remark": "2025年新设企业约84.1万家，市场主体约315.6万户"}identityData: {
+  enterpriseData: {"soe_institution_count": 95000, "foreign_enterprise_count": 28000, "private_enterprise_count": 1980000, "startup_count": 841000, "enterprise_data_quality": "官方数据", "enterprise_data_source": "广州市统计公报、新注册企业数据", "enterprise_data_remark": "2025年新设企业约84.1万家，市场主体约315.6万户"},
+identityData: {
       "entrepreneur": {
             "subsidy": 10000,
             "subsidyLabel": "最高 1 万",
@@ -4666,8 +4708,8 @@ const CITIES = [
       "留学归国",
       "博士",
       "硕士以上"
-    ]
-  enterpriseData: {"soe_institution_count": 58000, "foreign_enterprise_count": 8500, "private_enterprise_count": 2830000, "startup_count": 340000, "enterprise_data_quality": "官方数据", "enterprise_data_source": "深圳市2025年统计公报、深圳海关", "enterprise_data_remark": "经营主体464.89万户，民营企业占企业总数97%"}identityData: {
+    ]enterpriseData: {"soe_institution_count": 58000, "foreign_enterprise_count": 8500, "private_enterprise_count": 2830000, "startup_count": 340000, "enterprise_data_quality": "官方数据", "enterprise_data_source": "深圳市2025年统计公报、深圳海关", "enterprise_data_remark": "经营主体464.89万户，民营企业占企业总数97%"},
+identityData: {
       "entrepreneur": {
             "subsidy": 100000,
             "subsidyLabel": "最高 10 万",
@@ -4744,8 +4786,8 @@ const CITIES = [
       "硕士以上"
     ]
   ,
-  ,
-  enterpriseData: {"soe_institution_count": 18000, "foreign_enterprise_count": 25000, "private_enterprise_count": 850000, "startup_count": 110000, "enterprise_data_quality": "官方数据", "enterprise_data_source": "东莞市统计公报", "enterprise_data_remark": "制造业强市，外资企业集中"}identityData: {
+  enterpriseData: {"soe_institution_count": 18000, "foreign_enterprise_count": 25000, "private_enterprise_count": 850000, "startup_count": 110000, "enterprise_data_quality": "官方数据", "enterprise_data_source": "东莞市统计公报", "enterprise_data_remark": "制造业强市，外资企业集中"},
+identityData: {
       "entrepreneur": {
             "subsidy": 10000,
             "subsidyLabel": "最高 1 万",
@@ -4819,7 +4861,8 @@ const CITIES = [
       "硕士以上"
     ]
   ,
-  enterpriseData: {"soe_institution_count": 22000, "foreign_enterprise_count": 10000, "private_enterprise_count": 780000, "startup_count": 90000, "enterprise_data_quality": "官方数据", "enterprise_data_source": "佛山市统计公报", "enterprise_data_remark": "胡润中国500强8家"}identityData: {
+  enterpriseData: {"soe_institution_count": 22000, "foreign_enterprise_count": 10000, "private_enterprise_count": 780000, "startup_count": 90000, "enterprise_data_quality": "官方数据", "enterprise_data_source": "佛山市统计公报", "enterprise_data_remark": "胡润中国500强8家"},
+identityData: {
       "entrepreneur": {
             "subsidy": 10000,
             "subsidyLabel": "最高 1 万",
@@ -4893,7 +4936,8 @@ const CITIES = [
       "留学归国"
     ]
   ,
-  enterpriseData: {"soe_institution_count": 12000, "foreign_enterprise_count": 6500, "private_enterprise_count": 380000, "startup_count": 48000, "enterprise_data_quality": "估算", "enterprise_data_source": "基于城市经济规模、产业结构及公开数据估算", "enterprise_data_remark": "经济特区"}identityData: {
+  enterpriseData: {"soe_institution_count": 12000, "foreign_enterprise_count": 6500, "private_enterprise_count": 380000, "startup_count": 48000, "enterprise_data_quality": "估算", "enterprise_data_source": "基于城市经济规模、产业结构及公开数据估算", "enterprise_data_remark": "经济特区"},
+identityData: {
       "entrepreneur": {
             "subsidy": 10000,
             "subsidyLabel": "最高 1 万",
@@ -4967,7 +5011,8 @@ const CITIES = [
       "硕士以上"
     ]
   ,
-  enterpriseData: {"soe_institution_count": 8000, "foreign_enterprise_count": 45000, "private_enterprise_count": 320000, "startup_count": 35000, "enterprise_data_quality": "估算", "enterprise_data_source": "基于城市经济规模、产业结构及公开数据估算", "enterprise_data_remark": "国际金融中心，数据口径不同"}identityData: {
+  enterpriseData: {"soe_institution_count": 8000, "foreign_enterprise_count": 45000, "private_enterprise_count": 320000, "startup_count": 35000, "enterprise_data_quality": "估算", "enterprise_data_source": "基于城市经济规模、产业结构及公开数据估算", "enterprise_data_remark": "国际金融中心，数据口径不同"},
+identityData: {
       "entrepreneur": {
             "subsidy": 0,
             "subsidyLabel": "暂无相关政策",
@@ -5039,7 +5084,8 @@ const CITIES = [
       "求职者"
     ]
   ,
-  enterpriseData: {"soe_institution_count": 65000, "foreign_enterprise_count": 14000, "private_enterprise_count": 1250000, "startup_count": 200000, "enterprise_data_quality": "官方数据", "enterprise_data_source": "武汉市统计公报", "enterprise_data_remark": "2025年1-3月新注册企业8.1万家（全国第二），A股82家"}identityData: {
+  enterpriseData: {"soe_institution_count": 65000, "foreign_enterprise_count": 14000, "private_enterprise_count": 1250000, "startup_count": 200000, "enterprise_data_quality": "官方数据", "enterprise_data_source": "武汉市统计公报", "enterprise_data_remark": "2025年1-3月新注册企业8.1万家（全国第二），A股82家"},
+identityData: {
       "entrepreneur": {
             "subsidy": 8000,
             "subsidyLabel": "8千+最高100万",
@@ -5116,7 +5162,8 @@ const CITIES = [
       "硕士以上"
     ]
   ,
-  enterpriseData: {"soe_institution_count": 38000, "foreign_enterprise_count": 7000, "private_enterprise_count": 780000, "startup_count": 100000, "enterprise_data_quality": "官方数据", "enterprise_data_source": "长沙市统计公报", "enterprise_data_remark": "A股上市公司86家"}identityData: {
+  enterpriseData: {"soe_institution_count": 38000, "foreign_enterprise_count": 7000, "private_enterprise_count": 780000, "startup_count": 100000, "enterprise_data_quality": "官方数据", "enterprise_data_source": "长沙市统计公报", "enterprise_data_remark": "A股上市公司86家"},
+identityData: {
       "entrepreneur": {
             "subsidy": 30000,
             "subsidyLabel": "最高 3 万",
@@ -5193,7 +5240,8 @@ const CITIES = [
       "学生"
     ]
   ,
-  enterpriseData: {"soe_institution_count": 72000, "foreign_enterprise_count": 15000, "private_enterprise_count": 1850000, "startup_count": 260000, "enterprise_data_quality": "官方数据", "enterprise_data_source": "成都市统计公报", "enterprise_data_remark": "市场主体约363.9万户（全国第二），A股上市公司122家"}identityData: {
+  enterpriseData: {"soe_institution_count": 72000, "foreign_enterprise_count": 15000, "private_enterprise_count": 1850000, "startup_count": 260000, "enterprise_data_quality": "官方数据", "enterprise_data_source": "成都市统计公报", "enterprise_data_remark": "市场主体约363.9万户（全国第二），A股上市公司122家"},
+identityData: {
       "entrepreneur": {
             "subsidy": 60000,
             "subsidyLabel": "最高 6 万",
@@ -5270,7 +5318,8 @@ const CITIES = [
       "硕士以上"
     ]
   ,
-  enterpriseData: {"soe_institution_count": 85000, "foreign_enterprise_count": 12000, "private_enterprise_count": 1650000, "startup_count": 200000, "enterprise_data_quality": "官方数据", "enterprise_data_source": "重庆市统计公报", "enterprise_data_remark": "市场主体约341.6万户（全国第三）"}identityData: {
+  enterpriseData: {"soe_institution_count": 85000, "foreign_enterprise_count": 12000, "private_enterprise_count": 1650000, "startup_count": 200000, "enterprise_data_quality": "官方数据", "enterprise_data_source": "重庆市统计公报", "enterprise_data_remark": "市场主体约341.6万户（全国第三）"},
+identityData: {
       "entrepreneur": {
             "subsidy": 10000,
             "subsidyLabel": "最高 1 万",
@@ -5346,7 +5395,8 @@ const CITIES = [
       "学生"
     ]
   ,
-  enterpriseData: {"soe_institution_count": 18000, "foreign_enterprise_count": 3500, "private_enterprise_count": 480000, "startup_count": 60000, "enterprise_data_quality": "估算", "enterprise_data_source": "基于城市经济规模、产业结构及公开数据估算", "enterprise_data_remark": "江西省会"}identityData: {
+  enterpriseData: {"soe_institution_count": 18000, "foreign_enterprise_count": 3500, "private_enterprise_count": 480000, "startup_count": 60000, "enterprise_data_quality": "估算", "enterprise_data_source": "基于城市经济规模、产业结构及公开数据估算", "enterprise_data_remark": "江西省会"},
+identityData: {
       "entrepreneur": {
             "subsidy": 10000,
             "subsidyLabel": "最高 1 万",
@@ -5419,7 +5469,8 @@ const CITIES = [
       "学生"
     ]
   ,
-  enterpriseData: {"soe_institution_count": 18000, "foreign_enterprise_count": 3500, "private_enterprise_count": 450000, "startup_count": 55000, "enterprise_data_quality": "估算", "enterprise_data_source": "基于城市经济规模、产业结构及公开数据估算", "enterprise_data_remark": "广西首府"}identityData: {
+  enterpriseData: {"soe_institution_count": 18000, "foreign_enterprise_count": 3500, "private_enterprise_count": 450000, "startup_count": 55000, "enterprise_data_quality": "估算", "enterprise_data_source": "基于城市经济规模、产业结构及公开数据估算", "enterprise_data_remark": "广西首府"},
+identityData: {
       "entrepreneur": {
             "subsidy": 10000,
             "subsidyLabel": "最高 1 万",
@@ -5492,7 +5543,8 @@ const CITIES = [
       "学生"
     ]
   ,
-  enterpriseData: {"soe_institution_count": 20000, "foreign_enterprise_count": 4000, "private_enterprise_count": 520000, "startup_count": 65000, "enterprise_data_quality": "估算", "enterprise_data_source": "基于城市经济规模、产业结构及公开数据估算", "enterprise_data_remark": "云南省会"}identityData: {
+  enterpriseData: {"soe_institution_count": 20000, "foreign_enterprise_count": 4000, "private_enterprise_count": 520000, "startup_count": 65000, "enterprise_data_quality": "估算", "enterprise_data_source": "基于城市经济规模、产业结构及公开数据估算", "enterprise_data_remark": "云南省会"},
+identityData: {
       "entrepreneur": {
             "subsidy": 10000,
             "subsidyLabel": "最高 1 万",
@@ -5566,7 +5618,8 @@ const CITIES = [
       "求职者"
     ]
   ,
-  enterpriseData: {"soe_institution_count": 16000, "foreign_enterprise_count": 2500, "private_enterprise_count": 380000, "startup_count": 48000, "enterprise_data_quality": "估算", "enterprise_data_source": "基于城市经济规模、产业结构及公开数据估算", "enterprise_data_remark": "大数据中心"}identityData: {
+  enterpriseData: {"soe_institution_count": 16000, "foreign_enterprise_count": 2500, "private_enterprise_count": 380000, "startup_count": 48000, "enterprise_data_quality": "估算", "enterprise_data_source": "基于城市经济规模、产业结构及公开数据估算", "enterprise_data_remark": "大数据中心"},
+identityData: {
       "entrepreneur": {
             "subsidy": 10000,
             "subsidyLabel": "最高 1 万",
@@ -5640,7 +5693,8 @@ const CITIES = [
       "创业者"
     ]
   ,
-  enterpriseData: {"soe_institution_count": 12000, "foreign_enterprise_count": 3500, "private_enterprise_count": 280000, "startup_count": 35000, "enterprise_data_quality": "估算", "enterprise_data_source": "基于城市经济规模、产业结构及公开数据估算", "enterprise_data_remark": "自贸港"}identityData: {
+  enterpriseData: {"soe_institution_count": 12000, "foreign_enterprise_count": 3500, "private_enterprise_count": 280000, "startup_count": 35000, "enterprise_data_quality": "估算", "enterprise_data_source": "基于城市经济规模、产业结构及公开数据估算", "enterprise_data_remark": "自贸港"},
+identityData: {
       "entrepreneur": {
             "subsidy": 10000,
             "subsidyLabel": "最高 1 万",
@@ -6061,149 +6115,6 @@ const MATCH_QUESTIONS = [
 const ageMidpoint = { under25: 23, '25to30': 28, '30to35': 33, '35to40': 38, over40: 43 };
 const COMPANY_TYPE_MAP = { soe:"soe_institution_count", foreign:"foreign_enterprise_count", private:"private_enterprise_count", startup:"startup_count" };
 
-// ═══════════════════════════════════════════════════════════
-// LLM CONFIG — 替换为你的 API Key
-// ═══════════════════════════════════════════════════════════
-// ═══════════════════════════════════════════════════════════
-// LLM CONFIG — 从 config.js 加载（config.js 不提交到 Git）
-// ═══════════════════════════════════════════════════════════
-const LLM_CONFIG = window.__LLM_CONFIG__ || {
-  apiKey: '',
-  endpoint: 'https://api.deepseek.com/v1/chat/completions',
-  model: 'deepseek-chat',
-  timeout: 8000,
-};
-
-// ═══════════════════════════════════════════════════════════
-// PROMPT CHAIN — 自然语言 → 结构化筛选参数
-// ═══════════════════════════════════════════════════════════
-const PARSE_FREE_TEXT_SYSTEM_PROMPT = `你是一个城市政策匹配助手。用户用自然语言描述对工作城市的偏好，你需要提取为结构化参数。
-
-## 可提取的字段
-
-1. region（地域偏好，数组）:
-  可选值: "south"(南方), "north"(北方), "coastal"(沿海), "tier1"(一线城市), "new1"(新一线), "tier2"(二线)
-  规则: "想去暖和的地方" → ["south"]; "北上广深" → ["tier1"]; "杭州成都武汉" → ["new1"]; "不想去一线" → ["new1","tier2"]
-
-2. company（企业类型偏好，数组）:
-  可选值: "soe"(国企/事业单位), "foreign"(外企), "private"(民企), "startup"(创业公司)
-  规则: "大厂" → 不提取（太模糊）; "外企或大厂" → ["foreign"]; "想进体制内" → ["soe"]
-
-3. cost_preference（生活成本偏好，字符串，可为null）:
-  可选值: "low"(低成本), "mid"(中等), "high"(高消费可接受)
-  规则: "房租便宜" → "low"; "消费低" → "low"; "一线也行" → "high"
-
-4. degree（学历，字符串，可为null）:
-  可选值: "bachelor"(本科), "master"(硕士), "doctor"(博士), "overseas"(留学归国)
-
-5. age_group（年龄组，字符串，可为null）:
-  可选值: "under25", "25to30", "30to35", "35to40"
-
-6. hukou（落户意愿，字符串，可为null）:
-  可选值: "yes"(愿意), "no"(不考虑)
-
-## 输出规则
-
-- 严格返回 JSON，不要有任何其他文字
-- 用户没提到的字段用 null（数组用 []）
-- 不确定的、模糊的表达（如"大厂""好地方"）不要强制映射，留空
-- 只提取用户明确或强烈暗示的偏好
-
-## 示例
-
-用户: "我是应届硕士，想去南方沿海，外企多的地方，生活成本别太高"
-输出: {"region":["south","coastal"],"company":["foreign"],"cost_preference":"low","degree":"master","age_group":null,"hukou":null}
-
-用户: "北京上海都行，想进国企，能落户"
-输出: {"region":["tier1"],"company":["soe"],"cost_preference":"high","degree":null,"age_group":null,"hukou":"yes"}
-
-用户: "随便看看有哪些城市"
-输出: {"region":[],"company":[],"cost_preference":null,"degree":null,"age_group":null,"hukou":null}`;
-
-// ═══════════════════════════════════════════════════════════
-// LLM 调用 — 自然语言解析为结构化 selections
-// ═══════════════════════════════════════════════════════════
-const parseFreeText = async (freeText) => {
-  try {
-    const controller = new AbortController();
-    const timer = setTimeout(() => controller.abort(), LLM_CONFIG.timeout);
-
-    const response = await fetch(LLM_CONFIG.endpoint, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${LLM_CONFIG.apiKey}`,
-      },
-      body: JSON.stringify({
-        model: LLM_CONFIG.model,
-        messages: [
-          { role: 'system', content: PARSE_FREE_TEXT_SYSTEM_PROMPT },
-          { role: 'user', content: freeText.trim() },
-        ],
-        temperature: 0,
-        max_tokens: 300,
-      }),
-      signal: controller.signal,
-    });
-
-    clearTimeout(timer);
-
-    if (!response.ok) {
-      console.warn('LLM API error:', response.status);
-      return null;
-    }
-
-    const data = await response.json();
-    const raw = data.choices?.[0]?.message?.content || '';
-
-    const jsonMatch = raw.match(/\{[\s\S]*\}/);
-    if (!jsonMatch) {
-      console.warn('LLM returned non-JSON:', raw);
-      return null;
-    }
-
-    return JSON.parse(jsonMatch[0]);
-  } catch (err) {
-    console.warn('LLM parse failed:', err.message);
-    return null;
-  }
-};
-
-// ═══════════════════════════════════════════════════════════
-// LLM 输出 → selections 格式映射
-// ═══════════════════════════════════════════════════════════
-const mapLLMOutputToSelections = (llmOutput, existingSelections) => {
-  const mapped = { ...existingSelections };
-
-  if (llmOutput.region && llmOutput.region.length > 0) {
-    mapped.region = llmOutput.region.filter(v =>
-      ['south', 'north', 'coastal', 'tier1', 'new1', 'tier2'].includes(v)
-    );
-  }
-
-  if (llmOutput.company && llmOutput.company.length > 0) {
-    mapped.company = llmOutput.company.filter(v =>
-      ['soe', 'foreign', 'private', 'startup'].includes(v)
-    );
-  }
-
-  if (llmOutput.degree && ['bachelor', 'master', 'doctor', 'overseas'].includes(llmOutput.degree)) {
-    mapped.degree = llmOutput.degree;
-  }
-
-  if (llmOutput.age_group && ['under25', '25to30', '30to35', '35to40', 'over40'].includes(llmOutput.age_group)) {
-    mapped.age = llmOutput.age_group;
-  }
-
-  if (llmOutput.hukou && ['yes', 'no', 'unsure'].includes(llmOutput.hukou)) {
-    mapped.hukou = llmOutput.hukou;
-  }
-
-  mapped._costPreference = llmOutput.cost_preference || null;
-
-  return mapped;
-};
-
 // Phase 1: Hard filter
 const filterCandidatePool = (cities, selections, identityType) => {
   const regionSel = selections.region || [];
@@ -6359,43 +6270,28 @@ const MatchView = ({ cities, favs, toggleFav, selectedIdentity = null }) => {
   };
 
   // Map degree to identity type for subsidy lookup
-  const resolveIdentityType = (sels) => {
+  const resolveIdentityType = () => {
     if (selectedIdentity) return selectedIdentity;
-    const deg = sels.degree;
+    const deg = selections.degree;
     if (deg === 'overseas') return 'overseas';
     return 'graduate'; // bachelor/master/doctor → graduate
   };
 
-  const [llmParsedForDisplay, setLlmParsedForDisplay] = React.useState(null);
-
-  const runMatch = async () => {
+  const runMatch = () => {
     setLoading(true);
-
-    // ── Prompt Chain: 自然语言 → 结构化参数 ──
-    let effectiveSelections = { ...selections };
-    let llmParsed = null;
-
-    if (freeText.trim()) {
-      llmParsed = await parseFreeText(freeText);
-      if (llmParsed) {
-        effectiveSelections = mapLLMOutputToSelections(llmParsed, selections);
+    setTimeout(() => {
+      const identityType = resolveIdentityType();
+      const pool = filterCandidatePool(cities, selections, identityType);
+      setPoolSize(pool.length);
+      if (pool.length === 0) {
+        setResults([]);
+        setLoading(false);
+        return;
       }
-    }
-    setLlmParsedForDisplay(llmParsed);
-
-    const identityType = resolveIdentityType(effectiveSelections);
-    const pool = filterCandidatePool(cities, effectiveSelections, identityType);
-    setPoolSize(pool.length);
-
-    if (pool.length === 0) {
-      setResults([]);
+      const ranked = rankCandidates(pool, selections, identityType);
+      setResults(ranked.slice(0, 12));
       setLoading(false);
-      return;
-    }
-
-    const ranked = rankCandidates(pool, effectiveSelections, identityType);
-    setResults(ranked.slice(0, 12));
-    setLoading(false);
+    }, 300);
   };
 
   const hasSelection = Object.values(selections).some(v =>
@@ -6454,16 +6350,6 @@ const MatchView = ({ cities, favs, toggleFav, selectedIdentity = null }) => {
             onClick={runMatch} disabled={loading}>
             {loading ? '⏳ 匹配中...' : '🔍 智能匹配'}
           </button>
-
-          {llmParsedForDisplay && (
-            <div style={{ marginTop: 16, fontSize: 12, color: 'var(--teal-ink)', background: 'var(--teal-bg)', padding: '8px 14px', borderRadius: 8, display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap' }}>
-              🤖 已理解：
-              {llmParsedForDisplay.region?.length > 0 && llmParsedForDisplay.region.map(r => ({south:'南方',north:'北方',coastal:'沿海',tier1:'一线',new1:'新一线',tier2:'二线'})[r]).filter(Boolean).join('·')}
-              {llmParsedForDisplay.company?.length > 0 && ' · ' + llmParsedForDisplay.company.map(c => ({soe:'国企',foreign:'外企',private:'民企',startup:'创业公司'})[c]).join('·')}
-              {llmParsedForDisplay.cost_preference && ' · ' + ({low:'低成本',mid:'中等消费',high:'高消费OK'})[llmParsedForDisplay.cost_preference]}
-              {llmParsedForDisplay.degree && ' · ' + ({bachelor:'本科',master:'硕士',doctor:'博士',overseas:'海归'})[llmParsedForDisplay.degree]}
-            </div>
-          )}
 
           {results !== null && results.length === 0 && (
             <div style={{ marginTop: 30, textAlign: 'center', color: 'var(--ink-3)', padding: 40, background: 'var(--bg)', borderRadius: 12 }}>

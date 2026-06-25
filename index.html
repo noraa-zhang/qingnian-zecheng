@@ -6065,6 +6065,146 @@ const MATCH_QUESTIONS = [
 const ageMidpoint = { under25: 23, '25to30': 28, '30to35': 33, '35to40': 38, over40: 43 };
 const COMPANY_TYPE_MAP = { soe:"soe_institution_count", foreign:"foreign_enterprise_count", private:"private_enterprise_count", startup:"startup_count" };
 
+// ═══════════════════════════════════════════════════════════
+// LLM CONFIG — 替换为你的 API Key
+// ═══════════════════════════════════════════════════════════
+const LLM_CONFIG = {
+  apiKey: 'YOUR_API_KEY',
+  endpoint: 'https://api.openai.com/v1/chat/completions',
+  model: 'gpt-4o-mini',
+  timeout: 8000,
+};
+
+// ═══════════════════════════════════════════════════════════
+// PROMPT CHAIN — 自然语言 → 结构化筛选参数
+// ═══════════════════════════════════════════════════════════
+const PARSE_FREE_TEXT_SYSTEM_PROMPT = `你是一个城市政策匹配助手。用户用自然语言描述对工作城市的偏好，你需要提取为结构化参数。
+
+## 可提取的字段
+
+1. region（地域偏好，数组）:
+  可选值: "south"(南方), "north"(北方), "coastal"(沿海), "tier1"(一线城市), "new1"(新一线), "tier2"(二线)
+  规则: "想去暖和的地方" → ["south"]; "北上广深" → ["tier1"]; "杭州成都武汉" → ["new1"]; "不想去一线" → ["new1","tier2"]
+
+2. company（企业类型偏好，数组）:
+  可选值: "soe"(国企/事业单位), "foreign"(外企), "private"(民企), "startup"(创业公司)
+  规则: "大厂" → 不提取（太模糊）; "外企或大厂" → ["foreign"]; "想进体制内" → ["soe"]
+
+3. cost_preference（生活成本偏好，字符串，可为null）:
+  可选值: "low"(低成本), "mid"(中等), "high"(高消费可接受)
+  规则: "房租便宜" → "low"; "消费低" → "low"; "一线也行" → "high"
+
+4. degree（学历，字符串，可为null）:
+  可选值: "bachelor"(本科), "master"(硕士), "doctor"(博士), "overseas"(留学归国)
+
+5. age_group（年龄组，字符串，可为null）:
+  可选值: "under25", "25to30", "30to35", "35to40"
+
+6. hukou（落户意愿，字符串，可为null）:
+  可选值: "yes"(愿意), "no"(不考虑)
+
+## 输出规则
+
+- 严格返回 JSON，不要有任何其他文字
+- 用户没提到的字段用 null（数组用 []）
+- 不确定的、模糊的表达（如"大厂""好地方"）不要强制映射，留空
+- 只提取用户明确或强烈暗示的偏好
+
+## 示例
+
+用户: "我是应届硕士，想去南方沿海，外企多的地方，生活成本别太高"
+输出: {"region":["south","coastal"],"company":["foreign"],"cost_preference":"low","degree":"master","age_group":null,"hukou":null}
+
+用户: "北京上海都行，想进国企，能落户"
+输出: {"region":["tier1"],"company":["soe"],"cost_preference":"high","degree":null,"age_group":null,"hukou":"yes"}
+
+用户: "随便看看有哪些城市"
+输出: {"region":[],"company":[],"cost_preference":null,"degree":null,"age_group":null,"hukou":null}`;
+
+// ═══════════════════════════════════════════════════════════
+// LLM 调用 — 自然语言解析为结构化 selections
+// ═══════════════════════════════════════════════════════════
+const parseFreeText = async (freeText) => {
+  try {
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), LLM_CONFIG.timeout);
+
+    const response = await fetch(LLM_CONFIG.endpoint, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${LLM_CONFIG.apiKey}`,
+      },
+      body: JSON.stringify({
+        model: LLM_CONFIG.model,
+        messages: [
+          { role: 'system', content: PARSE_FREE_TEXT_SYSTEM_PROMPT },
+          { role: 'user', content: freeText.trim() },
+        ],
+        temperature: 0,
+        max_tokens: 300,
+      }),
+      signal: controller.signal,
+    });
+
+    clearTimeout(timer);
+
+    if (!response.ok) {
+      console.warn('LLM API error:', response.status);
+      return null;
+    }
+
+    const data = await response.json();
+    const raw = data.choices?.[0]?.message?.content || '';
+
+    const jsonMatch = raw.match(/\{[\s\S]*\}/);
+    if (!jsonMatch) {
+      console.warn('LLM returned non-JSON:', raw);
+      return null;
+    }
+
+    return JSON.parse(jsonMatch[0]);
+  } catch (err) {
+    console.warn('LLM parse failed:', err.message);
+    return null;
+  }
+};
+
+// ═══════════════════════════════════════════════════════════
+// LLM 输出 → selections 格式映射
+// ═══════════════════════════════════════════════════════════
+const mapLLMOutputToSelections = (llmOutput, existingSelections) => {
+  const mapped = { ...existingSelections };
+
+  if (llmOutput.region && llmOutput.region.length > 0) {
+    mapped.region = llmOutput.region.filter(v =>
+      ['south', 'north', 'coastal', 'tier1', 'new1', 'tier2'].includes(v)
+    );
+  }
+
+  if (llmOutput.company && llmOutput.company.length > 0) {
+    mapped.company = llmOutput.company.filter(v =>
+      ['soe', 'foreign', 'private', 'startup'].includes(v)
+    );
+  }
+
+  if (llmOutput.degree && ['bachelor', 'master', 'doctor', 'overseas'].includes(llmOutput.degree)) {
+    mapped.degree = llmOutput.degree;
+  }
+
+  if (llmOutput.age_group && ['under25', '25to30', '30to35', '35to40', 'over40'].includes(llmOutput.age_group)) {
+    mapped.age = llmOutput.age_group;
+  }
+
+  if (llmOutput.hukou && ['yes', 'no', 'unsure'].includes(llmOutput.hukou)) {
+    mapped.hukou = llmOutput.hukou;
+  }
+
+  mapped._costPreference = llmOutput.cost_preference || null;
+
+  return mapped;
+};
+
 // Phase 1: Hard filter
 const filterCandidatePool = (cities, selections, identityType) => {
   const regionSel = selections.region || [];
@@ -6220,28 +6360,43 @@ const MatchView = ({ cities, favs, toggleFav, selectedIdentity = null }) => {
   };
 
   // Map degree to identity type for subsidy lookup
-  const resolveIdentityType = () => {
+  const resolveIdentityType = (sels) => {
     if (selectedIdentity) return selectedIdentity;
-    const deg = selections.degree;
+    const deg = sels.degree;
     if (deg === 'overseas') return 'overseas';
     return 'graduate'; // bachelor/master/doctor → graduate
   };
 
-  const runMatch = () => {
+  const [llmParsedForDisplay, setLlmParsedForDisplay] = React.useState(null);
+
+  const runMatch = async () => {
     setLoading(true);
-    setTimeout(() => {
-      const identityType = resolveIdentityType();
-      const pool = filterCandidatePool(cities, selections, identityType);
-      setPoolSize(pool.length);
-      if (pool.length === 0) {
-        setResults([]);
-        setLoading(false);
-        return;
+
+    // ── Prompt Chain: 自然语言 → 结构化参数 ──
+    let effectiveSelections = { ...selections };
+    let llmParsed = null;
+
+    if (freeText.trim()) {
+      llmParsed = await parseFreeText(freeText);
+      if (llmParsed) {
+        effectiveSelections = mapLLMOutputToSelections(llmParsed, selections);
       }
-      const ranked = rankCandidates(pool, selections, identityType);
-      setResults(ranked.slice(0, 12));
+    }
+    setLlmParsedForDisplay(llmParsed);
+
+    const identityType = resolveIdentityType(effectiveSelections);
+    const pool = filterCandidatePool(cities, effectiveSelections, identityType);
+    setPoolSize(pool.length);
+
+    if (pool.length === 0) {
+      setResults([]);
       setLoading(false);
-    }, 300);
+      return;
+    }
+
+    const ranked = rankCandidates(pool, effectiveSelections, identityType);
+    setResults(ranked.slice(0, 12));
+    setLoading(false);
   };
 
   const hasSelection = Object.values(selections).some(v =>
@@ -6300,6 +6455,16 @@ const MatchView = ({ cities, favs, toggleFav, selectedIdentity = null }) => {
             onClick={runMatch} disabled={loading}>
             {loading ? '⏳ 匹配中...' : '🔍 智能匹配'}
           </button>
+
+          {llmParsedForDisplay && (
+            <div style={{ marginTop: 16, fontSize: 12, color: 'var(--teal-ink)', background: 'var(--teal-bg)', padding: '8px 14px', borderRadius: 8, display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap' }}>
+              🤖 已理解：
+              {llmParsedForDisplay.region?.length > 0 && llmParsedForDisplay.region.map(r => ({south:'南方',north:'北方',coastal:'沿海',tier1:'一线',new1:'新一线',tier2:'二线'})[r]).filter(Boolean).join('·')}
+              {llmParsedForDisplay.company?.length > 0 && ' · ' + llmParsedForDisplay.company.map(c => ({soe:'国企',foreign:'外企',private:'民企',startup:'创业公司'})[c]).join('·')}
+              {llmParsedForDisplay.cost_preference && ' · ' + ({low:'低成本',mid:'中等消费',high:'高消费OK'})[llmParsedForDisplay.cost_preference]}
+              {llmParsedForDisplay.degree && ' · ' + ({bachelor:'本科',master:'硕士',doctor:'博士',overseas:'海归'})[llmParsedForDisplay.degree]}
+            </div>
+          )}
 
           {results !== null && results.length === 0 && (
             <div style={{ marginTop: 30, textAlign: 'center', color: 'var(--ink-3)', padding: 40, background: 'var(--bg)', borderRadius: 12 }}>
